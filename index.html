@@ -17,12 +17,10 @@
 <body style="font-family: Manrope; min-height: 1000px; background: #320087">
 	<nav class="navbar text-light mb-5" style="background: #6500ff;">
 		<div class="container-fluid">
-		  	<a class="navbar-brand h5" href="#" style="font-weight: 800; color: white; font-size: 24px;">MiniSwap</a>
+		  	<a class="navbar-brand h5" href="#" onclick="location.reload()" style="font-weight: 800; color: white; font-size: 24px;">MiniSwap</a>
 			<div class="">
-				<!--
-				<span class="mx-3" style="text-decoration: underline; font-weight: 800; text-underline-offset: 7px; cursor: pointer">How it Works</span>
-				<span id="pending_swaps_button" class="mx-3" style="text-decoration: underline; font-weight: 800; text-underline-offset: 7px; cursor: pointer">Pending Swaps</span>
-				-->
+				
+				<span class="mx-3" style="text-decoration: underline; font-weight: 800; text-underline-offset: 7px; cursor: pointer">How it Works</span>				
 				<span class="btn btn-sm btn btn-light text-dark mx-3" id="metamask_connected" style="font-weight: 800;">Connect Metamask Wallet</span>
 				<span class="btn btn-sm btn btn-danger text-light switch_chain switch_chain_badge mx-3" style="display: none; font-weight: 800;">Switch Chain</span>
 			</div>
@@ -44,7 +42,7 @@
 			</div>
 		</div>
 		<div class="col-12">
-			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px; background: #e3e3e6;">
+			<div class="card mx-auto my-3 box-shadow border" id="pending_swaps_card" style="max-width: 450px; background: #e3e3e6;">
 				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
 					<h4 class="my-3 text-center"><strong id="">Your Pending Swaps</strong></h4>
 					<div id="pending_swaps_rows">
@@ -52,7 +50,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px; display: none; background: #e3e3e6">
+			<div class="card mx-auto my-3 box-shadow border" id="completed_swaps_card" style="max-width: 450px; display: none; background: #e3e3e6">
 				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
 					<h4 class="my-3 text-center"><strong id="">Completed Swaps</strong></h4>
 					<div id="completed_swaps_rows">
@@ -61,6 +59,15 @@
 				</div>
 			</div>
 		</div>
+        <p class="text-center">
+            <a class="text-dark" onclick="   
+            $('.container').css('display', 'none'); 
+            $('#choose_direction_card').css('display', 'block');
+            $('body').css('background', '#320087');" id="back_from_pending_swaps_card" 
+            style="cursor: pointer; text-decoration: underline; text-underline-offset: 7px; font-weight: 800;">Back
+            </a>
+        </p>
+        
 	</div>
 
 	<div class="container" id="choose_direction_card">
@@ -74,6 +81,10 @@
 					</div>
 				</div>
 			</div>
+            <div class="col-12 text-center">
+                <p class="text-light text-center">Or</p>
+                <span id="pending_swaps_button" class="mx-auto btn btn-lg btn-light col-12" style="font-weight: 800; cursor: pointer; max-width: 420px;">Finish an Old Swap</span>
+            </div>
 		</div>
 	</div>
 
@@ -81,13 +92,13 @@
 		<div class="col-12">
 			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
 				<div class="card-body p-2 p-sm-4" style="background: #e3e1e8 !important; border-radius: 1.5rem;">
-					<h4 class="my-3 text-center"><strong id="swap_summary_title_text">Swap Minima for ETH</strong></h4>
+					<h4 class="my-3 text-center"><strong id="swap_summary_title_text">Swap Minima for <span class="asset_selection_text">ETH</span></strong></h4>
 					<div class="p-2 background_area" style="border-radius: 0.5rem; background: #f8f9fa">
 						<div class="row col-12 p-0 m-0 py-3" style="border-radius: 1rem;">
 							<div class="col-6" style="display: flex;">
-								<span class="btn-light border" style="min-width: 115px; border-radius: 15px; border: solid 2px #e3e1e8 !important;">
-									<img class="mb-1 ms-2" src="minimalogo.svg" height="18" width="18"> 
-									<span class="ms-2 text-dark">Minima</span>
+								<span class="border align-self-center py-1 pt-2 col-12" style="min-width: 115px; border-radius: 15px; border: solid 2px #e3e1e8 !important; background: #e3e0e9;">
+									<img class="mb-1 ms-2 me-2" src="minimalogo.svg" height="32" width="32"> 
+									<span class="h-5 m-0" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">Minima</span>
 								</span>
 							</div>
 							<div class="col-6" style="display: flex;">
@@ -108,10 +119,10 @@
 					<div class="p-2 background_area" style="border-radius: 0.5rem; background: #f8f9fa">
 						<div class="row col-12 p-0 m-0 py-3" style="border-radius: 1rem;">
 							<div class="col-6" style="display: flex;">
-								<a class="btn btn-sm btn-light asset_choice_modal_trigger text-start" style="min-width: 115px; border: solid 2px #e3e1e8 !important; border-radius: 15px;">
-									<img class="mb-1" src="ethereumlogo.png" height="18" width="18">
-									<span class="">ETH</span>
-									<i class="fas fa-caret-down float-end mt-1 me-1"></i>
+								<a class="btn btn-sm btn-light border asset_choice_modal_trigger text-start align-self-center py-1 col-12" style="min-width: 115px; border: solid 2px #e3e1e8 !important; border-radius: 15px; background: #e3e0e9;">
+									<img id="selected_asset_image" class="mb-1 me-2" src="ethlogo.svg" height="32" width="32">
+									<span class="h-5 m-0 asset_selection_text" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">ETH</span>
+									<i class="fas fa-caret-down float-end mt-1 me-1" style="font-size: 24px; color: #7300ff;"></i>
 								</a>
 							</div>
 							<div class="col-6"  style="display: flex;">
@@ -163,7 +174,7 @@
 					<hr class="my-2">
 
 					<label style="font-weight: 800;">Receiving:</label>
-					<p class="m-0"><span id="swap_amount_eth_label">- -</span> ETH</p>
+					<p class="m-0"><span id="swap_receive_amount_label">- -</span></p>
 					<hr class="my-2">
 
 					<label style="font-weight: 800;">Recipient Public Key:</label>
@@ -214,7 +225,7 @@
 							</div>
 						</div>
 						<div class="input-group" style="display: none;">
-							<input class="form-control eth_amount" type="text" placeholder="e.g 1.2">
+							<input class="form-control receiver_asset_amount" type="text" placeholder="e.g 1.2">
 							<div class="input-group-append">
 								<span class="input-group-text">ETH</span>
 							</div>
@@ -223,15 +234,15 @@
 
 
 						<div class="dropdown">
-							<button style="width: 50%; height: 48px; border-radius: 7px; border: solid 2px #6500ff" time="3600" id="minima_timelock_dropdown_button" class="btn btn-light dropdown-toggle text-start" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-							  <span id="minima_timelock_dropdown_button_content">1 Hour</span>
+							<button style="width: 50%; height: 48px; border-radius: 7px; border: solid 2px #6500ff" time="10800" id="minima_timelock_dropdown_button" class="btn btn-light dropdown-toggle text-start" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+							  <span id="minima_timelock_dropdown_button_content">3 Hours</span>
 							  <i class="fas fa-caret-down fas fa-caret-down float-end mt-1"></i>
 							</button>
 							<ul class="dropdown-menu" id="minima_timelock_dropdown" aria-labelledby="dropdownMenuButton1" style="border: solid 2px #6500ff;">
-								<li><a class="dropdown-item minima_timelock_dropdown_item" time="1800" href="#">1 Hour</a></li>
-							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="3600" href="#">2 Hours</a></li>
-							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="7200" href="#">3 Hours</a></li>
-							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="14400" href="#">5 Hours</a></li>
+								<!--li><a class="dropdown-item minima_timelock_dropdown_item" time="3600" href="#">1 Hour</a></li>
+							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="7200" href="#">2 Hours</a></li-->
+							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="10800" href="#">3 Hours</a></li>
+							  	<!--li><a class="dropdown-item minima_timelock_dropdown_item" time="14400" href="#">5 Hours</a></li-->
 							</ul>
 						</div>
 
@@ -269,7 +280,7 @@
 				<div class="card card-body box-shadow my-3 mx-auto" style="max-width: 350px; background: #e3e3e6; border-radius: 1.5rem;">
 					<div class="p-3">
 						<h5 class="text-center my-4" style="font-weight: 800;">The Next Stage</h5>
-						<p class="text-center">The recipient now needs to lock up their ETH and provide you with the receipt</p>
+						<p class="text-center">The recipient now needs to lock up their <span class="asset_selection_text">ETH</span> and provide you with the receipt</p>
 						<a style="" class="btn btn-lg mt-2 col-12 btn-primary" id="minima_receipt_given_prompt_confirm">Continue</a>
 					</div>
 				</div>
@@ -318,9 +329,9 @@
 
 				<p class="mb-2 mt-3" style="font-weight: 800;">Enter Recipient Receipt</p>
 				<textarea id="ropsten_receipt_textarea" style="min-height: 150px; border: none; border-radius: 5px;" class="col-12"></textarea>
-				<a class="btn btn-lg btn-primary col-12 mt-3" id="load_ropsten_receipt">
-					<span id="load_ropsten_receipt_text">Claim Funds</span>
-					<div style="display: none;" class="spinner-border mx-auto" role="status" id="load_ropsten_receipt_spinner" style="display: none">
+				<a class="btn btn-lg btn-primary col-12 mt-3" id="load_evm_funds_locked_receipt">
+					<span id="load_evm_funds_locked_receipt_text">Claim Funds</span>
+					<div style="display: none;" class="spinner-border mx-auto" role="status" id="load_evm_funds_locked_receipt_spinner" style="display: none">
 						<span class="sr-only"></span>
 					</div>
 				</a>
@@ -329,7 +340,7 @@
 				</a>
 			</div>
 			<div id="ropsten_receipt_expiry_warning" style="display: none;">
-				<div class="alert alert-danger">
+				<div class="alert alert-danger" id="timelock_too_short_warning">
 					<strong>Warning!</strong>
 					<p>The timelock on this contract is too short for the counterparty to safely lock up their ETH. You can redeem your Minima when the timelock period ends.</p>
 				</div>
@@ -355,13 +366,13 @@
 		</div>
 	</div>
 
-	<div class="container mx-auto" id="ropsten_funds_claimed_receipt" style="display: none; max-width: 400px;">
+	<div class="container mx-auto" id="evm_funds_claimed_receipt" style="display: none; max-width: 400px;">
 		<div class="card card-body mt-3 p-sm-5" style="max-width: 400px; background: #e3e3e6;">
 			<h1 class="text-center mb-0">
 				<i class="fa fa-check-circle" style="color: #579157;"></i>
 			</h1>
 			<h5 class="text-center my-4" style="font-weight: 800;">Success</h5>
-			<p class="text-canter">You have successfully claimed the recipient's ETH. They can now claim the Minima</p>
+			<p class="text-canter">You have successfully claimed the recipient's <span class="asset_selection_text">ETH</span>. They can now claim the Minima</p>
 			<a class="btn btn-primary btn-lg col-12" target="_blank" id="evm_funds_claimed_explorer_link">View on Explorer</a>
 			<a style="cursor:pointer; font-weight: 800; text-decoration: underline; text-underline-offset: 7px;" class="start_another_swap mx-auto text-dark mt-4">Start Another Swap</a>		
 		</div>
@@ -370,9 +381,9 @@
 	<div class="container" id="ropsten_funds_claimed_tracker" style="display: none;">
 		<div class="card card-body mx-auto mt-3 p-sm-4" style="max-width: 400px; background: #e3e3e6;">
 			<h1 class="text-center"><i  style="color: #7300ff;" id="eth_waiting_to_be_claimed_icon" class="fa fa-hourglass-half"></i></h1>
-			<h5 class="text-center my-3" style="font-weight: 800;" id="eth_waiting_to_be_claimed_label">Waiting for ETH to be Claimed</h5>
+			<h5 class="text-center my-3" style="font-weight: 800;" id="eth_waiting_to_be_claimed_label">Waiting for <span class="asset_selection_text">ETH</span> to be Claimed</h5>
 
-			<p id="eth_waiting_to_be_claimed_message" class="text-center mb-3">You will be able to claim your Minima after the counterparty claims the ETH</p>
+			<p id="eth_waiting_to_be_claimed_message" class="text-center mb-3">You will be able to claim your Minima after the counterparty claims the <span class="asset_selection_text">ETH</span></p>
 			
 			<div class="p-3 bg-light" style="border-radius: 10px">
 				<p class="m-0" id="eth_claimed_status">Must be claimed in: 
@@ -380,13 +391,13 @@
 				</p>
 				
 				<div class="progress eth_redeem_progress mt-3" style="border: solid 2px #6500ff;border-radius: 15px;">
-					<div style="background-color: #6500ff; class="progress-bar" id="eth_redeem_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+					<div style="background-color: #6500ff;" id="eth_redeem_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
 						
 					</div>
 				</div>
 			</div>	
 			<a class="btn btn-lg mt-4 col-12 btn-primary" id="eth_redeem_button" style="display: none;">
-				<span id="eth_redeem_button_text">Redeem ETH</span>
+				<span id="eth_redeem_button_text">Redeem <span class="asset_selection_text">ETH</span></span>
 				<div class="spinner-border mx-auto" role="status" id="eth_redeem_button_spinner" style="display: none">
 					<span class="sr-only"></span>
 				</div>
@@ -403,7 +414,7 @@
 			<h1 class="text-center mb-4" id="claim_minima_icon" style="display: none;"><i style="color: #579157;" class="fa fa-check-circle" style="display: none;"></i></h1>
 			<h5 style="font-weight: 800;" id="claim_minima_title" class="m-0 text-center">Claim the Minima</h5>
 
-			<p class="text-center mt-4" id="claim_minima_text">The counterparty has claimed your ETH, you can now claim the Minima</p>
+			<p class="text-center mt-4" id="claim_minima_text">The counterparty has claimed your <span class="asset_selection_text">ETH</span>, you can now claim the Minima</p>
 	
 			<a class="btn btn-lg col-12 btn-primary" target="_blank" id="claim_minima_button">
 				<span id="claim_minima_button_text">
@@ -466,8 +477,8 @@
 						<strong>Load Receipt</strong>
 					</span>
 				</h5>
-				<p class="mb-2"><strong>Recipient Receipt</strong></p>
-				<textarea class="p-2" placeholder="Enter the lockup receipt that the recipient received when they locked their Minima" class="mt-2" id="minima_receipt_textarea" style="min-height: 150px; border: none; white-space: nowrap;"></textarea>
+				<p class="mb-2"><strong>Minima Lockup Receipt</strong></p>
+				<textarea class="p-2" placeholder="Enter the lockup receipt that the recipient received when they locked their Minima" class="mt-2" id="minima_receipt_textarea" style="min-height: 150px; border: none;"></textarea>
 				<a class="btn btn-primary btn-lg mt-3 col-12" id="load_minima_receipt">
 					<span id="load_minima_receipt_text">Load Receipt</span>
 					<div  style="display:none" class="spinner-border mx-auto" role="status" id="load_minima_receipt_spinner">
@@ -520,13 +531,17 @@
 					</p>
 
 					<p class="my-2"><strong>Recipient Will Receive</strong></p>
-					<p class="m-0 p-3 bg-light"> 
-						<img src="minimalogo.svg" style="width: 24px;"><span id="minima_receipt_status"> </span> <span>Minima</span>
+					<p class="m-0 p-2 bg-light h5 m-0 align-self-center" style="display: flex;"> 
+						<img src="minimalogo.svg" style="width: 48px;">
+						<span class="align-self-center">
+							<span id="minima_receipt_status"> </span> <span>Minima</span>
+						</span>
 					</p>
 
 					<p class="my-2"><strong>You Will Receive</strong></p>
-					<p class="m-0 p-3 bg-light"> 
-						<img src="ethereumlogo.png" style="height: 24px;"><span class="eth_to_lock"> </span>
+					<p class="m-0 p-2 bg-light" style="display: flex;"> 
+						<img src="ethlogo.svg" id="asset_to_lock_img" style="height: 48px;">
+						<span class="asset_to_lock h5 m-0 align-self-center asset_selection_text"> </span>
 					</p>
 
 					<p class="my-2"><strong>Expires In</strong></p>
@@ -540,7 +555,15 @@
 					</div>
 					<p class="minima_receipt_progress_text text-center"></p>
 					<!--a class="btn btn-primary btn-lg col-12 mt-3" id="minima_receipt_confirm">Confirm</a-->
-					<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_ethereum_confirm">
+					
+					<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_evm_asset_approve">
+						<span id="ethereum_approve_text" style="display: block;">Approve</span>
+						<div class="spinner-border mx-auto" role="status" id="ethereum_approve_spinner" style="display: none;">
+							<span class="sr-only"></span>
+						</div>
+					</a>
+					
+					<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_evm_asset_confirm">
 						<span id="ethereum_create_text" style="display: block;">Lock Funds</span>
 						<div class="spinner-border mx-auto" role="status" id="ethereum_create_spinner" style="display: none;">
 							<span class="sr-only"></span>
@@ -567,13 +590,13 @@
 				<div id="ethereum_lockup_form">
 					<p class="mb-2" style="font-weight:800">You are Locking</p>
 					<div class="row m-0 p-2 bg-light">
-						<img src="ethereumlogo.png" style="width: fit-content;height: 24px;" class="px-2">
+						<img src="ethlogo.svg" style="width: fit-content;height: 24px;" class="px-2">
 						<span id="ethereum_lock_modal_eth_amount" style="width: fit-content;" class="p-0">0.001000000000</span>
 						<span class="ms-auto" style="border-radius: 0px;width: fit-content;border-left: solid 1px;">ETH</span>
 					</div>
 				</div>
 			</div>
-			<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_ethereum_confirm">
+			<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_evm_asset_confirm">
 				<span id="ethereum_create_text">Lock Funds</span>
 				<div class="spinner-border mx-auto" role="status" id="ethereum_create_spinner" style="display: none">
 					<span class="sr-only"></span>
@@ -689,36 +712,43 @@
 					<span id="current_usdt_balance" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
+				</div>	
+				<div class="mt-1">
+					<i class="fa-solid fa-coins"></i> 
+					wMinima:
+					<span id="current_wminima_balance" class="float-end px-2">
+						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
+					</span>
 				</div>		
 			</span>
 		</p>
 	</div>
 
 	<div class="modal fade" tabindex="-1" id="asset_choice_modal">
-		<div class="modal-dialog modal-sm">
+		<div class="modal-dialog modal-md" style="max-width: 375px;">
 		  	<div class="modal-content" style="border-radius: 1.5rem; background: #e3e3e6">
 				
-				<div class="modal-body">
+				<div class="modal-body p-4">
 					<h5 class="modal-title text-center" style="font-weight: 800;">Select Currency</h5>
 					<div class="my-3">
 						<div currency="eth" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
-							<img class="mb-1" src="ethereumlogo.png" height="32" width="32">
-							<span class="ms-2"><small>Ether / ETH</small></span>
+							<img class="mb-1" src="ethlogo.svg" height="32" width="32">
+							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Ether / ETH</small></span>
 						</div>
-						<div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light text-muted" style="border-radius: 5px; cursor: not-allowed">
+						<div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdtlogo.svg" height="32" width="32">
-							<span class="ms-2"><small>Tether / USDT</small></span>
+							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Tether / USDT</small></span>
 						</div>
-						<div currency="usdc" class="text-start col-12 p-1 m-0 my-1 btn bg-light text-muted" style="border-radius: 5px; cursor: not-allowed">
+						<div currency="usdc" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdclogo.svg" height="32" width="32">
-							<span class="ms-2"><small>USD Coin / USDC</small></span>
+							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">USD Coin / USDC</small></span>
 						</div>
-						<div currency="wminima" class="text-start col-12 p-1 m-0 my-1 btn bg-light text-muted" style="border-radius: 5px; cursor: not-allowed">
+						<div currency="wminima" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="wminimalogo.svg" height="32" width="32">
-							<span class="ms-2"><small>Wrapped Minima / wMinima</small></span>
+							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Wrapped Minima / wMinima</small></span>
 						</div>
 					</div>
-					<p class="text-center" style="font-weight: 800; text-decoration: underline; text-underline-offset: 7px;">Cancel</p>
+					<p class="text-center" style="font-weight: 800; text-decoration: underline; text-underline-offset: 7px; cursor: pointer;">Cancel</p>
 				</div>
 		  	</div>
 		</div>
@@ -737,8 +767,10 @@
 		 * still has time to claim the first party's funds. For that reason ETH_TIMELOCK_INNER_WINDOW 
 		 * must be greater than MIMIMUM_LOCKUP_MINIMA, or the first party can maliciously claim everything
 		**/
-		const MINIMUM_LOCKUP_MINIMA = 240 //default 1 hours
+		const MINIMUM_LOCKUP_MINIMA = 72 //default 1 hours = 72 blocks
 		const ETH_TIMELOCK_INNER_WINDOW = MINIMUM_LOCKUP_MINIMA / 2; //default 0.5 hour
+        const MINIMA_BLOCK_TIME = 50;
+        const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME 
 
 		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> USDC
 		
@@ -754,6 +786,7 @@
 		var refunder_key; 			//The Minima locker's key
 		var secret_minima; 			//The secret used to unlock the hashlock
 		var hashlock_minima; 		//The hashlock used to lock funds on minima and ethereum
+        var database_htlc_contracts;//HTLC contracts information loaded from database
 		var current_loaded_htlc; 	//Helper object loaded from database to easily access info about the HTLC
 		var evm_htlc_contract_id; 	//ID of the currently htlc contract on ethereum
 
@@ -828,6 +861,42 @@
 			return result;
 		}
 
+        var scientificToDecimal = function (num) {
+            var nsign = Math.sign(num);
+            //remove the sign
+            num = Math.abs(num);
+            //if the number is in scientific notation remove it
+            if (/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
+                var zero = '0',
+                        parts = String(num).toLowerCase().split('e'), //split into coeff and exponent
+                        e = parts.pop(), //store the exponential part
+                        l = Math.abs(e), //get the number of zeros
+                        sign = e / l,
+                        coeff_array = parts[0].split('.');
+                if (sign === -1) {
+                    l = l - coeff_array[0].length;
+                    if (l < 0) {
+                    num = coeff_array[0].slice(0, l) + '.' + coeff_array[0].slice(l) + (coeff_array.length === 2 ? coeff_array[1] : '');
+                    } 
+                    else {
+                    num = zero + '.' + new Array(l + 1).join(zero) + coeff_array.join('');
+                    }
+                } 
+                else {
+                    var dec = coeff_array[1];
+                    if (dec)
+                        l = l - dec.length;
+                    if (l < 0) {
+                    num = coeff_array[0] + dec.slice(0, l) + '.' + dec.slice(l);
+                    } else {
+                    num = coeff_array.join('') + new Array(l + 1).join(zero);
+                    }
+                }
+            }
+
+            return nsign < 0 ? '-'+num : num;
+        };
+
 		function validate_amount(amount, _current_asset)
 		{
 			if(amount == "")
@@ -876,8 +945,15 @@
 							
 							+"  `secret` varchar(160) DEFAULT NULL, "
 							+"  `hash` varchar(160) DEFAULT NULL,"
+                            +"  `actualscript` varchar(2000) DEFAULT NULL,"
 
+                            +"  `receiverminima` varchar(66) DEFAULT NULL, "
+                            +"  `refunderminima` varchar(66) DEFAULT NULL, "
 							
+                            +"  `receiverasset` varchar(66) DEFAULT NULL, "
+
+                            +"  `coinid` varchar(66) DEFAULT NULL, "
+
 							+"  `timelockminima` int(10) DEFAULT -1,"
 							+"  `timelockropsten` int(10) DEFAULT -1,"
 
@@ -886,6 +962,7 @@
 							
 							+"  `amounteth` float DEFAULT 0,"
 							+"  `ethlocked` bool DEFAULT false,"
+                            +"  `ethlockedtime` varchar(64) DEFAULT 0,"
 
 							+"  `unlockaddresseth` varchar(42) DEFAULT NULL,"
 
@@ -935,7 +1012,7 @@
 						$(".minima_unconfirmed").text(coins[i].unconfirmed);
 						$(".minima_sendable").text(coins[i].sendable);
 
-						$(".asset_choice[asset='minima']").text("Balance: " + coins[i].sendable + " Minima");
+						$(".asset_choice[asset='minima']").text("Balance: " + parseFloat(coins[i].sendable).toFixed(6) + " Minima");
 
 						user_balances["minima"] = coins[i].sendable;
 
@@ -985,11 +1062,13 @@
 
 			var minima_amount = $(".minima_amount").val();
 
-			var eth_amount = $(".eth_amount").val();
+			var receiver_asset_amount = $(".receiver_asset_amount").val();
+
+            var receiver_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 
 			const timelock_seconds = $("#minima_timelock_dropdown_button").attr("time");
 			
-			let seconds_to_blocks = timelock_seconds / 15;
+			let seconds_to_blocks = timelock_seconds / 50;
 			
 			const timelock = parseInt(current_minima_block) + parseInt(seconds_to_blocks) + 1;
 
@@ -1011,17 +1090,17 @@
 				error = true;
 			}
 
-			if(minima_receiver.length != 66 || !/^[0-9A-F]{64}$/i.test(hashlock_minima.substring(2)))
+			if(receiver_minima.length != 66 || !/^[0-9A-F]{64}$/i.test(receiver_minima.substring(2)))
 			{
 				$(".minima_amount").addClass("is-invalid");
 
-				alert("Invalid minima public key");
+				alert("Invalid minima public key ");
 				error = true;
 			}
 
-			if(eth_amount != parseFloat(eth_amount))
+			if(receiver_asset_amount != parseFloat(receiver_asset_amount))
 			{
-				$(".eth_amount").addClass("is-invalid");
+				$(".receiver_asset_amount").addClass("is-invalid");
 				alert("Invalid float value for eth amount");
 				error = true;
 			}
@@ -1058,9 +1137,11 @@
 				//Details
 				let script 	= resp.response.script;
 				let address = resp.response.address;				
-				
+				let _txn = "send amount:"+minima_amount+" address:"+address + " state:"+ JSON.stringify({"1":hashlock_minima, "2":receiver_minima, "3":refunder_key});
+                console.log("GENERATING HTLC TRANSACTION ");
+                console.log(_txn);
 				//Now lets put this in the DB
-				MDS.cmd("send amount:"+minima_amount+" address:"+address + " state:"+ JSON.stringify({"0":hashlock_minima, "1":receiver_minima, "2":refunder_key}), function(sendresp){
+				MDS.cmd(_txn, function(sendresp){
 					
 					MDS.log("SENT THE SCRIPT " + minima_amount + " MINIMA");
 					MDS.log("ENTIRE RESPONSE:");
@@ -1068,18 +1149,20 @@
 
 					let coinid = sendresp.response.body.txn.outputs[0].coinid;
 
-					console.log("THE COIN ID IS " + coinid);
-
 					if(sendresp.status == false)
 					{
 						alert("Transaction unsuccessful " + sendresp.message);
 					}
 					else
 					{
+                        console.log("THE MINIMA SECRET IS " + secret_minima);
 						//If the send was successful add it to the database
-						var sql = "INSERT INTO htlc(htlcscript, chain, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+script+"','minima','"+address+"','"+secret_minima+"','"+hashlock_minima+"','"+timelock+"','"+minima_amount+"','"+eth_amount+"','"+ethereum_address+"', true)";
+						var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+script+"','"+actualscript+"','"+receiver_minima+"','"+refunder_key+"','"+receiver_asset+"','minima','"+coinid+"','"+address+"','"+secret_minima+"','"+hashlock_minima+"','"+timelock+"','"+minima_amount+"','"+receiver_asset_amount+"','"+ethereum_address+"', true)";
 						MDS.sql(sql,function(sqlresp){
 							
+                            console.log("Result of the INSERT:");
+                            console.log(sqlresp);
+
 							$("#btn-lock-funds-minima").css("display", "none");
 							$(".container").css("display", "none");
 
@@ -1092,7 +1175,8 @@
 								"receiver_minima": receiver_minima,
 								"refunder_minima": refunder_key,
 								"actual_script": actualscript,
-								"eth_amount"	: eth_amount,
+								"receiver_asset": receiver_asset,
+								"receiver_asset_amount"	: scientificToDecimal(receiver_asset_amount),
 								"address"	: address,
 								"coinid"	:coinid,
 								"unlockaddresseth" : ethereum_address
@@ -1123,72 +1207,120 @@
 			
 			//$("#myhtlc").empty();
 
+            $("#pending_swaps_rows").html("");
+
 			var sql = "SELECT * FROM htlc ORDER BY ID DESC";
 			MDS.sql(sql,function(sqlresp){
 
+                console.log(sqlresp);
+
 				var data = sqlresp.rows;
+
+                database_htlc_contracts = data;
+
 				let _pending_swaps_html = "";
-				let _completed_swaps_html = "";
+                let _completed_swaps_html = "";
 				
 				for(var i = 0; i < data.length; i++) 
 				{
-					//If the user has either refunded themselves or claimed the Minima
-					if	((data[i].CHAIN = "ethereum " && (data[i].REFUNDEDETHEREUM || data[i].CLAIMEDMINIMA)) 
-						|| 
-						(data[i].CHAIN = "minima " && (data[i].REFUNDEDMINIMA || data[i].CLAIMEDETHEREUM))){
-						//do stuff return;
-						return;
-					}
 
-					let title_text = "";
-					let timelock_minima_seconds = (data[i].TIMELOCKMINIMA - current_minima_block) * 4;
-					if(timelock_minima_seconds < 0) timelock_minima_seconds = 0;
-					let timer_minima_text = secondsToDigitalClock(timelock_minima_seconds);
+                    console.log("ROW");
+                    console.log(data[i]);
 
+                    let title_text = "";
+                    let timer_minima_text = "";
+                    let text_colour = "#7300ff;";
+					
+                    //Expire contracts 30 minutes before actual expiry to avoid race conditions with collection
+					let timelock_minima_expiry_seconds = (data[i].TIMELOCKMINIMA - current_minima_block - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME;
+					
+                    if(timelock_minima_expiry_seconds <= 0) 
+                    {
+                        timelock_minima_expiry_seconds = 0;
+                        timer_minima_text = " Expired";
+                        let text_colour = "red;";
+                    }
+                    else
+                    {
+                        timer_minima_text = secondsToDigitalClock(timelock_minima_expiry_seconds);
+                    }
+                    
 					if(data[i].CHAIN == "minima")
 					{
-						title_text = '<small class="m-0" style="font-weight: 800">' + data[i].AMOUNTMINIMA + " Minima for " + data[i].AMOUNTETH + " ETH</small>";
+						title_text = '<small class="m-0" style="font-weight: 800">' 
+                                    + parseFloat(data[i].AMOUNTMINIMA).toString() 
+                                    + " Minima for " 
+                                    + parseFloat(data[i].AMOUNTETH).toString() 
+                                    + " ETH</small>";
 					}
-					else if(data[i].CHAIN == "ethereum")
+					else
 					{
-						title_text = '<small class="m-0" style="font-weight: 800">' + data[i].AMOUNTETH + " ETH for " + data[i].AMOUNTMINIMA + " Minima</small>";
+						title_text = '<small class="m-0" style="font-weight: 800">' 
+                                    + parseFloat(data[i].AMOUNTETH).toString() 
+                                    + " ETH for " 
+                                    + parseFloat(data[i].AMOUNTMINIMA).toString() 
+                                    + " Minima</small>";
 					}
 
-					title_text += '<span class="float-end"><small class="me-2" style="font-weight: 800; color: #7300ff;"><i class="fa fa-stopwatch"></i> '+timer_minima_text+'</small> <i class="fa fa-chevron-right"></i></span>';
+                    //If the user has either refunded themselves or claimed the Minima
+					if	((data[i].CHAIN == "ethereum" && (data[i].REFUNDEDETHEREUM == "true" || data[i].CLAIMEDMINIMA == "true")) 
+						|| 
+						(data[i].CHAIN == "minima" && (data[i].REFUNDEDMINIMA == "true" || data[i].CLAIMEDETHEREUM == "true"))){
+						//do stuff return;
 
-					_pending_swaps_html = '<div style="border-radius: 10px;" class="p-3 bg-light historical_swap_item" style="cursor: pointer">'+title_text+'</div>';
+                        console.log("Found completed swap");
+                        _completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light historical_swap_item">'+title_text+'</div>';
+						continue;
+					}
+
+					title_text += '<span class="float-end"><small class="me-2" style="font-weight: 800; color: '+text_colour+'"><i class="fa fa-stopwatch"></i> '+timer_minima_text+'</small> <i class="fa fa-chevron-right"></i></span>';
+
+					_pending_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light historical_swap_item">'+title_text+'</div>';
 				}
 				
-				$("#pending_swaps_rows").html(JSON.stringify(data) + _pending_swaps_html);
-			});
+                console.log("FINAL HTML");
+                console.log(_pending_swaps_html);
+
+				$("#pending_swaps_rows").append(_pending_swaps_html);
+                $("#completed_swaps_rows").append(_completed_swaps_html);
+			
+            });
+
 		}
 		
 		function collect(address,secret){
 
-			console.log("%cAttempting to collect minima coins at address " + address, "background: cyan");
+            console.log("- Inside collection function");
+            console.log("Address: " + address);
+            console.log("Secret: " + secret);
 
 			//First.. get the coin..			
 			let collection_result = MDS.cmd("coins address:"+address, function(coinresp){
-				
-				//MDS.log(JSON.stringify(coinresp));
+
+                console.log("GETTING COINS AT ADDRESS");
+
+				MDS.log(JSON.stringify(coinresp));
 				
 				var coins = coinresp.response;
 				if(coins.length < 1){
 					alert("No unspent coins found.");
 					return false;
 				}
+
+                console.log("Unspent coins found " + coins.length);
 				
 				//Get the coin
 				var coin = coins[0];
 
-				console.log("%cThe coin in question: ", "background: cyan");
-				console.log(coin);
+                console.log("Getting the 0th coin");
 
 				if(coin.spent)
 				{
 					alert("This coin has already been spent");
 					return false;
 				}
+
+                console.log("Coin already spent??? " + coin.spent.toString());
 
 				//Get an address to collect to..
 				let cmd_result = MDS.cmd("getaddress", function(getresp){
@@ -1211,36 +1343,34 @@
 
 						let txnpost_response;
 
-						console.log("%cTransaction Post Response: ", "background: cyan");
-						console.log(txnresp);
-
 						//let obj = JSON.parse(txnresp);
 
 						//We did 8 commands at simultaneously, but we only care about the txn post response
 						for(let i = 0; i < txnresp.length; i++)
 						{
-							console.log("Minima command: " + txnresp[i].command);
 							if(txnresp[i].command == "txnpost")
 							{
 								txnpost_response = txnresp[i];
 							}
 						}
 
-						console.log("%cResponse of the transaction POST", "background: cyan");
-						console.log(txnpost_response);
-
 						//Now we can see how much we claimed
 						let amount_claimed = txnpost_response.response.body.txn.outputs[0].amount;
 
-						console.log("Amount claimed is " + amount_claimed);
+                        console.log("Response of the post to claim the Minima");
+                        console.log(txnpost_response);
+                        console.log("Amount claimed: " + amount_claimed);
 
 						if(amount_claimed > 0)
 						{
 							//Reset redemption button 
 							$("#ropsten_receipt_expiry_warning").css("display", "none");
+							$("#minima_redeem_spinner").css("display", "none");
 							$("#redeem_minima").css("display", "none");
-							$("#minima_redeem_success").css("display", "block");
+							
+							$("#timelock_too_short_warning").css("display", "none");
 
+							clearInterval(ethereum_timelock_progress_bar_update_interval);
 
 							//Set Claim button to say "you have claimed"
 							$("#claim_minima_icon").css("display", "block");
@@ -1269,6 +1399,7 @@
 				$(".container").css("display", "none");
 				$("#pending_swaps_container").css("display", "block");
 				$("body").css("background", "white");
+                loadHTLC();
 			});
 
 			$("#pending_swaps_toggle").on("click", function(){
@@ -1276,7 +1407,10 @@
 				$(this).addClass("btn-light");
 
 				$("#completed_swaps_toggle").removeClass("text-purple");
-				$("#completed_swaps_toggle").removeClass("btn-light");				
+				$("#completed_swaps_toggle").removeClass("btn-light");	
+                
+                $("#pending_swaps_card").show();
+                $("#completed_swaps_card").hide();
 			});
 
 			$("#completed_swaps_toggle").on("click", function(){
@@ -1285,6 +1419,9 @@
 
 				$("#pending_swaps_toggle").removeClass("text-purple");
 				$("#pending_swaps_toggle").removeClass("btn-light");	
+
+                $("#pending_swaps_card").hide();
+                $("#completed_swaps_card").show();
 			});
 
 			$("#choose_minima_for_tokens").on("click", function(){
@@ -1340,29 +1477,20 @@
 			$(".asset_selection").on("click", function(){
 								
 				const _html = $(this).html();
-
 				const _currency = $(this).attr("currency");
 
-				let _text;
+				let _text = "Swap Minima for " + ASSET_FRIENDLY_NAMES[_currency];
+				swap_direction[0] = "minima";
+				swap_direction[1] = _currency;
 
-				if($("#swap_direction").attr("direction") == "down")
-				{
-					 _text = "Swap Minima for " + ASSET_FRIENDLY_NAMES[_currency];
-					swap_direction[0] = "minima";
-					swap_direction[1] = _currency;
-				}
-				else
-				{
-					_text = "Swap " + ASSET_FRIENDLY_NAMES[_currency] + " for Minima";
-					swap_direction[0] = _currency;
-					swap_direction[1] = "minima";
-				}
+				$("#selected_asset_image").attr("src", _currency + "logo.svg?v2");
+				$(".asset_selection_text").text(ASSET_FRIENDLY_NAMES[_currency]);
 
 				$("#swap_initiate_button").text(_text);
 				$("#swap_summary_title_text").text(_text);
 
 				$("#bottom_balance_label").attr("asset", _currency);
-				$("#bottom_balance_label").text("Balance: " + user_balances[_currency]);
+				$("#bottom_balance_label").text("Balance: " + user_balances[_currency] + " " + ASSET_FRIENDLY_NAMES[_currency]);
 
 				$(".modal").modal("hide");
 				
@@ -1412,7 +1540,7 @@
 				
 				if(return_early) return;
 
-				let _current_asset = $("#top_asset_selection_wrapper").attr("selection");
+				let _current_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 				let _valid_top_amount = validate_amount(_top_amount);
 				let _valid_bottom_amount = validate_amount(_bottom_amount);
 				
@@ -1423,49 +1551,26 @@
 					return;
 				}
 
-				//swap is Minima ---> Something Else
-				if(swap_direction[0].toLowerCase() == "minima")
+				$(".minima_amount").val(_top_amount);
+				$(".receiver_asset_amount").val(_bottom_amount);
+
+				var minima_amount = _top_amount;
+
+				if(new BigNumber(user_balances["minima"]).isLessThan(minima_amount))
 				{
-
-					$(".minima_amount").val(_top_amount);
-					$(".eth_amount").val(_bottom_amount);
-
-					var minima_amount = _top_amount;
-
-					if(new BigNumber(user_balances["minima"]).isLessThan(minima_amount))
-					{
-						alert("Insufficient Minima Balance");
-						$("#top_amount").addClass("is-invalid");
-						return;	
-					}
-
-					genRandomSecret();
-
-					$(".container").css("display", "none");
-
-					//Set labels on receipt to correct values
-					$("#swap_amount_minima_label").text(minima_amount)
-					$("#swap_amount_eth_label").text(_bottom_amount)
-					$("#get_minima_public_key_prompt").css("display", "block");
-
+					alert("Insufficient Minima Balance");
+					$("#top_amount").addClass("is-invalid");
+					return;	
 				}
-				else
-				{
-					$(".minima_amount").val(_bottom_amount);
-					$(".eth_amount").val(_top_amount);
 
-					var eth_amount = _bottom_amount;
+				genRandomSecret();
 
-					if(new BigNumber(user_balances["eth"]).isLessThan(eth_amount))
-					{
-						alert("Insufficient ETH Balance");
-						$("#bottom_amount").addClass("is-invalid");
-						return;	
-					}
+				$(".container").css("display", "none");
 
-					$("#swap_details_card").css("display", "none");
-					$("#minima-get-public-key-container").css("display", "block");
-				}
+				//Set labels on receipt to correct values
+				$("#swap_amount_minima_label").text(minima_amount)
+				$("#swap_receive_amount_label").text(_bottom_amount + " " + ASSET_FRIENDLY_NAMES[_current_asset])
+				$("#get_minima_public_key_prompt").css("display", "block");
 
 			});
 
@@ -1554,18 +1659,20 @@
 				if(!isValidJSON(_json))
 				{
 					alert("Receipt invalid: invalid JSON format");
+                    $("#load_minima_receipt_text").css("display", "block");
+				    $("#load_minima_receipt_spinner").css("display", "none");
+                    return;
 				}
 
 				let _obj = JSON.parse(_json);
 
-				console.log(" - Loaded Minima Receipt:");
-				console.log(_obj);
-				console.log("\n\n");
-
 				let _address = _obj.address //Guaranteed unique field
-				let _eth_amount = _obj.eth_amount;
+				let _eth_amount = parseFloat(_obj.receiver_asset_amount).toString();
 				let _hashlock = _obj.hashlock;
 				let _ethereum_unlock_address = _obj.unlockaddresseth;
+				let _receiver_asset = _obj.receiver_asset;
+                let _refunder_minima = _obj.refunder_minima;
+                let _receiver_asset_amount = _obj.receiver_asset_amount;
 				let _timelock_minima = _obj.timelock;
 				let _actual_script = _obj.actual_script;
 				let _coinid = _obj.coinid;
@@ -1573,21 +1680,25 @@
 				let _locker_minima = _obj.refunder_minima;
 				let _error = false;
 
-				let script_should_be = actualscript;
+				if(_receiver_asset == "eth")
+				{
+					$("#lock_evm_asset_approve").css("display", "none");
+					$("#lock_evm_asset_confirm").css("display", "block");	
+				}
+				else
+				{
+					$("#lock_evm_asset_confirm").css("display", "none");
+					$("#lock_evm_asset_approve").css("display", "block");
+				}
 
-				console.log(" - Cryptographically Verifying Script:");
+				$(".asset_selection_text").text(ASSET_FRIENDLY_NAMES[_receiver_asset]);
+
+				let script_should_be = actualscript;
 
 				if(script_should_be.replace(/ /g,'') !==  _actual_script.replace(/ /g,''))
 				{
 					alert("Invalid lockup receipt. The suggested minima lockup script has been modified, and it not safe.");
 					$("#minima_receipt_textarea").css("border","solid 2px red !important;");
-					
-					console.log("- The Minima lock script was different than expected ");
-					console.log(" - The received script was: ");
-					console.log(_actual_script.replace(/ /g,''));
-					console.log("\n - The expected script was: ");
-					console.log(script_should_be.replace(/ /g,''));
-					console.log(" - ABORTING");
 					return;
 				}
 
@@ -1601,22 +1712,11 @@
 				_txn = 	"txncreate id:checksignature"+_salt+";"
 				+		"txnsign id:checksignature"+_salt+" publickey: " + _receiver_minima + ";";
 
-				console.log(" - Verifying public key provided in the receipts");
-				console.log(" - Creating mock transaction and attempting to sign it");
-				console.log(" - Executing:  " + _txn);
-
 				let _cmd = MDS.cmd(_txn, function(_response){
-					
-					console.log(" - Executed address verify script");
-					console.log(" - Printing the response \n");
-					console.log(_response);
 					
 					if(_response[1].status == false && _response[1].pending == false)
 					{
 						//The receiver can not unlock this HTLC
-
-						console.log("\n - The responses status of the transaction was " + false);
-						console.log(" - ABORTING");
 
 						alert("Invalid receipt. The Minima receiver public key in this receipt is not yours. You will not be able to refund the Minima with this wallet.")
 						return;
@@ -1644,13 +1744,22 @@
 						current_loaded_htlc.TIMELOCKMINIMA = _timelock_minima;
 						current_loaded_htlc.UNLOCKADDRESSETH =  _ethereum_unlock_address;
 						current_loaded_htlc.RECEIVERMINIMA =  _receiver_minima;
+                        current_loaded_htlc.REFUNDERMINIMA =  _refunder_minima;
+						current_loaded_htlc.RECEIVERASSET = _receiver_asset;
 						current_loaded_htlc.ADDRESS = _address;
 						current_loaded_htlc.COINID = _coinid;
 						current_loaded_htlc.HASH = _hashlock;
 
+						var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+_actual_script+"','"+_actual_script+"','"+_receiver_minima+"','"+_refunder_minima+"','"+_receiver_asset+"','"+chainName+"','"+_coinid+"','"+_address+"','','"+_hashlock+"','"+_timelock_minima+"','"+_receiver_asset_amount+"','"+_eth_amount+"','', true)";
+                
+                        MDS.sql(sql,function(sqlresp){
+                            console.log("%cLocked Minima Receipt Adding Details to Database", "background:red");
+                            console.log(sqlresp);
+                        });
+
 						let _blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
 
-						$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * 15 - ETH_TIMELOCK_INNER_WINDOW) + ")"); 
+						$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * MINIMA_BLOCK_TIME - ETH_TIMELOCK_INNER_WINDOW) + ")"); 
 
 						$(".minima_receipt_progress_text").text("Block" + current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
 
@@ -1664,31 +1773,18 @@
 							//So both users will know what the address is. If the address
 							//is not the hash of the expected script, then we know the script is wrong
 
-							console.log(" - Interval (Check Blockchain Confirmation of Minima Lock)");
-
 							MDS.cmd("coins address:" + _address, function(response){
-
-								console.log(" - Printing response:");
-								console.log(response);
 
 								let _coin_found = false;
 								let _coin;
 								let _obj = response.response;
-								console.log("Object");
-								console.log(_obj);
 
-								console.log("LOOKING FOR " + current_loaded_htlc.COINID + "\n");
-								console.log("______CHECKING AGAINST__________");
 								for(let i = 0; i < _obj.length; i++)
 								{
-									
-									console.log("- " + _obj[i].coinid);
-
+				
 									if(_obj[i].coinid == current_loaded_htlc.COINID)
 									{
-										console.log("%cCOIN FOUND!!", "color:green");
 										_coin = _obj[i];
-										console.log(_coin);
 										_coin_found = true;
 										break;
 									}	
@@ -1697,14 +1793,12 @@
 								if(_coin_found)
 								{
 									$("#minima_receipt_status").html(_coin.amount);
-									$(".eth_to_lock").text(_eth_amount + " ETH");
+									$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
+									$("#asset_to_lock_img").attr("src", _receiver_asset + "logo.svg");
 
 									if(_coin.state[0].data !== current_loaded_htlc.HASH)
 									{
 										alert("Incorrect hashlock. Swap invalid.")
-										
-										console.log("%cExpecting: " + current_loaded_htlc.HASH, "background:yellow");
-										console.log("%cGot: " + _coin.state[0].data, "background:yellow");
 										
 										clearInterval(minima_transaction_update_interval);
 										return;
@@ -1713,15 +1807,13 @@
 									if(_coin.state[1].data !== current_loaded_htlc.RECEIVERMINIMA)
 									{
 										alert("Incorrect receiver in script. Swap invalid.");
-										console.log("%cExpecting: " + current_loaded_htlc.RECEIVERMINIMA, "background:yellow");
-										console.log("%cGot: " + _coin.state[1].data, "background:yellow");
 										clearInterval(minima_transaction_update_interval);
 										return;
 									}
 
 									$("#minima_receipt_confirmation_status").text("No Longer Available")
 									$("#minima_receipt_confirmation_status_colour").css("background", "red");
-									$(".eth_to_lock").text(_eth_amount + " ETH");
+									$(".asset_to_lock").text(_eth_amount + " ETH");
 
 									$("#minima_lock_receipt_waiting_button").css("display", "none");
 									$("#minima_lock_receipt_waiting_spinner").css("display", "none");
@@ -1733,8 +1825,7 @@
 									$("#minima_receipt_confirmation_status").text("Confirmed Locked");
 									$("#minima_receipt_confirmation_status_colour").css("background", "green");
 									
-									console.log("%c - (Locked Minima Confirmed)", "color: green");
-									clearInterval(minima_transaction_update_interval);
+                                    clearInterval(minima_transaction_update_interval);
 								}
 
 								let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100; 
@@ -1749,7 +1840,7 @@
 								$(".minima_receipt_progress_text").text(current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
 
 								_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
-								_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * 15 );
+								_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
 
 								$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")"); 
 
@@ -1757,8 +1848,6 @@
 						}
 
 						update_minima_transaction_status();
-
-						console.log("- OUTSIDE OF UPDATE FUNCTION");
 
 						if(!minima_transaction_update_interval)
 						{
@@ -1882,7 +1971,7 @@
 							$(".minima_redeem_progress_bar").css("width", _percentage_redeemable_time + "%");
 							$("#minima_redeem_progress_text").text(current_minima_block + " / " + current_loaded_htlc.TIMELOCKMINIMA + " Blocks");
 							
-							let time_remaining = secondsToHms(_blocks_til_redeemable * 15);
+							let time_remaining = secondsToHms(_blocks_til_redeemable * MINIMA_BLOCK_TIME);
 
 							if(!time_remaining)
 							{
@@ -1897,7 +1986,7 @@
 						$(".ropsten_receipt_progress_text").text(current_minima_block + " / " + (current_loaded_htlc.TIMELOCKMINIMA - ETH_TIMELOCK_INNER_WINDOW));
 					
 						let _blocks_til_expiry = parseInt(current_loaded_htlc.TIMELOCKMINIMA) - current_minima_block;
-						let _digital_clock_expiry = secondsToDigitalClock((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * 15 );
+						let _digital_clock_expiry = secondsToDigitalClock((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
 
 						$(".ropsten_receipt_timelock").text(_digital_clock_expiry); 
 					
@@ -1922,9 +2011,40 @@
 				
 			});
 
-			$("#lock_ethereum_confirm").on("click", async function(){
+			//Need to approve before you lock ERC20
+			$("#lock_evm_asset_approve").on("click", async function(){
+
+				$("#ethereum_approve_text").css("display", "none");
+				$("#ethereum_approve_spinner").css("display", "block");
+
+				const _receiver_asset = current_loaded_htlc.RECEIVERASSET;
+				const _receiver_amount = web3.utils.toWei(current_loaded_htlc.AMOUNTETH);
+
+                console.log("RECEIVER ASSET " + _receiver_asset);
+                console.log("RECEIVER AMOUNT " + _receiver_amount);
+                
+
+				let _token = ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId][_receiver_asset];
+
+				_token = new window.web3.eth.Contract(ABIs[_receiver_asset], TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset]);
+
+				await _token.methods.approve(HTLC_CONTRACT_ADDRESSES["erc20"][chainName], _receiver_amount)
+				.send({from: currentAccount})
+				.then(function(e){
+					$("#lock_evm_asset_approve").css("display", "none");
+					$("#lock_evm_asset_confirm").css("display", "block");
+				})
+				.catch(function(e){
+					console.error("THERE WAS AN ERROR");
+					$("#ethereum_approve_text").css("display", "block");
+					$("#ethereum_approve_spinner").css("display", "none");
+					console.error(e);
+				});
+			});
+
+			$("#lock_evm_asset_confirm").on("click", async function(){
 				
-				let time_window_seconds = (parseInt(current_loaded_htlc.TIMELOCKMINIMA) - current_minima_block) * 15; //Minima timelock expires in this many seconds
+				let time_window_seconds = (parseInt(current_loaded_htlc.TIMELOCKMINIMA) - current_minima_block) * MINIMA_BLOCK_TIME; //Minima timelock expires in this many seconds
 
 				let _block_number = await web3.eth.getBlockNumber();
 
@@ -1941,6 +2061,7 @@
 				const _hashlock = current_loaded_htlc.HASH;
 				const _timelock = parseInt(current_ethereum_chain_time) + parseInt(time_window_seconds / 2); //Give each party equal time to claim (half the time each)
 				const _amount = current_loaded_htlc.AMOUNTETH;
+				const _receiver_asset = current_loaded_htlc.RECEIVERASSET;
 
 				if(!/^[0-9A-F]{40}$/i.test(_receiver.substring(2)) || _receiver.substring(0,2) !== "0x")
 				{
@@ -1965,94 +2086,160 @@
 				$("#ethereum_create_spinner").css("display", "block");
 				$("#ethereum_create_text").css("display", "none");	
 
-				console.log("- Creating HTLC Contract on Ethereum Side");
-				console.log("- Chain name " + chainName);
-				console.log(" - Contract address " + HTLC_CONTRACTS[chainName]);
+				let htlc_contract;				
+				let htlc_contract_method;
 
-				await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.newContract(_receiver, _hashlock, parseInt(_timelock)).send({from: currentAccount, value: web3.utils.toWei(_amount.toString())}).on('transactionHash', function(hash){
-					console.log("- Hash of HTLC Contract creation on EVM Network");
-					console.log(hash);
-				}).then(async response => {
-
-					console.log("- Response of the Contract Creation being forwarded to the blockchain");
-
-					console.log(response);
-
-					$("#ethereum_lockup_container").css("display", "none");
-					$("#minima_receipt_content").css("display", "none");
-
-					$("#ethereum_create_spinner").css("display", "none");
-					$("#ethereum_create_text").css("display", "block");
-
-					evm_htlc_contract_id = response.events.LogHTLCNew.returnValues[0];
-
-					console.log(" - HTLC Contract address on EVM chain " + evm_htlc_contract_id);
+				if(_receiver_asset === "eth")
+				{					
+					//Use the Native Contract 
+					htlc_contract = new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]);
+					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock));
 					
-					/*
-					
-					var _sql = "UPDATE htlc SET contractidevm='"+ evm_htlc_contract_id + "', timelockropsten='"+parseInt(_timelock)+"' WHERE address='" + current_loaded_htlc.ADDRESS + "'";
-					
-					MDS.sql(_sql,function(msg){
+					await htlc_contract_method.send({from: currentAccount, value: web3.utils.toWei(_amount.toString())}).on('transactionHash', function(hash){
+						console.log(hash);
+					}).then(async response => {
+
+						$("#ethereum_lockup_container").css("display", "none");
+						$("#minima_receipt_content").css("display", "none");
+						$("#ethereum_create_spinner").css("display", "none");
+						$("#ethereum_create_text").css("display", "block");
+
+						evm_htlc_contract_id = response.events.LogHTLCNew.returnValues[0];
 						
+						$(".container").css("display", "none");
+
+						$("#ethereum_lockup_confirmed").css("display", "block");
+						
+						_JSON = JSON.stringify({"asset" : _receiver_asset, "contract_id" : evm_htlc_contract_id});
+
+						$(".ethereum_lock_info").text(_JSON);
+
+                        var sql = "UPDATE htlc SET ethlocked = true, ethlockedtime='"+eth_locked_time+"', contractidevm='"+evm_htlc_contract_id+"', timelockropsten='"+_timelock+"' WHERE hash = '"+_hashlock+"'";
+                        MDS.sql(sql,function(sqlresp){
+
+                        });
+
+						evm_claimed_check_interval = setInterval(async function(){
+							let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
+								return result;
+							});
+
+							_block_number = await web3.eth.getBlockNumber();
+
+							current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
+								return e.timestamp;
+							});
+
+							let _timelock_remaining = secondsToDigitalClock(_timelock - current_ethereum_chain_time);
+
+							$("#eth_receipt_claimed_timelock").text(_timelock_remaining);
+
+							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100; 
+
+							$("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
+
+							if(_contract_object.withdrawn)
+							{
+								//Whichever view the user is looking at, hide it and show the "Claim minima view"
+								$(".container").css("display", "none");
+								$("#claim_minima").css("display", "block");
+								clearInterval(evm_claimed_check_interval);
+							}
+							else if(_timelock_remaining <= 0)
+							{
+								clearInterval(evm_claimed_check_interval);
+								$("#eth_claimed_status").text("The recipient failed to claim ETH on time. Redeem your " + ASSET_FRIENDLY_NAMES[_receiver_asset] + ".");
+								$("#eth_claimed_status").addClass("text-danger");
+								$("#eth_redeem_button").css("display", "block");
+
+								$("#eth_waiting_to_be_claimed_label").text("Recipient failed to claim your " + ASSET_FRIENDLY_NAMES[_receiver_asset] + ".");
+								$("#eth_waiting_to_be_claimed_message").css("display", "none");
+								$("#eth_waiting_to_be_claimed_icon").removeClass("fa-hourglass-half");
+								$("#eth_waiting_to_be_claimed_icon").addClass("fa-times-circle");
+								$("#eth_waiting_to_be_claimed_message").css("color", "#e75454");
+
+							}
+
+						}, 3000);
+							
+					}).catch((err) => {
+						$("#ethereum_create_spinner").css("display", "none");
+						$("#ethereum_create_text").css("display", "block");
 					});
-					*/
-					
-					$(".container").css("display", "none");
 
-					$("#ethereum_lockup_confirmed").css("display", "block");
-					
-					_JSON = JSON.stringify({"contract_id" : evm_htlc_contract_id});
+				}
+				else
+				{
+					//Use the ERC20 Contract
+					htlc_contract = new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]);
+					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock), TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset], web3.utils.toWei(_amount))
+					.send({from: currentAccount})
+					.then(async response => {
 
-					$(".ethereum_lock_info").text(_JSON);
-
-					evm_claimed_check_interval = setInterval(async function(){
-						let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
-							return result;
-						});
-
-						_block_number = await web3.eth.getBlockNumber();
-
-						current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
-							return e.timestamp;
-						});
-
-						let _timelock_remaining = secondsToDigitalClock(_timelock - current_ethereum_chain_time);
-
-						$("#eth_receipt_claimed_timelock").text(_timelock_remaining);
-
-						let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100; 
-
-						$("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
-
-						if(_contract_object.withdrawn)
-						{
-							//Whichever view the user is looking at, hide it and show the "Claim minima view"
-							$(".container").css("display", "none");
-							$("#claim_minima").css("display", "block");
-							clearInterval(evm_claimed_check_interval);
-						}
-						else if(_timelock_remaining <= 0)
-						{
-							clearInterval(evm_claimed_check_interval);
-							$("#eth_claimed_status").text("The recipient failed to claim ETH on time. Redeem your ETH.");
-							$("#eth_claimed_status").addClass("text-danger");
-							$("#eth_redeem_button").css("display", "block");
-
-							$("#eth_waiting_to_be_claimed_label").text("Recipient failed to claim ETH");
-							$("#eth_waiting_to_be_claimed_message").css("display", "none");
-							$("#eth_waiting_to_be_claimed_icon").removeClass("fa-hourglass-half");
-							$("#eth_waiting_to_be_claimed_icon").addClass("fa-times-circle");
-							$("#eth_waiting_to_be_claimed_message").css("color", "#e75454");
-
-						}
-
-					}, 3000);
+						evm_htlc_contract_id = response.events.HTLCERC20New.returnValues[0];
 						
-				}).catch((err) => {
-					$("#ethereum_create_spinner").css("display", "none");
-					$("#ethereum_create_text").css("display", "block");
-				});
+						$(".container").css("display", "none");
 
+						$("#ethereum_lockup_confirmed").css("display", "block");
+						
+						_JSON = JSON.stringify({"asset" : _receiver_asset, "contract_id" : evm_htlc_contract_id});
+
+						$(".ethereum_lock_info").text(_JSON);
+
+                        var sql = "UPDATE htlc SET ethlocked = true WHERE hash = '"+_hashlock+"'";
+                        MDS.sql(sql,function(sqlresp){
+
+                        });
+
+						evm_claimed_check_interval = setInterval(async function(){
+							let _contract_object = await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
+								return result;
+							});
+
+							_block_number = await web3.eth.getBlockNumber();
+
+							current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
+								return e.timestamp;
+							});
+
+							let _timelock_remaining = secondsToDigitalClock(_timelock - current_ethereum_chain_time);
+
+							$("#eth_receipt_claimed_timelock").text(_timelock_remaining);
+
+							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100; 
+
+							$("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
+
+							if(_contract_object.withdrawn)
+							{
+								//Whichever view the user is looking at, hide it and show the "Claim minima view"
+								$(".container").css("display", "none");
+								$("#claim_minima").css("display", "block");
+								clearInterval(evm_claimed_check_interval);
+							}
+							else if(_timelock_remaining <= 0)
+							{
+								clearInterval(evm_claimed_check_interval);
+								$("#eth_claimed_status").text("The recipient failed to claim the " + ASSET_FRIENDLY_NAMES[_receiver_asset] + " on time. Redeem your Minima.");
+								$("#eth_claimed_status").addClass("text-danger");
+								$("#eth_redeem_button").css("display", "block");
+
+								$("#eth_waiting_to_be_claimed_label").text("Recipient failed to claim the " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
+								$("#eth_waiting_to_be_claimed_message").css("display", "none");
+								$("#eth_waiting_to_be_claimed_icon").removeClass("fa-hourglass-half");
+								$("#eth_waiting_to_be_claimed_icon").addClass("fa-times-circle");
+								$("#eth_waiting_to_be_claimed_message").css("color", "#e75454");
+							}
+
+						}, 3000);
+
+					}).catch(function(e){
+						console.error("THERE WAS AN ERROR");
+						console.error(e);
+						$("#ethereum_create_spinner").css("display", "none");
+						$("#ethereum_create_text").css("display", "block");
+					});
+				}
 			});
 
 			$("#continue_from_ethereum_lockup_confirmed").on("click", function(){
@@ -2060,7 +2247,7 @@
 				$("#ethereum_lockup_receipt").css("display", "block");
 			})
 
-			$("#load_ropsten_receipt").on("click", async function(){
+			$("#load_evm_funds_locked_receipt").on("click", async function(){
 
 				let _receipt = $("#ropsten_receipt_textarea").val();
 
@@ -2068,21 +2255,12 @@
 				{
 					alert("Bad receipt: Invalid JSON");
 					return;
-				} 
-
+				}
+				
 				let _obj = JSON.parse(_receipt);
 
-				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.getContract(_obj.contract_id).call({from: currentAccount}).then(function(result){
-					return result;
-				});
-
-				let contract_amount_from_wei = web3.utils.fromWei(_contract_object.amount.toString());
-
-				if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
-				{
-					alert("Incorrect funds amount. It should be " + current_loaded_htlc.AMOUNTETH + " but got " + contract_amount_from_wei);
-					return;
-				}
+                console.log("The object: ");
+                console.log(_obj);
 
 				if(typeof _obj.contract_id == "undefined")
 				{
@@ -2090,22 +2268,86 @@
 					return;
 				}
 
-				$("#load_ropsten_receipt_text").css("display", "none");
+				if(typeof _obj.asset == "undefined")
+				{
+					alert("Bad receipt: Malformed. No asset type set");
+					return;
+				}
 
-				$("#load_ropsten_receipt_spinner").css("display", "block");
+				if(!SUPPORTED_ASSETS[chainId] || SUPPORTED_ASSETS[chainId].indexOf(_obj.asset) == -1)
+				{
+					alert("Bad receipt: Asset " + obj.asset + " not supported");
+					return;
+				}
 
-				await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.withdraw(_obj.contract_id, secret_minima).send({from: currentAccount}).on('transactionHash', function(hash){
-					$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].url + hash);
-					$("#load_ropsten_receipt_text").text("Claiming Funds...");
-				}).then(async response =>{
-					$("#ropsten_funds_claimed_receipt").css("display", "block");
-					$("#ethereum-receipt-loader-container").css("display", "none");
-					
-				}).catch((err) => {
-					$("#load_ropsten_receipt_spinner").css("display", "none");
-					$("#ethereum_unlock_text").css("display", "block");
-					alert(err);
-				});
+				if(_obj.asset == "eth")
+				{
+                    console.log("The asset was ETH");
+
+					let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.getContract(_obj.contract_id).call({from: currentAccount}).then(function(result){
+						return result;
+					});
+
+                    console.log("Contract Object");
+                    console.log(_contract_object);
+                    
+					let contract_amount_from_wei = web3.utils.fromWei(_contract_object.amount.toString());
+
+					if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
+					{
+						alert("Incorrect funds amount. It should be " + current_loaded_htlc.AMOUNTETH + " but got " + contract_amount_from_wei);
+						return;
+					}
+
+					$("#load_evm_funds_locked_receipt_text").css("display", "none");
+					$("#load_evm_funds_locked_receipt_spinner").css("display", "block");
+
+                    console.log("Invoking the contract");
+
+
+					await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.withdraw(_obj.contract_id, current_loaded_htlc.SECRET).send({from: currentAccount}).on('transactionHash', function(hash){
+						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + hash);
+						$("#load_evm_funds_locked_receipt_text").text("Claiming Funds...");
+					}).then(async response =>{
+						$("#evm_funds_claimed_receipt").css("display", "block");
+						$("#ethereum-receipt-loader-container").css("display", "none");
+						
+					}).catch((err) => {
+						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
+						$("#ethereum_unlock_text").css("display", "block");
+						alert(err);
+					});
+				}
+				else
+				{
+					let _contract_object = await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.getContract(_obj.contract_id).call({from: currentAccount}).then(function(result){
+						return result;
+					});
+
+					let contract_amount_from_wei = web3.utils.fromWei(_contract_object.amount.toString());
+
+					if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
+					{
+						alert("Incorrect funds amount. It should be " + current_loaded_htlc.AMOUNTETH + " but got " + contract_amount_from_wei);
+						return;
+					}
+
+					$("#load_evm_funds_locked_receipt_text").css("display", "none");
+					$("#load_evm_funds_locked_receipt_spinner").css("display", "block");
+
+					await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.withdraw(_obj.contract_id, secret_minima).send({from: currentAccount}).on('transactionHash', function(hash){
+						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + hash);
+						$("#load_evm_funds_locked_receipt_text").text("Claiming Funds...");
+					}).then(async response =>{
+						$("#evm_funds_claimed_receipt").css("display", "block");
+						$("#ethereum-receipt-loader-container").css("display", "none");
+						
+					}).catch((err) => {
+						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
+						$("#ethereum_unlock_text").css("display", "block");
+						alert(err);
+					});
+				}
 
 			});
 
@@ -2129,10 +2371,7 @@
 				$("#minima_redeem_button_text").css("display", "none");
 				$("#minima_redeem_spinner").css("display", "block");
 
-
-				let minima_claim_result = await collect(current_loaded_htlc.ADDRESS, secret_minima).then(function(response){
-					return response;
-				});
+				await collect(current_loaded_htlc.ADDRESS, secret_minima);
 
 				$("#minima_redeem_button_text").css("display", "block");
 				$("#minima_redeem_spinner").css("display", "none");
@@ -2144,7 +2383,7 @@
 				$("#eth_redeem_button_spinner").css("display", "block");
 				$("#eth_redeem_button_text").css("display", "none");
 
-				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.refund(evm_htlc_contract_id).send({from: currentAccount}).on('transactionHash', function(hash){
+				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.refund(evm_htlc_contract_id).send({from: currentAccount}).on('transactionHash', function(hash){
 					$("#eth_redeem_explorer_button").attr("href", "https://ropsten.etherscan.io/tx/" + hash);
 				}).then(function(result){
 					$("#eth_redeem_button").css("display", "none");
@@ -2161,13 +2400,180 @@
 				$("#claim_minima_button_text").css("display", "none");
 				$("#claim_minima_button_spinner").css("display", "block");
 
-				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACTS[chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
+                if(!evm_htlc_contract_id)
+                {
+                    evm_htlc_contract_id = current_loaded_htlc.CONTRACTIDEVM;
+                }
+
+                console.log("EVM contract id: " + evm_htlc_contract_id);
+                console.log("HTLC ABI: ");
+                console.log(HTLC_ABI);
+                console.log('HTLC_CONTRACT_ADDRESSES["native"][chainName] : ' + HTLC_CONTRACT_ADDRESSES["native"][chainName]);
+                
+				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
 					return result;
 				});
+
+                console.log("Contract Object: ");
+                console.log(_contract_object);
+
+                console.log("Collecting Minima Coins: ");
 
 				collect(current_loaded_htlc.ADDRESS, _contract_object.preimage);
 			})
 		
+            $('body').on('click', '.historical_swap_item', function() {
+                console.log("Clicked");
+
+                let _address = $(this).attr("address");
+                let _from_chain = $(this).attr("from_chain");
+
+                //Find the right htlc
+                for(let i = 0; i < database_htlc_contracts.length; i++)
+                {
+                    console.log(database_htlc_contracts[i]);
+
+                    console.log(database_htlc_contracts[i]["ADDRESS"]);
+
+                    if(database_htlc_contracts[i]["ADDRESS"] == _address)
+                    {
+                        console.log("Found the correct HTLC");
+                        current_loaded_htlc = database_htlc_contracts[i];
+                        break;
+                    }
+                }
+
+                //Minima Timelock has Expired
+                if(current_loaded_htlc.TIMELOCKMINIMA <= current_minima_block)
+                {
+                    if(_from_chain == "minima")
+                    {
+                        alert("Minima Timelock has expired. This swap cannot be completed. The Minima will be refunded automatically.");
+                        //Set refunded minima is true
+                        collect(current_loaded_htlc.ADDRESS, current_loaded_htlc.SECRET);
+                    }
+                    else
+                    {
+                        alert("Minima Timelock has expired. This swap cannot be completed. The Minima can be refunded by the counterparty.");
+                    }
+                    
+                    return;
+                }
+
+                if(_from_chain != "minima")
+                {
+                    //This should never happen
+                    if(!current_loaded_htlc.ETHLOCKED)
+                    {
+                        console.log("ETH NOT LOCKED");
+                        return;
+                    } 
+
+                    let _json = JSON.stringify({
+                        "asset" : current_loaded_htlc.RECEIVERASSET,
+                        "contract_id" : current_loaded_htlc.CONTRACTIDEVM
+                    });
+
+                    let _contract_type = "native";
+                    if(current_loaded_htlc.RECEIVERASSET != "eth")
+                    {
+                        _contract_type = "erc20";
+                    }
+
+                    console.log("Invoking the interval");
+
+                    evm_claimed_check_interval = setInterval(async function(){
+                        
+                        console.log("Inside the interval");
+                        
+                        let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES[_contract_type][chainName]).methods.getContract(current_loaded_htlc.CONTRACTIDEVM).call({from: currentAccount}).then(function(result){
+                            return result;
+                        });
+
+                        console.log("Got the contract object");
+
+                        _block_number = await web3.eth.getBlockNumber();
+
+                        console.log("Got the block number");
+
+                        current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
+                            return e.timestamp;
+                        });
+
+                        console.log("Got the chain time");
+
+                        console.log("Current Ethereum Time: " + current_ethereum_chain_time);
+                        console.log("Contract Timelock: " + current_loaded_htlc.TIMELOCKROPSTEN);
+
+
+                        let _timelock_remaining = secondsToDigitalClock(current_loaded_htlc.TIMELOCKROPSTEN - current_ethereum_chain_time);
+
+                        $("#eth_receipt_claimed_timelock").text(_timelock_remaining);
+
+                        let _progress_bar_width = (current_ethereum_chain_time - current_loaded_htlc.ETHLOCKEDTIME) / (current_loaded_htlc.TIMELOCKROPSTEN - current_loaded_htlc.ETHLOCKEDTIME) * 100; 
+
+                        $("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
+
+                        if(_contract_object.withdrawn)
+                        {
+                            //Whichever view the user is looking at, hide it and show the "Claim minima view"
+                            $(".container").css("display", "none");
+                            $("#claim_minima").css("display", "block");
+                            clearInterval(evm_claimed_check_interval);
+                        }
+                        else if(_timelock_remaining <= 0)
+                        {
+                            clearInterval(evm_claimed_check_interval);
+                            $("#eth_claimed_status").text("The recipient failed to claim ETH on time. Redeem your " + ASSET_FRIENDLY_NAMES[_receiver_asset] + ".");
+                            $("#eth_claimed_status").addClass("text-danger");
+                            $("#eth_redeem_button").css("display", "block");
+
+                            $("#eth_waiting_to_be_claimed_label").text("Recipient failed to claim your " + ASSET_FRIENDLY_NAMES[_receiver_asset] + ".");
+                            $("#eth_waiting_to_be_claimed_message").css("display", "none");
+                            $("#eth_waiting_to_be_claimed_icon").removeClass("fa-hourglass-half");
+                            $("#eth_waiting_to_be_claimed_icon").addClass("fa-times-circle");
+                            $("#eth_waiting_to_be_claimed_message").css("color", "#e75454");
+
+                        }
+
+                    }, 3000);
+
+                    $(".container").css("display", "none");
+                    $("#ethereum_lockup_receipt").css("display", "block");
+                    $(".ethereum_lock_info").text(_json);
+                }
+                else
+                {                    
+                    //Go to the screen where the user generates the minima lockup receipt
+                    let json = JSON.stringify({
+                        "hashlock"	: current_loaded_htlc.HASH,
+                        "timelock"	: current_loaded_htlc.TIMELOCKMINIMA,
+                        "receiver_minima": current_loaded_htlc.RECEIVERMINIMA,
+                        "refunder_minima": current_loaded_htlc.REFUNDERMINIMA,
+                        "actual_script": current_loaded_htlc.ACTUALSCRIPT,
+                        "receiver_asset": current_loaded_htlc.RECEIVERASSET,
+                        "receiver_asset_amount"	: scientificToDecimal(current_loaded_htlc.AMOUNTMINIMA),
+                        "address"	: current_loaded_htlc.ADDRESS,
+                        "coinid"	: current_loaded_htlc.COINID,
+                        "unlockaddresseth" : current_loaded_htlc.UNLOCKADDRESSETH
+                    });
+
+                    console.log("RAW JSON");
+                    console.log(json);
+
+                    var jsonPretty = JSON.stringify(JSON.parse(json),null,2);
+                    
+                    console.log("PRETTY JSON");
+                    console.log(jsonPretty);
+
+                    $("#minima_lock_receipt_json").text(jsonPretty);
+
+                    $(".container").css("display", "none");
+                    $("#funds_locked_minima_receipt").css("display", "block");
+                }
+                
+            });
+
 			$(".start_another_swap ").on("click", function(){
 				location.reload();
 			});
@@ -2227,13 +2633,30 @@
 				"infoURL": "https://github.com/ethereum/seoplia"
 			},
 		}
-		const HTLC_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"LogHTLCNew","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCRefund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCWithdraw","type":"event"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}];
-		
-		const HTLC_CONTRACTS = 
+
+		const SUPPORTED_ASSETS = 
 		{
-			ropsten : "0x7b6fc8da9550877d7b1b6ba0209f2dc42650d284",
-			polygon : "0xf4188600176727caf29d0ca523479334f38f99ed",
-			sepolia : "0xDF45127318f78b5F422c6ddD6e11e6e7c986Ca78"
+			"0xaa36a7"	: ["eth", "wminima", "usdc", "usdt"],	//Sepolia
+			"0x3"		: ["eth", "usdc", "usdt"],	 			//Ropsten
+			"0x89"		: ["usdc", "usdt", "matic"],			//Polygon
+		}
+
+		const HTLC_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"LogHTLCNew","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCRefund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCWithdraw","type":"event"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}];
+		const HTLC_ERC20_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"address","name":"tokenContract","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"HTLCERC20New","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"HTLCERC20Refund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"HTLCERC20Withdraw","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"},{"internalType":"address","name":"_tokenContract","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"address","name":"tokenContract","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}];
+		
+		const HTLC_CONTRACT_ADDRESSES = 
+		{
+			"native" : 
+			{
+				ropsten : "0x7b6fc8da9550877d7b1b6ba0209f2dc42650d284",
+				polygon : "0xf4188600176727caf29d0ca523479334f38f99ed",
+				sepolia : "0xDF45127318f78b5F422c6ddD6e11e6e7c986Ca78",
+			},
+			"erc20" : 
+			{
+				polygon : "0x6c9a1013EdaFb2e9C9c6034F1870fEc1166273f0",
+				sepolia : "0x0e0d7b45339d247938446f720652a2d5af70f22c",
+			}
 		};
 
 		const NETWORK_NAMES = {
@@ -2317,6 +2740,7 @@
 			"0xaa36a7" : {
 				"usdt" 	: 	"0xa1d7f71cbbb361a77820279958bac38fc3667c1a",
 				"usdc"	: 	"0x51fce89b9f6d4c530698f181167043e1bb4abf89", 
+				"wminima": 	"0xE60EefeE4f610dB767371591480c7ddbFCeaE719",
 			},
 
 			//BNB Chain
@@ -2363,7 +2787,13 @@
 				{
 					"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_account","type":"address"}],"name":"unBlacklist","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"minter","type":"address"}],"name":"removeMinter","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_currency","type":"string"},{"name":"_decimals","type":"uint8"},{"name":"_masterMinter","type":"address"},{"name":"_pauser","type":"address"},{"name":"_blacklister","type":"address"},{"name":"_owner","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"masterMinter","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"unpause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"name":"mint","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_amount","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"minter","type":"address"},{"name":"minterAllowedAmount","type":"uint256"}],"name":"configureMinter","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newPauser","type":"address"}],"name":"updatePauser","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"paused","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"pause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"minter","type":"address"}],"name":"minterAllowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"pauser","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newMasterMinter","type":"address"}],"name":"updateMasterMinter","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"isMinter","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_newBlacklister","type":"address"}],"name":"updateBlacklister","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"blacklister","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"currency","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_account","type":"address"}],"name":"blacklist","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_account","type":"address"}],"name":"isBlacklisted","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"minter","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"burner","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"minter","type":"address"},{"indexed":false,"name":"minterAllowedAmount","type":"uint256"}],"name":"MinterConfigured","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"oldMinter","type":"address"}],"name":"MinterRemoved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"newMasterMinter","type":"address"}],"name":"MasterMinterChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_account","type":"address"}],"name":"Blacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_account","type":"address"}],"name":"UnBlacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"newBlacklister","type":"address"}],"name":"BlacklisterChanged","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"newAddress","type":"address"}],"name":"PauserChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"previousOwner","type":"address"},{"indexed":false,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"
 				}
-			]
+			],
+			"wminima":
+			[
+				{
+					"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"wminimaAddress","type":"address"}],"name":"DeleteAddress","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"wminimaAddress","type":"address"},{"indexed":false,"internalType":"bytes32","name":"minimaAddress","type":"bytes32"}],"name":"NewAddress","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"previousAdminRole","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"newAdminRole","type":"bytes32"}],"name":"RoleAdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleGranted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleRevoked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"wminimaAddress","type":"address"},{"indexed":false,"internalType":"bytes32","name":"minimaAddress","type":"bytes32"}],"name":"UpdateAddress","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"block","type":"uint256"}],"name":"UpdateLastBridgeBlock","type":"event"},{"inputs":[],"name":"DEFAULT_ADMIN_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"MINTER_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"PAUSER_ROLE","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleAdmin","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getRoleMember","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleMemberCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"hasRole","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"latestBridgeBlock","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"minimaList","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"minimaStructs","outputs":[{"internalType":"bytes32","name":"minimaAddress","type":"bytes32"},{"internalType":"uint256","name":"listPointer","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"renounceRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"revokeRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"wminimaAddress","type":"address"}],"name":"isMapped","outputs":[{"internalType":"bool","name":"isIndeed","type":"bool"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"getAddressCount","outputs":[{"internalType":"uint256","name":"minimaCount","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bytes32","name":"minimaAddress","type":"bytes32"}],"name":"newAddress","outputs":[{"internalType":"bool","name":"success","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"minimaAddress","type":"bytes32"}],"name":"updateAddress","outputs":[{"internalType":"bool","name":"success","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"deleteAddress","outputs":[{"internalType":"bool","name":"success","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"updateLatestBridge","outputs":[],"stateMutability":"nonpayable","type":"function"
+				}
+			],
 		}
 
 		const ASSET_DECIMALS = 
@@ -2407,6 +2837,18 @@
 				"0xaa36a7" : 18,
 				
 			},
+			"wminima":
+			{
+				"0x1" 	: 18,
+				"0x3" 	: 18,
+				"0x89" 	: 18,
+				"0x38" 	: 18,
+				"0xa86a": 18,
+				"0xfa" 	: 18,
+				"0xa4b1": 18,
+				"0xa" 	: 18,
+				"0xaa36a7" : 18,
+			}
 		}
 
 		const ASSET_FRIENDLY_NAMES = 
@@ -2431,12 +2873,19 @@
 			"0xaa36a7" : new Web3("https://rpc.sepolia.org"),									//Sepolia
 		}
 
-		var HTLC_CONTRACT_OBJECTS = {
-			"0x3" : new WEB3_RPC["0x3"].eth.Contract(HTLC_ABI, HTLC_CONTRACTS.ropsten),
-			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACTS.sepolia)
+		var HTLC_CONTRACT_FUNCTIONALITY_PROVIDERS = {
+			"0x3" : new WEB3_RPC["0x3"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].ropsten),
+			"0x89" : new WEB3_RPC["0x89"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].polygon),
+			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].sepolia)
 		}
 
-		var CONTRACT_FUNCTIONALITY_PROVIDERS = 
+		var HTLC_ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS = {
+			"0x3" : new WEB3_RPC["0x3"].eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].ropsten),
+			"0x89" : new WEB3_RPC["0x89"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].polygon),
+			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].sepolia)
+		}
+
+		var ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS = 
 		{
 			"0x1" : //Ethereum Mainnet
 			{
@@ -2483,6 +2932,7 @@
 			{
 				"usdt" 	: new WEB3_RPC["0xaa36a7"].eth.Contract(ABIs["usdt"], TOKEN_CONTRACT_ADDRESSES["0xaa36a7"]["usdt"]),
 				"usdc" 	: new WEB3_RPC["0xaa36a7"].eth.Contract(ABIs["usdc"], TOKEN_CONTRACT_ADDRESSES["0xaa36a7"]["usdc"]),
+				"wminima": new WEB3_RPC["0xaa36a7"].eth.Contract(ABIs["wminima"], TOKEN_CONTRACT_ADDRESSES["0xaa36a7"]["wminima"]),
 			}
 		}
 
@@ -2566,7 +3016,6 @@
 			
 			if(typeof SUPPORTED_CHAINS[chainId] == 'undefined')
 			{
-				console.log("Wrong Chain!");
 				//Wrong Chain
 				$(".switch_chain").css("display", "block");
 				$(".switch_chain_badge").css("display", "inline");
@@ -2576,13 +3025,11 @@
 
 			update_balances();
 
-			console.log("Chain ID " + chainId);
-			console.log("Network Name " + NETWORK_NAMES[chainId].name);
-
 			$(".network_name").text(NETWORK_NAMES[chainId].name);
 			$(".native_asset_name").text(NETWORK_NAMES[chainId].native_asset);
 			
 		}
+
 		async function handleAccountsChanged(accounts)
 		{
 			if(accounts.length == 0)
@@ -2632,7 +3079,7 @@
 
 				let fromWei = web3.utils.fromWei(bal);
 
-				return parseFloat(fromWei).toFixed(ASSET_DECIMALS[asset][chainId]);
+				return parseFloat(fromWei).toFixed(6);
 			}
 
 			web3.eth.getBalance(currentAccount, function (error, result) {
@@ -2640,31 +3087,42 @@
 
 				$("#current_eth_balance").text(_friendly_balance);
 
-				$(".asset_choice[asset='eth']").text("Balance: " + _friendly_balance);
+				$(".asset_choice[asset='eth']").text("Balance: " + _friendly_balance + " ETH");
 
 				user_balances["eth"] = _friendly_balance;
             });
 
-			CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["usdc"].methods.balanceOf(currentAccount).call().then(function (bal) {
+			ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["usdc"].methods.balanceOf(currentAccount).call().then(function (bal) {
 
 				let _friendly_balance = friendly_balance(bal, "usdc");
 
                 $("#current_usdc_balance").text(_friendly_balance);
 
-				$(".asset_choice[asset='usdc']").text("Balance: " + _friendly_balance);
+				$(".asset_choice[asset='usdc']").text("Balance: " + _friendly_balance + " USDC");
 
 				user_balances["usdc"] = _friendly_balance;
             });
 
-			CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["usdt"].methods.balanceOf(currentAccount).call().then(function (bal) {
+			ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["usdt"].methods.balanceOf(currentAccount).call().then(function (bal) {
 				
 				let _friendly_balance = friendly_balance(bal, "usdt");
 
 				$("#current_usdt_balance").text(_friendly_balance);
 
-				$(".asset_choice[asset='usdt']").text("Balance: " + _friendly_balance);
+				$(".asset_choice[asset='usdt']").text("Balance: " + _friendly_balance + " USDT");
 
 				user_balances["usdt"] = _friendly_balance;
+            });
+
+			ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["wminima"].methods.balanceOf(currentAccount).call().then(function (bal) {
+				
+				let _friendly_balance = friendly_balance(bal, "wminima");
+
+				$("#current_wminima_balance").text(_friendly_balance);
+
+				$(".asset_choice[asset='wminima']").text("Balance: " + _friendly_balance + " wMinima");
+
+				user_balances["wminima"] = _friendly_balance;
             });
 		}
 
@@ -2672,18 +3130,15 @@
 
 
 			_chainId = "0x" + _chainId.substring(2).toUpperCase();
-			console.log("Changing chain to " + _chainId);
 
 			let testnetChainIds = ["0x1", "0x3", "0x4", "0x2A", "0xAA36A7"];
 			if(testnetChainIds.includes(_chainId)) {
-				console.log("SWITCHING TO TESTNET CHAIN");
 				await ethereum.request({
 					method: 'wallet_switchEthereumChain',
 					params: [{ chainId: _chainId }],
 				});
 				return;
 			} else {
-				console.log("ADDING UNKNOWN CHAIN");
 				await ethereum.request({
 					method: 'wallet_addEthereumChain',
 					params: 
