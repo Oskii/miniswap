@@ -121,7 +121,7 @@
 							<div class="col-6" style="display: flex;">
 								<a class="btn btn-sm btn-light border asset_choice_modal_trigger text-start align-self-center py-1 col-12" style="min-width: 115px; border: solid 2px #e3e1e8 !important; border-radius: 15px; background: #e3e0e9;">
 									<img id="selected_asset_image" class="mb-1 me-2" src="ethlogo.svg" height="32" width="32">
-									<span class="h-5 m-0 asset_selection_text" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">ETH</span>
+									<span class="h-5 m-0 selected_asset_text" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">ETH</span>
 									<i class="fas fa-caret-down float-end mt-1 me-1" style="font-size: 24px; color: #7300ff;"></i>
 								</a>
 							</div>
@@ -618,6 +618,18 @@
 		</div>
 	</div>
 
+    <div class="container" id="minima_redeemed_card" style="display: none;">
+		<div class="card card-body mx-auto" style="max-width: 400px; background: #e3e3e6;">
+			<div class="p-3 pt-0">
+				<h1 class="text-center mt-4">
+					<i class="fa fa-check-circle text-success"></i>
+				</h1>
+				<h5 class="text-center my-4" style="font-weight: 800;">Minima Refunded</h5>
+				<a class="btn btn-primary btn-lg col-12" onclick="location.reload()">Start Again</a>
+			</div>
+		</div>
+	</div>
+
     <div class="container" id="historical_swap_item_details" style="display: none;">
 		<div class="card card-body mx-auto" style="max-width: 400px; background: #e3e3e6;">
 			<div class="p-3 pt-0">
@@ -1036,8 +1048,8 @@
 			//Get a secure random number..
 			MDS.cmd("random", function(resp){
 			
-				//Get the random value..
-				secret_minima = resp.response.random;
+				//Get the random value.. but make it upper case so we can make ethereum and minima compatible
+				secret_minima = "0x" + resp.response.random.substring(2).toUpperCase();
 
 				hashSecret();
 			});	
@@ -1257,9 +1269,9 @@
 					}
 
                     //If the user has either refunded themselves or claimed the Minima
-					if	((data[i].CHAIN == "sepolia" && (data[i].CLAIMEDETHEREUM == "true" || data[i].REFUNDEDETHEREUM == "true")) 
+					if	((data[i].CHAIN == "sepolia" && (data[i].CLAIMEDMINIMA == "true" || data[i].REFUNDEDETHEREUM == "true")) 
 						|| 
-						(data[i].CHAIN == "minima" && (data[i].CLAIMEDMINIMA == "true" || data[i].REFUNDEDMINIMA == "true"))){
+						(data[i].CHAIN == "minima" && (data[i].CLAIMEDETHEREUM == "true" || data[i].REFUNDEDMINIMA == "true"))){
 						//do stuff return;
                         
                         let _outcome = '<span class="text-success float-end" style="font-weight:800">Completed</span>';
@@ -1311,6 +1323,10 @@
             console.log("Address: " + address);
             console.log("Secret: " + secret);
 
+            secret = "0x" + secret.substring(2).toUpperCase();
+
+            console.log("THE SECRET IS " + secret);
+
 			//First.. get the coin..			
 			let collection_result = MDS.cmd("coins address:"+address, function(coinresp){
 
@@ -1339,6 +1355,19 @@
 
                 console.log("Coin already spent??? " + coin.spent.toString());
 
+                console.log("The secret is " + secret); 
+
+                let pertinent_key;
+                //If we are not the minima locker
+                if(current_loaded_htlc.CHAIN != "minima")
+                {   
+                    pertinent_key = current_loaded_htlc.RECEIVERMINIMA;
+                }
+                else
+                {
+                    pertinent_key = refunder_key;
+                }
+
 				//Get an address to collect to..
 				let cmd_result = MDS.cmd("getaddress", function(getresp){
 					var getaddress = getresp.response.address;
@@ -1351,7 +1380,7 @@
 						"txninput id:myhtlc coinid:"+coin.coinid+";"+											//Add a coin to the input of this transaction
 						"txnoutput id:myhtlc amount:"+coin.amount+" address:"+getaddress+" storestate:false;"+	//Create a transaction output
 						"txnstate id:myhtlc port:0 value:"+secret+";"+											//Add a variable to state(0)
-						"txnsign id:myhtlc publickey:"+ refunder_key+";"+										//Sign the transaction with the public key
+						"txnsign id:myhtlc publickey:"+ pertinent_key+";"+										//Sign the transaction with the public key
 						"txnpost id:myhtlc auto:true;"+															//Post the transaction to the network
 						"txndelete id:myhtlc";
 					
@@ -1507,7 +1536,8 @@
 				swap_direction[1] = _currency;
 
 				$("#selected_asset_image").attr("src", _currency + "logo.svg?v2");
-				$(".asset_selection_text").text(ASSET_FRIENDLY_NAMES[_currency]);
+				$(".selected_asset_text").text(ASSET_FRIENDLY_NAMES[_currency]);
+                $(".asset_selection_text").text(ASSET_FRIENDLY_NAMES[_currency]);
 
 				$("#swap_initiate_button").text(_text);
 				$("#swap_summary_title_text").text(_text);
@@ -1689,6 +1719,8 @@
 
 				let _obj = JSON.parse(_json);
 
+                console.log("Receipt information: " + _obj);
+
 				let _address = _obj.address //Guaranteed unique field
 				let _eth_amount = parseFloat(_obj.receiver_asset_amount).toString();
 				let _hashlock = _obj.hashlock;
@@ -1836,8 +1868,6 @@
 
 									$("#minima_receipt_confirmation_status").text("No Longer Available")
 									$("#minima_receipt_confirmation_status_colour").css("background", "red");
-									$(".asset_to_lock").text(_eth_amount + " ETH");
-
 									$("#minima_lock_receipt_waiting_button").css("display", "none");
 									$("#minima_lock_receipt_waiting_spinner").css("display", "none");
 									$("#minima_lock_receipt_continue_button").css("display", "block");
@@ -2152,7 +2182,7 @@
                             console.log("Contract object for Native HTLC");
                             console.log(_contract_object);
 
-                            secret_minima = _contract_object.preimage;
+                            secret_minima = _contract_object.preimage.toUpperCase();
 
 							current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
 								return e.timestamp;
@@ -2339,6 +2369,10 @@
 
                     console.log("Invoking the contract");
 
+                    if(!current_loaded_htlc.SECRET)
+                    {
+                        current_loaded_htlc.SECRET = secret_minima;
+                    }
 
 					await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.withdraw(_obj.contract_id, current_loaded_htlc.SECRET).send({from: currentAccount}).on('transactionHash', function(hash){
 						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + hash);
@@ -2355,6 +2389,7 @@
 					}).catch((err) => {
 						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
 						$("#ethereum_unlock_text").css("display", "block");
+                        $("#load_evm_funds_locked_receipt_text").css("display", "block");
 						alert(err);
 					});
 				}
@@ -2395,6 +2430,7 @@
 					}).catch((err) => {
 						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
 						$("#ethereum_unlock_text").css("display", "block");
+                        $("#load_evm_funds_locked_receipt_text").css("display", "block");
 						alert(err);
 					});
 				}
@@ -2423,8 +2459,12 @@
 
 				collect(current_loaded_htlc.ADDRESS, secret_minima);
 
-				$("#minima_redeem_button_text").css("display", "block");
-				$("#minima_redeem_spinner").css("display", "none");
+				//$("#minima_redeem_button_text").css("display", "block");
+				//$("#minima_redeem_spinner").css("display", "none");
+
+                $(".container").css("display", "none");
+
+                $("#minima_redeemed_card").css("display", "block");
 
 			});
 
@@ -2459,18 +2499,11 @@
                 console.log("HTLC ABI: ");
                 console.log(HTLC_ABI);
                 console.log('HTLC_CONTRACT_ADDRESSES["native"][chainName] : ' + HTLC_CONTRACT_ADDRESSES["native"][chainName]);
-                
-				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.getContract(evm_htlc_contract_id).call({from: currentAccount}).then(function(result){
-					return result;
-				});
-
-                console.log("Contract Object: ");
-                console.log(_contract_object);
 
                 console.log("Collecting Minima Coins: ");
 
 				collect(current_loaded_htlc.ADDRESS, secret_minima);
-			})
+			});
 		
             $('body').on('click', '.historical_swap_item', async function() {
                 console.log("Clicked");
@@ -2549,6 +2582,9 @@
                         let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES[_contract_type][chainName]).methods.getContract(current_loaded_htlc.CONTRACTIDEVM).call({from: currentAccount}).then(function(result){
                             return result;
                         });
+
+                        secret_minima = "0x" + _contract_object.preimage.substring(2).toUpperCase();
+                        current_loaded_htlc.SECRET = "0x" + _contract_object.preimage.substring(2).toUpperCase();
 
                         console.log("Got the contract object");
 
