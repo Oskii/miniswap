@@ -755,10 +755,10 @@
 							<img class="mb-1" src="ethlogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Ether / ETH</small></span>
 						</div>
-						<div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
+						<!--div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdtlogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Tether / USDT</small></span>
-						</div>
+						</div-->
 						<div currency="usdc" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdclogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">USD Coin / USDC</small></span>
@@ -956,7 +956,7 @@
 
 				//My HTLC contracts
 				initsql = "CREATE TABLE IF NOT EXISTS `htlc` ( "
-							+"  `id` IDENTITY PRIMARY KEY, "
+							+"  `id` bigint auto_increment, "
 							+"  `htlcscript` varchar(512) DEFAULT NULL, "
 							+"  `chain` varchar(32) DEFAULT NULL, "
 							+"  `address` varchar(160) DEFAULT NULL, "
@@ -1149,7 +1149,7 @@
 			}
 			
 			//Now create a script that we track with this value..
-			MDS.cmd("newscript trackall:false script:\""+actualscript+"\"", function(resp){
+			MDS.cmd("newscript trackall:true script:\""+actualscript+"\"", function(resp){
 			
 				MDS.log("NEW SCRIPT CREATION");
 				MDS.log(resp);
@@ -1374,7 +1374,7 @@
 					
 					//Now construct a txn..
 					var txncreate = 
-						"newscript trackall:false script:\""+actualscript+"\";"+
+						"newscript trackall:true script:\""+actualscript+"\";"+
 						"txndelete id:myhtlc;"+																	//Delete this transaction
 						"txncreate id:myhtlc;"+																	//Create a new transaction
 						"txninput id:myhtlc coinid:"+coin.coinid+";"+											//Add a coin to the input of this transaction
@@ -2071,7 +2071,7 @@
 				$("#ethereum_approve_spinner").css("display", "block");
 
 				const _receiver_asset = current_loaded_htlc.RECEIVERASSET;
-				const _receiver_amount = web3.utils.toWei(current_loaded_htlc.AMOUNTETH);
+				const _receiver_amount = current_loaded_htlc.AMOUNTETH * (10 ** ASSET_DECIMALS[_receiver_asset][chainId]);
 
                 console.log("RECEIVER ASSET " + _receiver_asset);
                 console.log("RECEIVER AMOUNT " + _receiver_amount);
@@ -2081,7 +2081,10 @@
 
 				_token = new window.web3.eth.Contract(ABIs[_receiver_asset], TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset]);
 
-				await _token.methods.approve(HTLC_CONTRACT_ADDRESSES["erc20"][chainName], _receiver_amount)
+				console.log("=== TOKEN ===");
+				console.log(_receiver_asset + " " + TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset] + " " + _receiver_amount.toString());
+
+				await _token.methods.approve(HTLC_CONTRACT_ADDRESSES["erc20"][chainName], _receiver_amount.toString())
 				.send({from: currentAccount})
 				.then(function(e){
 					$("#lock_evm_asset_approve").css("display", "none");
@@ -2147,7 +2150,7 @@
 					//Use the Native Contract 
 					htlc_contract = new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]);
 					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock));
-					
+
 					await htlc_contract_method.send({from: currentAccount, value: web3.utils.toWei(_amount.toString())}).on('transactionHash', function(hash){
 						console.log(hash);
 					}).then(async response => {
@@ -2229,8 +2232,10 @@
 				else
 				{
 					//Use the ERC20 Contract
+					let adjusted_amount = _amount * 10 ** ASSET_DECIMALS[_receiver_asset][chainId];
+				
 					htlc_contract = new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]);
-					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock), TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset], web3.utils.toWei(_amount))
+					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock), TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset], adjusted_amount.toString())
 					.send({from: currentAccount})
 					.then(async response => {
 
@@ -2356,7 +2361,7 @@
                     console.log("Contract Object");
                     console.log(_contract_object);
                     
-					let contract_amount_from_wei = web3.utils.fromWei(_contract_object.amount.toString());
+					let contract_amount_from_wei = _contract_object.amount / (10 ** ASSET_DECIMALS[_obj.asset]);
 
 					if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
 					{
@@ -2395,16 +2400,23 @@
 				}
 				else
 				{
-                    console.log("The asset was " + _obj.asset);
-                    console.log("ABI: " + HTLC_ERC20_ABI);
-                    console.log("Contract: " + HTLC_CONTRACT_ADDRESSES["erc20"][chainName]);
-                    console.log("Contract Id: " + _obj.contract_id);
-
 					let _contract_object = await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.getContract(_obj.contract_id).call({from: currentAccount}).then(function(result){
 						return result;
 					});
 
-					let contract_amount_from_wei = web3.utils.fromWei(_contract_object.amount.toString());
+					let contract_amount_from_wei = _contract_object.amount / (10 ** ASSET_DECIMALS[_obj.asset][chainId]);
+					contract_amount_from_wei = contract_amount_from_wei.toString();
+
+					console.log("Asset " + _obj.asset);
+					console.log("Asset decimals" + ASSET_DECIMALS[_obj.asset]);
+					console.log("Contract raw amount " + _contract_object.amount);
+					console.log("divisor " + (10 ** ASSET_DECIMALS[_obj.asset]));
+					console.log("The asset was " + _obj.asset);
+                    console.log("ABI: " + HTLC_ERC20_ABI);
+                    console.log("Contract: " + HTLC_CONTRACT_ADDRESSES["erc20"][chainName]);
+                    console.log("Contract Id: " + _obj.contract_id);
+					console.log("Current loaded HTLC Amount " + current_loaded_htlc.AMOUNTETH);
+					console.log("Amount saved in actual contract " + contract_amount_from_wei);
 
 					if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
 					{
@@ -2700,7 +2712,7 @@
 		
 		const SUPPORTED_CHAINS =
 		{
-			/*
+			
 			"0x1":
 			{
 				"name": "Ethereum Mainnet",
@@ -2715,7 +2727,7 @@
 				"explorers": [{"name":"etherscan","url":"https://etherscan.io","standard":"EIP3091"}],
 				"infoURL": "https://ethereum.org"
 			},
-			
+			/*
 			"0x3":
 			{
 				"name": "Ethereum Testnet Ropsten",
@@ -2753,6 +2765,7 @@
 			"0xaa36a7"	: ["eth", "wminima", "usdc", "usdt"],	//Sepolia
 			"0x3"		: ["eth", "usdc", "usdt"],	 			//Ropsten
 			"0x89"		: ["usdc", "usdt", "matic"],			//Polygon
+			"0x1"		: ["eth", "usdc", "usdt", "wminima"]	//Mainnet
 		}
 
 		const HTLC_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"LogHTLCNew","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCRefund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCWithdraw","type":"event"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}];
@@ -2762,14 +2775,15 @@
 		{
 			"native" : 
 			{
-				ropsten : "0x7b6fc8da9550877d7b1b6ba0209f2dc42650d284",
 				polygon : "0xf4188600176727caf29d0ca523479334f38f99ed",
 				sepolia : "0xDF45127318f78b5F422c6ddD6e11e6e7c986Ca78",
+				ethereum: "0x00678A4D4ad7aa891Ab250fA274EB0f2C155242f"
 			},
 			"erc20" : 
 			{
 				polygon : "0x6c9a1013EdaFb2e9C9c6034F1870fEc1166273f0",
 				sepolia : "0x0e0d7b45339d247938446f720652a2d5af70f22c",
+				ethereum: "0x83750412A484ddf3F46D1Bc23830eaaE7F64a77A"
 			}
 		};
 
@@ -2831,10 +2845,11 @@
 
 		const TOKEN_CONTRACT_ADDRESSES = 
 		{
-			//ETH PoW
+			//ETH
 			"0x1"	: {
 				"usdt" 	: 	"0xdac17f958d2ee523a2206206994597c13d831ec7",
 				"usdc"	: 	"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 
+				"wminima":  "0x669c01CAF0eDcaD7c2b8Dc771474aD937A7CA4AF"
 			},
 
 			//ETH Ropsten
@@ -2988,12 +3003,14 @@
 		}
 
 		var HTLC_CONTRACT_FUNCTIONALITY_PROVIDERS = {
+			"0x1" : new WEB3_RPC["0x1"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].ethereum),
 			"0x3" : new WEB3_RPC["0x3"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].ropsten),
 			"0x89" : new WEB3_RPC["0x89"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].polygon),
 			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"].sepolia)
 		}
 
 		var HTLC_ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS = {
+			"0x1" : new WEB3_RPC["0x1"].eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].ethereum),
 			"0x3" : new WEB3_RPC["0x3"].eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].ropsten),
 			"0x89" : new WEB3_RPC["0x89"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].polygon),
 			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].sepolia)
@@ -3005,6 +3022,7 @@
 			{
 				"usdt" 	: new WEB3_RPC["0x1"].eth.Contract(ABIs["usdt"], TOKEN_CONTRACT_ADDRESSES["0x1"]["usdt"]),
 				"usdc" 	: new WEB3_RPC["0x1"].eth.Contract(ABIs["usdc"], TOKEN_CONTRACT_ADDRESSES["0x1"]["usdc"]),
+				"wminima" 	: new WEB3_RPC["0x1"].eth.Contract(ABIs["wminima"], TOKEN_CONTRACT_ADDRESSES["0x1"]["wminima"]),
 			},
 			"0x3" : //Ethereum Testnet Roptsten
 			{
@@ -3093,7 +3111,7 @@
 		}
 
 		$(".switch_chain").on("click", function(){
-			changeChain("0xaa36a7");
+			changeChain("0x1");
 		});
 
 		//Top badge
