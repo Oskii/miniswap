@@ -2363,7 +2363,8 @@
                     console.log("Contract Object");
                     console.log(_contract_object);
                     
-					let contract_amount_from_wei = _contract_object.amount / (10 ** ASSET_DECIMALS[_obj.asset]);
+					let contract_amount_from_wei = _contract_object.amount / (10 ** ASSET_DECIMALS[_obj.asset][chainId]);
+					console.log("contract amount from wei" + contract_amount_from_wei);
 
 					if(parseFloat(current_loaded_htlc.AMOUNTETH) != parseFloat(contract_amount_from_wei))
 					{
@@ -2382,7 +2383,7 @@
                     }
 
 					await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.withdraw(_obj.contract_id, current_loaded_htlc.SECRET).send({from: currentAccount}).on('transactionHash', function(hash){
-						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + hash);
+						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + "/tx/" + hash);
 						$("#load_evm_funds_locked_receipt_text").text("Claiming Funds...");
 					}).then(async response =>{
 						$("#evm_funds_claimed_receipt").css("display", "block");
