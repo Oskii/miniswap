@@ -755,10 +755,10 @@
 							<img class="mb-1" src="ethlogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Ether / ETH</small></span>
 						</div>
-						<!--div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
+						<div currency="usdt" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdtlogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Tether / USDT</small></span>
-						</div-->
+						</div>
 						<div currency="usdc" class="text-start col-12 p-1 m-0 my-1 btn bg-light asset_selection" style="border-radius: 5px;">
 							<img class="mb-1" src="usdclogo.svg" height="32" width="32">
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">USD Coin / USDC</small></span>
@@ -2150,7 +2150,7 @@
 					//Use the Native Contract 
 					htlc_contract = new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]);
 					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock));
-
+					console.log("Creating contract for " + _receiver_asset);
 					await htlc_contract_method.send({from: currentAccount, value: web3.utils.toWei(_amount.toString())}).on('transactionHash', function(hash){
 						console.log(hash);
 					}).then(async response => {
@@ -2232,8 +2232,10 @@
 				else
 				{
 					//Use the ERC20 Contract
+
+					console.log("Creating contract for " + _receiver_asset);
+
 					let adjusted_amount = _amount * 10 ** ASSET_DECIMALS[_receiver_asset][chainId];
-				
 					htlc_contract = new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]);
 					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock), TOKEN_CONTRACT_ADDRESSES[chainId][_receiver_asset], adjusted_amount.toString())
 					.send({from: currentAccount})
@@ -2783,7 +2785,7 @@
 			{
 				polygon : "0x6c9a1013EdaFb2e9C9c6034F1870fEc1166273f0",
 				sepolia : "0x0e0d7b45339d247938446f720652a2d5af70f22c",
-				ethereum: "0x83750412A484ddf3F46D1Bc23830eaaE7F64a77A"
+				ethereum: "0x05f2ce2a177b0fd960bbf485530d347f71e81352"
 			}
 		};
 
