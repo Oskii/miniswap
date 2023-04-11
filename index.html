@@ -70,7 +70,19 @@
         
 	</div>
 
-	<div class="container" id="choose_direction_card">
+	<div class="container" id="write_mode_container">
+		<div class="col-12">
+			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
+				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
+					<h4>This MiniDapp only works in WRITE Mode</h4>
+					<p class="mt-3">This MiniDapp needs access to your wallet, please close this page and give MiniSwap WRITE permissions from the MiniHub, then reopen MiniSwap.</p>
+					<a class="btn btn-primary mt-3 btn-block col-12 btn-lg" id="confirm_write_permissions">I have set WRITE permissions</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" id="choose_direction_card" style="display: none">
 		<div class="col-12">
 			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
 				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
@@ -81,9 +93,12 @@
 					</div>
 				</div>
 			</div>
-            <div class="col-12 text-center">
+            <div class="col-12 text-center" id="old_swap_container">
                 <p class="text-light text-center">Or</p>
-                <span id="pending_swaps_button" class="mx-auto btn btn-lg btn-light col-12" style="font-weight: 800; cursor: pointer; max-width: 420px;">Finish an Old Swap</span>
+                <span id="pending_swaps_button" class="mx-auto btn btn-lg btn-light col-12" style="font-weight: 800; cursor: pointer; max-width: 420px; display: none">Finish an Old Swap</span>
+				<div  id="get_minima_block_spinner" class="text-light">
+					Reading Blockchain Data &nbsp;&nbsp;<div class="spinner-border text-light mx-auto" style="display: inline-block; width: 12px; height: 12px; font-size: 12px"></div>
+				</div>
             </div>
 		</div>
 	</div>
@@ -181,12 +196,12 @@
 					<p class="m-0"><span id="recipient_minima_public_key_label">- -</span></p>
 					<hr class="my-2">
 
-					<label style="font-weight: 800;">Expires in Approximately:</label>
-					<p class="m-0"><span id="expiry_hours_label">- -</span></p>
-					<hr class="my-2">
-
 					<label style="font-weight: 800;">Time / Date:</label>
 					<p class="m-0"><span id="date_time">- -</span></p>
+					<hr class="my-2">
+
+					<label style="font-weight: 800;">Recipient Must Lock Funds Within:</label>
+					<p class="m-0"><span id="expiry_hours_label">- -</span></p>
 
 					<a class="btn btn-lg col-12 btn-primary mt-4" id="minima_lockup_confirm" onclick="genHTLCtxn();">
 						<span class="minima_lock_text">
@@ -230,18 +245,18 @@
 								<span class="input-group-text">ETH</span>
 							</div>
 						</div>
-						<label class="mt-3 mb-1">Offer Expires In </label>
+						<label class="mt-3 mb-1">Minima Refundable In </label>
 
 
 						<div class="dropdown">
-							<button style="width: 50%; height: 48px; border-radius: 7px; border: solid 2px #6500ff" time="10800" id="minima_timelock_dropdown_button" class="btn btn-light dropdown-toggle text-start" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-							  <span id="minima_timelock_dropdown_button_content">3 Hours</span>
-							  <i class="fas fa-caret-down fas fa-caret-down float-end mt-1"></i>
+							<button style="height: 48px; border-radius: 7px; border: solid 2px #6500ff" time="50000" id="minima_timelock_dropdown_button" class="btn btn-light dropdown-toggle text-start" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+							  <span id="minima_timelock_dropdown_button_content">1000 Blocks (13 hours)</span>
+							  <i class="fas fa-caret-down fas fa-caret-down float-end mt-1 ms-3"></i>
 							</button>
 							<ul class="dropdown-menu" id="minima_timelock_dropdown" aria-labelledby="dropdownMenuButton1" style="border: solid 2px #6500ff;">
 								<!--li><a class="dropdown-item minima_timelock_dropdown_item" time="3600" href="#">1 Hour</a></li>
 							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="7200" href="#">2 Hours</a></li-->
-							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="10800" href="#">3 Hours</a></li>
+							  	<li><a class="dropdown-item minima_timelock_dropdown_item" time="50000" href="#">1000 Blocks (13 hours)</a></li>
 							  	<!--li><a class="dropdown-item minima_timelock_dropdown_item" time="14400" href="#">5 Hours</a></li-->
 							</ul>
 						</div>
@@ -513,7 +528,7 @@
 			<div class="spinner-border mx-auto mt-1 mb-4" role="status" id="minima_lock_receipt_waiting_spinner" style="">
 				<span class="sr-only"></span>
 			</div>
-			<a class="btn btn-lg btn-primary" id="minima_lock_receipt_waiting_button" disabled style="cursor: not-allowed; background: #c7b7f0 !important;">Waiting For Blocks...</a>
+			<a class="btn btn-lg btn-primary" id="minima_lock_receipt_waiting_button" disabled style="cursor: not-allowed; background: #c7b7f0 !important;">Waiting For <span id="confirmation_blocks_left">10</span> Blocks...</a>
 			<a class="btn btn-lg btn-primary" id="minima_lock_receipt_continue_button" style="display: none">Continue</a>
 		</div>
 	</div>
@@ -530,7 +545,7 @@
 						<span class="ml-1 float-end mt-1" id="minima_receipt_confirmation_status_colour" style="width: 18px; height: 18px; border-radius: 1rem; background: orange; display: inline-block;"></span>
 					</p>
 
-					<p class="my-2"><strong>Recipient Will Receive</strong></p>
+					<p class="my-2"><strong>You Will Receive</strong></p>
 					<p class="m-0 p-2 bg-light h5 m-0 align-self-center" style="display: flex;"> 
 						<img src="minimalogo.svg" style="width: 48px;">
 						<span class="align-self-center">
@@ -538,7 +553,7 @@
 						</span>
 					</p>
 
-					<p class="my-2"><strong>You Will Receive</strong></p>
+					<p class="my-2"><strong>They Will Receive</strong></p>
 					<p class="m-0 p-2 bg-light" style="display: flex;"> 
 						<img src="ethlogo.svg" id="asset_to_lock_img" style="height: 48px;">
 						<span class="asset_to_lock h5 m-0 align-self-center asset_selection_text"> </span>
@@ -787,12 +802,14 @@
 		 * still has time to claim the first party's funds. For that reason ETH_TIMELOCK_INNER_WINDOW 
 		 * must be greater than MIMIMUM_LOCKUP_MINIMA, or the first party can maliciously claim everything
 		**/
-		const MINIMUM_LOCKUP_MINIMA = 72 //default 1 hours = 72 blocks
-		const ETH_TIMELOCK_INNER_WINDOW = MINIMUM_LOCKUP_MINIMA / 2; //default 0.5 hour
+		const MINIMUM_LOCKUP_MINIMA = 1000 //default 12 hours = 1000 blocks
+		const ETH_TIMELOCK_INNER_WINDOW = parseInt(MINIMUM_LOCKUP_MINIMA / 6); //default 2 hours 
         const MINIMA_BLOCK_TIME = 50;
-        const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME 
+        const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME;
+		const ETH_TIMELOCK_MAX_DELAY = 60 * 60 * 6 / 50; //6 hours in blocks
+		const ETH_TIMELOCK_MAX_DELAY_HOURS = ETH_TIMELOCK_MAX_DELAY * 50 / 60 / 60; // 6 hours
 
-		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> USDC
+		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> eth
 		
 		var user_balances = //User's wallet balances of each asset
 		{
@@ -947,8 +964,13 @@
 	<!-- Minima Functionality -->
 	<script>
 
-		const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 200 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 200))";
-		const actualscript_address = "0x2C0B69764D57A682B4E3F095B992D98BC15C20870F5DC9342BBA88907BBD5B32";
+		//const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 200 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 200))";
+		//const actualscript_address = "0x2C0B69764D57A682B4E3F095B992D98BC15C20870F5DC9342BBA88907BBD5B32";
+		
+		//12 hours version
+		const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 1000 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 1000))";
+		const actualscript_address = "0x77AF062D69F57F43839D66792614AE52DDF939231A720FB6E476A434BA95DA78";
+		
 		
 		MDS.init(function(msg){
 
@@ -972,10 +994,10 @@
 							
                             +"  `receiverasset` varchar(66) DEFAULT NULL, "
 
-                            +"  `coinid` varchar(66) DEFAULT NULL, "
+                            +"  `coinid` varchar(66) DEFAULT NULL UNIQUE, "
 
 							+"  `timelockminima` int(10) DEFAULT -1,"
-							+"  `timelockropsten` int(10) DEFAULT -1,"
+							+"  `timelockevm` int(10) DEFAULT -1,"
 
 							+"  `amountminima` float DEFAULT 0,"
 							+"  `minimalocked` bool DEFAULT false,"
@@ -998,7 +1020,6 @@
 				//Run this..
 				MDS.sql(initsql,function(msg){
 					MDS.log("HTLC SQL Inited..");
-					//loadHTLC();
 				});
 
 				MDS.cmd("getaddress", function(response){
@@ -1010,12 +1031,21 @@
 						
 					current_minima_block = response.response.chain.block;
 					minima_starting_block = current_minima_block;
-					$("#current_minima_block").text(current_minima_block);						
+					$("#current_minima_block").text(current_minima_block);		
+					$("#pending_swaps_button").css("display", "block");	
+					$("#get_minima_block_spinner").css("display", "none");	
+
+					//if(response.response.locked)
+					//{
+						//show the password input
+					//}
 				});					
 			
 			}else if(msg.event == "NEWBLOCK"){
 				current_minima_block = msg.data.txpow.header.block;
 				$("#current_minima_block").text(current_minima_block);
+				$("#pending_swaps_button").css("display", "block");	
+				$("#get_minima_block_spinner").css("display", "none");		
 			}else{
 				//All other messages - Log it..
 				//MDS.log(JSON.stringify(msg));
@@ -1197,6 +1227,8 @@
 								"actual_script": actualscript,
 								"receiver_asset": receiver_asset,
 								"receiver_asset_amount"	: scientificToDecimal(receiver_asset_amount),
+								"sender_asset" : "minima",
+								"sender_asset_amount" : scientificToDecimal(minima_amount),
 								"address"	: address,
 								"coinid"	:coinid,
 								"unlockaddresseth" : ethereum_address
@@ -1208,9 +1240,7 @@
 
 							
 							$("body").css("background", "white");
-							//And now reload..
-							//loadHTLC();
-							
+														
 						});
 					}
 
@@ -1248,63 +1278,82 @@
                     console.log(data[i]);
 
                     let title_text = "";
-                    let timer_minima_text = "";
+                    let time_left_text = "";
                     let text_colour = "#7300ff;";
 
                     if(data[i].CHAIN == "minima")
 					{
 						title_text = '<small class="m-0" style="font-weight: 800">' 
                                     + parseFloat(data[i].AMOUNTMINIMA).toString() 
-                                    + " Minima for " 
+                                    + " MINIMA for " 
                                     + parseFloat(data[i].AMOUNTETH).toString() 
-                                    + " ETH</small>";
+                                    + data[i].RECEIVERASSET.toUpperCase()
+									+ "</small>";
 					}
 					else
 					{
 						title_text = '<small class="m-0" style="font-weight: 800">' 
                                     + parseFloat(data[i].AMOUNTETH).toString() 
-                                    + " ETH for " 
+                                    + " " + data[i].RECEIVERASSET.toUpperCase()
+									+ " for " 
                                     + parseFloat(data[i].AMOUNTMINIMA).toString() 
-                                    + " Minima</small>";
+                                    + " MINIMA</small>";
 					}
 
-                    //If the user has either refunded themselves or claimed the Minima
-					if	((data[i].CHAIN == "sepolia" && (data[i].CLAIMEDMINIMA == "true" || data[i].REFUNDEDETHEREUM == "true")) 
-						|| 
-						(data[i].CHAIN == "minima" && (data[i].CLAIMEDETHEREUM == "true" || data[i].REFUNDEDMINIMA == "true"))){
-						//do stuff return;
-                        
+                    //If the user has either claimed the Minima or ETH
+					if	(data[i].CLAIMEDMINIMA == "true" || data[i].CLAIMEDETHEREUM == "true"){
+						                        
                         let _outcome = '<span class="text-success float-end" style="font-weight:800">Completed</span>';
-                        if(
-                            data[i].CHAIN == "sepolia" && data[i].REFUNDEDETHEREUM == "true"
-                            ||
-                            data[i].CHAIN == "minima" && data[i].REFUNDEDMINIMA == "true")
-                        {
-                            _outcome = '<span class="text-danger float-end" style="font-weight:800">Refunded</span>';
-                        }
-
-                        console.log("Found completed swap");
-                        _completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
+						console.log("Found completed swap");
+						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
 						continue;
 					}
+					//If the user has either refunded the Minima or ETH
+					else if (data[i].REFUNDEDETHEREUM == "true" || data[i].REFUNDEDMINIMA == "true")
+					{
+						_outcome = '<span class="text-danger float-end" style="font-weight:800">Refunded</span>';
+						console.log("Found completed swap");
+						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
+						continue;
+					}					
 					
                     //Expire contracts 30 minutes before actual expiry to avoid race conditions with collection
 					let timelock_minima_expiry_seconds = (data[i].TIMELOCKMINIMA - current_minima_block - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME;
-                    let timelock_ethereum_expiry_seconds = Date.now() / 1000 - data[i].TIMELOCKROPSTEN;
-                    if(timelock_minima_expiry_seconds <= 0) 
-                    {
-                        timelock_minima_expiry_seconds = 0;
-                        timer_minima_text = " Expired";
-                        text_colour = "red;";
-                    }
-                    else
-                    {
-                        timer_minima_text = secondsToDigitalClock(timelock_minima_expiry_seconds);
-                    }
+                    let timelock_ethereum_expiry_seconds = data[i].TIMELOCKEVM - Date.now() / 1000;
 
-					title_text += '<span class="float-end"><small class="me-2" style="font-weight: 800; color: '+text_colour+'"><i class="fa fa-stopwatch"></i> '+timer_minima_text+'</small> <i class="fa fa-chevron-right"></i></span>';
+					console.log("The Chain is " + data[i].CHAIN);
+					console.log("The Ethereum Timelock is " + Date.now() / 1000 + " - " + data[i].TIMELOCKEVM + " = " + timelock_ethereum_expiry_seconds);
 
-					_pending_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light historical_swap_item my-1">'+title_text+'</div>';
+					if(data[i].CHAIN == "minima")
+					{
+						if(timelock_minima_expiry_seconds <= 0) 
+						{
+							timelock_minima_expiry_seconds = 0;
+							time_left_text = " Expired";
+							text_colour = "red;";
+						}
+						else
+						{
+							time_left_text = secondsToDigitalClock(timelock_minima_expiry_seconds);
+						}
+					}
+					else
+					{
+						if(timelock_ethereum_expiry_seconds <= 0) 
+						{
+							timelock_ethereum_expiry_seconds = 0;
+							time_left_text = " Expired";
+							text_colour = "red;";
+						}
+						else
+						{
+							time_left_text = secondsToDigitalClock(timelock_ethereum_expiry_seconds);
+						}
+					}
+
+					title_text += '<span class="float-end"><small class="me-2" style="font-weight: 800; color: '+text_colour+'"><i class="fa fa-stopwatch"></i> '+time_left_text+'</small> <i class="fa fa-chevron-right"></i></span>';
+
+					_pending_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" contractidevm="'+data[i].CONTRACTIDEVM+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light historical_swap_item my-1">'+title_text+'</div>';
 				}
 				
                 console.log("FINAL HTML");
@@ -1317,45 +1366,39 @@
 
 		}
 		
-		function collect(address,secret){
-
-            console.log("- Inside collection function");
-            console.log("Address: " + address);
-            console.log("Secret: " + secret);
+		function collect(address, secret, is_refund = false){
 
             secret = "0x" + secret.substring(2).toUpperCase();
 
-            console.log("THE SECRET IS " + secret);
+			console.log("Collecting coin at address " + address);
+			console.log("Using secret " + secret);
 
 			//First.. get the coin..			
 			let collection_result = MDS.cmd("coins address:"+address, function(coinresp){
 
-                console.log("GETTING COINS AT ADDRESS");
-
 				MDS.log(JSON.stringify(coinresp));
 				
+				console.log("The response is: ");
+				console.log(coinresp);
+
 				var coins = coinresp.response;
+
 				if(coins.length < 1){
 					alert("No unspent coins found.");
 					return false;
 				}
-
-                console.log("Unspent coins found " + coins.length);
 				
 				//Get the coin
 				var coin = coins[0];
 
-                console.log("Getting the 0th coin");
+				console.log("The coin in question is: ");
+				console.log(coin);
 
 				if(coin.spent)
 				{
 					alert("This coin has already been spent");
 					return false;
 				}
-
-                console.log("Coin already spent??? " + coin.spent.toString());
-
-                console.log("The secret is " + secret); 
 
                 let pertinent_key;
                 //If we are not the minima locker
@@ -1373,6 +1416,16 @@
 					var getaddress = getresp.response.address;
 					
 					//Now construct a txn..
+					/*var txncreate = 
+						"newscript trackall:true script:\""+actualscript+"\";"+
+						"txndelete id:myhtlc;"+																	//Delete this transaction
+						"txncreate id:myhtlc;"+																	//Create a new transaction
+						"txninput id:myhtlc coinid:"+coin.coinid+";"+											//Add a coin to the input of this transaction
+						"txnoutput id:myhtlc amount:"+coin.amount+" address:"+getaddress+" storestate:false;"+	//Create a transaction output
+						"txnstate id:myhtlc port:0 value:"+secret+";"+											//Add a variable to state(0)
+						"txnsign txnpostauto:true id:myhtlc publickey:"+ pertinent_key+";";						//Sign the transaction with the public key
+					
+					*/
 					var txncreate = 
 						"newscript trackall:true script:\""+actualscript+"\";"+
 						"txndelete id:myhtlc;"+																	//Delete this transaction
@@ -1383,7 +1436,7 @@
 						"txnsign id:myhtlc publickey:"+ pertinent_key+";"+										//Sign the transaction with the public key
 						"txnpost id:myhtlc auto:true;"+															//Post the transaction to the network
 						"txndelete id:myhtlc";
-					
+
 					//Lets Post it..
 					let txn_create = MDS.cmd(txncreate, function(txnresp){
 
@@ -1394,18 +1447,18 @@
 						//We did 8 commands at simultaneously, but we only care about the txn post response
 						for(let i = 0; i < txnresp.length; i++)
 						{
-							if(txnresp[i].command == "txnpost")
+							if(txnresp[i].command == "txnsign")
 							{
 								txnpost_response = txnresp[i];
 							}
 						}
 
-						//Now we can see how much we claimed
-						let amount_claimed = txnpost_response.response.body.txn.outputs[0].amount;
+						console.log("The transaction sign response is: ");
+						console.log(txnpost_response);
 
-                        console.log("Response of the post to claim the Minima");
-                        console.log(txnpost_response);
-                        console.log("Amount claimed: " + amount_claimed);
+						//Now we can see how much we claimed
+						//let amount_claimed = txnpost_response.response.body.txn.outputs[0].amount;
+						let amount_claimed = txnpost_response.response.txpow.body.txn.outputs[0].amount;
 
 						if(amount_claimed > 0)
 						{
@@ -1425,13 +1478,21 @@
 							$("#claim_minima_button").css("display", "none");
 							$(".start_another_swap").css("display", "block");
 
-                            var sql = "UPDATE htlc SET claimedminima = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
-                            MDS.sql(sql,function(sqlresp){
-                                console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
-                            });
-
+							if(!is_refund)
+							{
+								var sql = "UPDATE htlc SET claimedminima = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
+								MDS.sql(sql,function(sqlresp){
+									console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
+								});
+							}
+							else
+							{
+								var sql = "UPDATE htlc SET refundedminima = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
+								MDS.sql(sql,function(sqlresp){
+									console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
+								});
+							}
 						}
-
 					});
 
 				});
@@ -1446,8 +1507,12 @@
 		//DOM functionality to be applied after document fully loaded
 		$(document).ready(function(){
 
+			$("#confirm_write_permissions").on("click", function(){
+				$(".container").css("display", "none");
+				$("#choose_direction_card").css("display", "block");
+			});
+
 			$("#pending_swaps_button").on("click", function(){
-				//loadHTLC();
 				$(".container").css("display", "none");
 				$("#pending_swaps_container").css("display", "block");
 				$("body").css("background", "white");
@@ -1581,17 +1646,17 @@
 				//validate inputs
 				let _top_amount = $("#top_amount").val();
 				let _bottom_amount = $("#bottom_amount").val();
+				let _return_early = false;
 
-				let return_early = false;
 				$(".swap_amount").each(function(){
 					if(new BigNumber($(this).val()).isLessThanOrEqualTo(0) || $(this).val() == "")
 					{
 						$(this).addClass("is-invalid");
-						return_early = true;
+						_return_early = true;
 					}
 				});
 				
-				if(return_early) return;
+				if(_return_early) return;
 
 				let _current_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 				let _valid_top_amount = validate_amount(_top_amount);
@@ -1661,13 +1726,13 @@
 				$("body").css("background", "#320087");
 
 				$("#recipient_minima_public_key_label").text($("#minima_receiver").val());
-				$("#expiry_hours_label").text($("#minima_timelock_dropdown_button_content").text());
+				$("#expiry_hours_label").text(ETH_TIMELOCK_MAX_DELAY_HOURS + " hours");
 
 				let _friendly_date = new Date().toLocaleDateString("en-UK", {year: 'numeric', month: 'long', day: 'numeric' }) + " - " + new Date().toLocaleTimeString().toLowerCase().replace(" ", "");
 				$("#date_time").text(_friendly_date);
 
-
 				$(".container").css("display", "none");
+
 				$("#minima_lockup_confirm_container").css("display", "block");
 			});
 
@@ -1727,7 +1792,7 @@
 				let _ethereum_unlock_address = _obj.unlockaddresseth;
 				let _receiver_asset = _obj.receiver_asset;
                 let _refunder_minima = _obj.refunder_minima;
-                let _receiver_asset_amount = _obj.receiver_asset_amount;
+                let _receiver_asset_amount = _obj.sender_asset_amount;
 				let _timelock_minima = _obj.timelock;
 				let _actual_script = _obj.actual_script;
 				let _coinid = _obj.coinid;
@@ -1833,6 +1898,10 @@
 								let _coin_found = false;
 								let _coin;
 								let _obj = response.response;
+								var _coin_created_block;
+
+								console.log(response);
+								console.log("Coin created at " + _coin_created_block);
 
 								for(let i = 0; i < _obj.length; i++)
 								{
@@ -1841,11 +1910,22 @@
 									{
 										_coin = _obj[i];
 										_coin_found = true;
+										current_loaded_htlc.CREATED = _obj[i].created;
 										break;
 									}	
 								}
 
-								if(_coin_found)
+								let _confirmation_blocks_left = 10 - (current_minima_block - current_loaded_htlc.CREATED);
+
+								if(new BigNumber(_confirmation_blocks_left).isNaN())
+								{
+									_confirmation_blocks_left = 10;
+								}
+
+								//Show how many blocks are left until confirmation
+								$("#confirmation_blocks_left").text(_confirmation_blocks_left);
+
+								if(_coin_found && (current_minima_block - current_loaded_htlc.CREATED >= 10))
 								{
 									$("#minima_receipt_status").html(_coin.amount);
 									$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
@@ -1881,10 +1961,10 @@
                                     clearInterval(minima_transaction_update_interval);
 								}
 
-								let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100; 
+								let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100; 
 								$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
 
-								if(_timelock_minima - current_minima_block <= ETH_TIMELOCK_INNER_WINDOW) //Less than one hour to go
+								if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
 								{
 									$("#minima_receipt_confirm").css("display", "none");
 									$("#minima_receipt_expiry_warning").css("display", "block");
@@ -2170,7 +2250,7 @@
 
 						$(".ethereum_lock_info").text(_JSON);
 
-                        var sql = "UPDATE htlc SET ethlocked = true, ethlockedtime='"+eth_locked_time+"', contractidevm='"+evm_htlc_contract_id+"', timelockropsten='"+_timelock+"' WHERE hash = '"+_hashlock+"'";
+                        var sql = "UPDATE htlc SET ethlocked = true, ethlockedtime='"+eth_locked_time+"', contractidevm='"+evm_htlc_contract_id+"', timelockevm='"+_timelock+"' WHERE hash = '"+_hashlock+"'";
                         MDS.sql(sql,function(sqlresp){
 
                         });
@@ -2251,7 +2331,7 @@
 
 						$(".ethereum_lock_info").text(_JSON);
 
-                        var sql = "UPDATE htlc SET ethlocked = true WHERE hash = '"+_hashlock+"'";
+                        var sql = "UPDATE htlc SET ethlocked = true, ethlockedtime='"+eth_locked_time+"', contractidevm='"+evm_htlc_contract_id+"', timelockevm='"+_timelock+"' WHERE hash = '"+_hashlock+"'";
                         MDS.sql(sql,function(sqlresp){
 
                         });
@@ -2431,7 +2511,7 @@
 					$("#load_evm_funds_locked_receipt_spinner").css("display", "block");
 
 					await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.withdraw(_obj.contract_id, secret_minima).send({from: currentAccount}).on('transactionHash', function(hash){
-						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + hash);
+						$("#evm_funds_claimed_explorer_link").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + "/tx/" + hash);
 						$("#load_evm_funds_locked_receipt_text").text("Claiming Funds...");
 					}).then(async response =>{
 						$("#evm_funds_claimed_receipt").css("display", "block");
@@ -2474,9 +2554,6 @@
 
 				collect(current_loaded_htlc.ADDRESS, secret_minima);
 
-				//$("#minima_redeem_button_text").css("display", "block");
-				//$("#minima_redeem_spinner").css("display", "none");
-
                 $(".container").css("display", "none");
 
                 $("#minima_redeemed_card").css("display", "block");
@@ -2488,8 +2565,22 @@
 				$("#eth_redeem_button_spinner").css("display", "block");
 				$("#eth_redeem_button_text").css("display", "none");
 
-				let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.refund(evm_htlc_contract_id).send({from: currentAccount}).on('transactionHash', function(hash){
-					$("#eth_redeem_explorer_button").attr("href", "https://ropsten.etherscan.io/tx/" + hash);
+				let _contract_type;
+				let _which_abi;
+				
+				if(current_loaded_htlc.RECEIVERASSET != "eth")
+				{
+					_contract_type = "erc20";
+					_which_abi = HTLC_ERC20_ABI;
+				}
+				else
+				{
+					_contract_type = "native";
+					_which_abi = HTLC_ABI;
+				}
+
+				let _contract_object = new window.web3.eth.Contract(_which_abi, HTLC_CONTRACT_ADDRESSES[_contract_type][chainName]).methods.refund(evm_htlc_contract_id).send({from: currentAccount}).on('transactionHash', function(hash){
+					$("#eth_redeem_explorer_button").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + "/tx/" + hash);
 				}).then(function(result){
 					$("#eth_redeem_button").css("display", "none");
 					$("#eth_redeem_explorer_button").css("display", "block");
@@ -2525,56 +2616,84 @@
 
                 let _address = $(this).attr("address");
                 let _from_chain = $(this).attr("from_chain");
+				let _contract_id = $(this).attr("contractidevm");
 
                 //Find the right htlc
                 for(let i = 0; i < database_htlc_contracts.length; i++)
                 {
                     console.log(database_htlc_contracts[i]);
 
-                    console.log(database_htlc_contracts[i]["ADDRESS"]);
+                    console.log(database_htlc_contracts[i]["CONTRACTIDEVM"]);
 
-                    if(database_htlc_contracts[i]["ADDRESS"] == _address)
+                    if(database_htlc_contracts[i]["CONTRACTIDEVM"] == _contract_id)
                     {
                         console.log("Found the correct HTLC");
                         current_loaded_htlc = database_htlc_contracts[i];
+						console.log(current_loaded_htlc);
                         secret_minima = current_loaded_htlc.SECRET;
                         break;
                     }
                 }
 
+				console.log("From chain? " + _from_chain);
+
                 if(_from_chain != "minima")
                 {
-                    //This should never happen
-                    if(!current_loaded_htlc.ETHLOCKED)
+
+					var _contract_type;
+                    if(current_loaded_htlc.RECEIVERASSET != "eth")
                     {
-                        console.log("ETH NOT LOCKED");
+                        _contract_type = "erc20";
+                    }
+					else
+					{
+						_contract_type = "native";
+					}
+
+					console.log("IS IT LOCKED? " + current_loaded_htlc.ETHLOCKED);
+                    if(current_loaded_htlc.ETHLOCKED == "false")
+                    {
+                        console.log("ETH NOT LOCKED YET");
+						$(".container").css("display", "none");
+						$("#minima-receipt-loader-container").css("display", "block");
                         return;
                     } 
 
                     let _now = parseInt(Date.now() / 1000);
 
-                    if(_now >= current_loaded_htlc.TIMELOCKROPSTEN)
+					console.log("The timelock expires at " + current_loaded_htlc.TIMELOCKEVM);
+					console.log("And the current time is " + _now);
+
+                    if(_now >= current_loaded_htlc.TIMELOCKEVM)
                     {
                         //refund the evm
-                        console.log("Refunding");
-                        let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.refund(current_loaded_htlc.CONTRACTIDEVM).send({from: currentAccount}).on('transactionHash', function(hash){
-                            $("#eth_redeem_explorer_button").attr("href", "https://ropsten.etherscan.io/tx/" + hash);
-                        }).then(function(result){
-                            $("#eth_redeem_button").css("display", "none");
-                            $("#eth_redeem_explorer_button").css("display", "block");
+                        console.log("Calling refund method");
+						console.log("Contract ID " + current_loaded_htlc.CONTRACTIDEVM);
 
-                            let _sql = "UPDATE htlc SET refundedethereum = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
-                            MDS.sql(_sql,function(sqlresp){
-                                console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
-                            });
+						let _which_abi = HTLC_ABI;
+						if(_contract_type == "erc20")
+						{
+							_which_abi = HTLC_ERC20_ABI;
+						}
+						let _contract_object = new window.web3.eth.Contract(_which_abi, HTLC_CONTRACT_ADDRESSES[_contract_type][chainName])
+						.methods.refund(current_loaded_htlc.CONTRACTIDEVM)
+						.send({from: currentAccount}).on('transactionHash', function(hash){
+							$("#eth_redeem_explorer_button").attr("href", SUPPORTED_CHAINS[chainId].explorers[0].url + "/tx/" + hash);
+						}).then(function(result){
+							$("#eth_redeem_button").css("display", "none");
+							$("#eth_redeem_explorer_button").css("display", "block");
 
-                        }).catch((err) => {
-                            alert(err.message);
-                            $("#eth_redeem_button_spinner").css("display", "none");
-                            $("#eth_redeem_button_text").css("display", "block");
-                        });
+							let _sql = "UPDATE htlc SET refundedethereum = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
+							MDS.sql(_sql,function(sqlresp){
+								console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
+							});
 
-                        return;
+						}).catch((err) => {
+							alert(err.message);
+							$("#eth_redeem_button_spinner").css("display", "none");
+							$("#eth_redeem_button_text").css("display", "block");
+						});
+						return;	
                     }
 
                     let _json = JSON.stringify({
@@ -2582,51 +2701,52 @@
                         "contract_id" : current_loaded_htlc.CONTRACTIDEVM
                     });
 
-                    let _contract_type = "native";
-                    if(current_loaded_htlc.RECEIVERASSET != "eth")
-                    {
-                        _contract_type = "erc20";
-                    }
-
                     console.log("Invoking the interval");
 
                     evm_claimed_check_interval = setInterval(async function(){
                         
                         console.log("Inside the interval");
                         
-                        let _contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES[_contract_type][chainName]).methods.getContract(current_loaded_htlc.CONTRACTIDEVM).call({from: currentAccount}).then(function(result){
-                            return result;
-                        });
+						console.log("Getting contract with the ID of " + current_loaded_htlc.CONTRACTIDEVM);
+
+						var _contract_object;
+
+						if(_contract_type == "erc20")
+						{
+							_contract_object = await new window.web3.eth.Contract(HTLC_ERC20_ABI, HTLC_CONTRACT_ADDRESSES["erc20"][chainName]).methods.getContract(current_loaded_htlc.CONTRACTIDEVM).call({from: currentAccount}).then(function(result){
+								return result;
+							});
+						}
+						else
+						{
+							_contract_object = await new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]).methods.getContract(current_loaded_htlc.CONTRACTIDEVM).call({from: currentAccount}).then(function(result){
+								return result;
+							});
+						}
 
                         secret_minima = "0x" + _contract_object.preimage.substring(2).toUpperCase();
                         current_loaded_htlc.SECRET = "0x" + _contract_object.preimage.substring(2).toUpperCase();
 
-                        console.log("Got the contract object");
-
                         _block_number = await web3.eth.getBlockNumber();
-
-                        console.log("Got the block number");
 
                         current_ethereum_chain_time = await web3.eth.getBlock(_block_number).then(function(e){
                             return e.timestamp;
                         });
 
-                        console.log("Got the chain time");
-
-                        console.log("Current Ethereum Time: " + current_ethereum_chain_time);
-                        console.log("Contract Timelock: " + current_loaded_htlc.TIMELOCKROPSTEN);
-
-
-                        let _timelock_remaining = secondsToDigitalClock(current_loaded_htlc.TIMELOCKROPSTEN - current_ethereum_chain_time);
+                        let _timelock_remaining = secondsToDigitalClock(current_loaded_htlc.TIMELOCKEVM - current_ethereum_chain_time);
 
                         $("#eth_receipt_claimed_timelock").text(_timelock_remaining);
 
-                        let _progress_bar_width = (current_ethereum_chain_time - current_loaded_htlc.ETHLOCKEDTIME) / (current_loaded_htlc.TIMELOCKROPSTEN - current_loaded_htlc.ETHLOCKEDTIME) * 100; 
+                        let _progress_bar_width = (current_ethereum_chain_time - current_loaded_htlc.ETHLOCKEDTIME) / (current_loaded_htlc.TIMELOCKEVM - current_loaded_htlc.ETHLOCKEDTIME) * 100; 
 
                         $("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
 
+						console.log("%cThe contract object is", "background: yellow");
+						console.log(_contract_object);
+
                         if(_contract_object.withdrawn)
                         {
+							console.log("The contract funds have been withdrawn");
                             //Whichever view the user is looking at, hide it and show the "Claim minima view"
                             $(".container").css("display", "none");
                             $("#claim_minima").css("display", "block");
@@ -2634,6 +2754,8 @@
                         }
                         else if(_timelock_remaining <= 0)
                         {
+							console.log("The remaining timelock is less than 0");
+
                             clearInterval(evm_claimed_check_interval);
                             $("#eth_claimed_status").text("The recipient failed to claim ETH on time. Redeem your " + ASSET_FRIENDLY_NAMES[_receiver_asset] + ".");
                             $("#eth_claimed_status").addClass("text-danger");
@@ -2644,7 +2766,6 @@
                             $("#eth_waiting_to_be_claimed_icon").removeClass("fa-hourglass-half");
                             $("#eth_waiting_to_be_claimed_icon").addClass("fa-times-circle");
                             $("#eth_waiting_to_be_claimed_message").css("color", "#e75454");
-
                         }
 
                     }, 3000);
@@ -2661,9 +2782,9 @@
                     {
                         if(_from_chain == "minima")
                         {
-                            alert("Minima Timelock has expired. This swap cannot be completed. The Minima will be refunded automatically.");
+                            alert("Minima Timelock has expired. This swap cannot be completed. Attempting to refund the Minima.");
                             //Set refunded minima is true
-                            collect(current_loaded_htlc.ADDRESS, current_loaded_htlc.SECRET);
+                            collect(current_loaded_htlc.ADDRESS, current_loaded_htlc.SECRET, true);
                         }
                         else
                         {
@@ -2681,7 +2802,9 @@
                         "refunder_minima": current_loaded_htlc.REFUNDERMINIMA,
                         "actual_script": current_loaded_htlc.ACTUALSCRIPT,
                         "receiver_asset": current_loaded_htlc.RECEIVERASSET,
-                        "receiver_asset_amount"	: scientificToDecimal(current_loaded_htlc.AMOUNTMINIMA),
+                        "receiver_asset_amount"	: scientificToDecimal(current_loaded_htlc.AMOUNTETH),
+						"sender_asset": "minima",
+						"sender_asset_amount": scientificToDecimal(current_loaded_htlc.AMOUNTMINIMA),
                         "address"	: current_loaded_htlc.ADDRESS,
                         "coinid"	: current_loaded_htlc.COINID,
                         "unlockaddresseth" : current_loaded_htlc.UNLOCKADDRESSETH
