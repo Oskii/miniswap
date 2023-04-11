@@ -935,7 +935,6 @@
 		const ETH_TIMELOCK_MAX_DELAY_HOURS = ETH_TIMELOCK_MAX_DELAY * 50 / 60 / 60; // 6 hours
 
 		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> eth
-
 		var user_balances = //User's wallet balances of each asset
 		{
 			"eth" 	 : "- -",
@@ -1249,7 +1248,6 @@
 						//show the password input
 					//}
 				});
-
 			}else if(msg.event == "NEWBLOCK"){
 				current_minima_block = msg.data.txpow.header.block;
 				$("#current_minima_block").text(current_minima_block);
@@ -1585,7 +1583,6 @@
 
 
 							$("body").css("background", "white");
-
 						});
 					}
 
@@ -1647,7 +1644,6 @@
 
                     //If the user has either claimed the Minima or ETH
 					if	(data[i].CLAIMEDMINIMA == "true" || data[i].CLAIMEDETHEREUM == "true"){
-
                         let _outcome = '<span class="text-success float-end" style="font-weight:800">Completed</span>';
 						console.log("Found completed swap");
 						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
@@ -1661,7 +1657,6 @@
 						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
 						continue;
 					}
-
                     //Expire contracts 30 minutes before actual expiry to avoid race conditions with collection
 					let timelock_minima_expiry_seconds = (data[i].TIMELOCKMINIMA - current_minima_block - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME;
                     let timelock_ethereum_expiry_seconds = data[i].TIMELOCKEVM - Date.now() / 1000;
@@ -1741,14 +1736,12 @@
 
 				console.log("The response is: ");
 				console.log(coinresp);
-
 				var coins = coinresp.response;
 
 				if(coins.length < 1){
 					alert("No unspent coins found.");
 					return false;
 				}
-
 				//Get the coin
 				var coin = coins[0];
 
