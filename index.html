@@ -19,8 +19,8 @@
 		<div class="container-fluid">
 		  	<a class="navbar-brand h5" href="#" onclick="location.reload()" style="font-weight: 800; color: white; font-size: 24px;">MiniSwap</a>
 			<div class="">
-				
-				<span class="mx-3" style="text-decoration: underline; font-weight: 800; text-underline-offset: 7px; cursor: pointer">How it Works</span>				
+
+				<span class="mx-3" style="text-decoration: underline; font-weight: 800; text-underline-offset: 7px; cursor: pointer">How it Works</span>
 				<span class="btn btn-sm btn btn-light text-dark mx-3" id="metamask_connected" style="font-weight: 800;">Connect Metamask Wallet</span>
 				<span class="btn btn-sm btn btn-danger text-light switch_chain switch_chain_badge mx-3" style="display: none; font-weight: 800;">Switch Chain</span>
 			</div>
@@ -31,6 +31,116 @@
 			</div-->
 		</div>
 	</nav>
+
+	<div class="modal fade" tabindex="-1" id="node_locked_modal">
+		<div class="modal-dialog modal-md" style="max-width: 375px;">
+			<div class="modal-content" style="border-radius: 1.5rem;">
+				<div class="modal-body p-4">
+					<form id="confirm_vault_password" class="mb-1">
+						<h5 class="mb-4">Enter your vault password</h5>
+						<div class="position-relative">
+							<input id="vault_password" type="password" class="input input-active input-white bg-grey-three w-100 px-3 py-2 outline-none" />
+							<img id="toggle_password" class="position-absolute" src="visibility_off.svg" width="25" style="cursor: pointer; right: 10px; top: 10px;" />
+						</div>
+						<div class="text-center">
+							<button id="confirm_vault_password_btn" type="submit" class="btn btn-lg col-12 btn-primary mt-4" disabled>Confirm</button>
+							<div class="mt-3 mb-0">
+								<span onclick="$('#node_locked_modal').modal('hide')" class="text-dark" style="cursor: pointer; text-decoration: underline; text-underline-offset: 7px;">Cancel</span>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" id="confirm_send" style="display: none;">
+		<div class="col-12">
+			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
+				<div class="card-body p-3 p-sm-4" style="border-radius: 1.5rem;">
+					<h4 class="mb-4">Action required</h4>
+					<p>
+						You now need to accept this pending transaction.
+					</p>
+					<p>
+						Once accepted, your native Minima will be sent to the contract for a maximum of 12 hours.
+					</p>
+					<p>
+						You must return to this page to get your receipt which you will need to share with your counterparty.
+					</p>
+					<p class="d-block d-lg-none mb-1">
+						To accept the transaction, go to the Minima app Home screen and press
+						<svg style="margin-left: 4px; margin-right: 4px;" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+									d="M8.9998 17.5025C7.82045 17.5025 6.71387 17.2796 5.68005 16.8338C4.64623 16.388 3.74685 15.7826 2.9819 15.0177C2.21696 14.2528 1.61158 13.3534 1.16578 12.3196C0.719973 11.2857 0.49707 10.1791 0.49707 8.9998C0.49707 7.82045 0.719973 6.71387 1.16578 5.68005C1.61158 4.64623 2.21696 3.74685 2.9819 2.9819C3.74685 2.21696 4.64623 1.61158 5.68005 1.16578C6.71387 0.719973 7.82045 0.49707 8.9998 0.49707C10.1791 0.49707 11.2857 0.719973 12.3196 1.16578C13.3534 1.61158 14.2528 2.21696 15.0177 2.9819C15.7826 3.74685 16.388 4.64623 16.8338 5.68005C17.2796 6.71387 17.5025 7.82045 17.5025 8.9998C17.5025 9.36816 17.4825 9.72957 17.4425 10.084C17.4025 10.4385 17.3372 10.786 17.2466 11.1266C17.0223 10.8745 16.7609 10.6687 16.4624 10.5093C16.164 10.3499 15.842 10.2524 15.4966 10.2167C15.535 10.0217 15.5629 9.82234 15.5804 9.61867C15.5979 9.41502 15.6067 9.20873 15.6067 8.9998C15.6067 7.15198 14.9675 5.58888 13.6891 4.31049C12.4107 3.03211 10.8476 2.39292 8.9998 2.39292C7.15198 2.39292 5.58888 3.03211 4.31049 4.31049C3.03211 5.58888 2.39292 7.15198 2.39292 8.9998C2.39292 10.8476 3.03211 12.4107 4.31049 13.6891C5.58888 14.9675 7.15198 15.6067 8.9998 15.6067C9.69817 15.6067 10.3636 15.5058 10.9962 15.3042C11.6287 15.1025 12.2125 14.8191 12.7475 14.4541C12.9175 14.7367 13.1365 14.984 13.4045 15.1961C13.6724 15.4082 13.9652 15.5695 14.2829 15.68C13.5612 16.2528 12.7528 16.6998 11.8576 17.0209C10.9624 17.342 10.0098 17.5025 8.9998 17.5025ZM15.1511 14.1642C14.8295 14.1642 14.5564 14.0519 14.3318 13.8273C14.1071 13.6026 13.9948 13.3295 13.9948 13.0079C13.9948 12.6864 14.1071 12.4133 14.3318 12.1887C14.5564 11.964 14.8295 11.8517 15.1511 11.8517C15.4726 11.8517 15.7457 11.964 15.9704 12.1887C16.195 12.4133 16.3073 12.6864 16.3073 13.0079C16.3073 13.3295 16.195 13.6026 15.9704 13.8273C15.7457 14.0519 15.4726 14.1642 15.1511 14.1642ZM11.6751 12.9464L8.09174 9.36303V4.85805H9.90786V8.62661L12.9563 11.6751L11.6751 12.9464Z"
+									fill="#08090B"
+							/>
+						</svg>
+						Long press the command and select 'Accept'. That's it!
+					</p>
+					<p class="d-none d-lg-block mb-1">
+						To accept the transaction, go to the MiniDapp hub and click Pending Actions. Click Accept for the Miniswap command, then click OK. That's it
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" id="confirm_txnsign" style="display: none;">
+		<div class="col-12">
+			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px; background: #e3e3e6;">
+				<div class="card-body p-3 p-sm-4" style="border-radius: 1.5rem;">
+					<h4 class="mb-4">Action required</h4>
+					<p>
+						You now need to accept this pending transaction.
+					</p>
+					<p>
+						Once accepted, you will become the counterparty to this swap and will need to wait 10 blocks for the native Minima to be confirmed on-chain.
+					</p>
+					<p class="d-block d-lg-none mb-1">
+						To accept the transaction, go to the Minima app Home screen and press
+						<svg style="margin-left: 4px; margin-right: 4px;" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+									d="M8.9998 17.5025C7.82045 17.5025 6.71387 17.2796 5.68005 16.8338C4.64623 16.388 3.74685 15.7826 2.9819 15.0177C2.21696 14.2528 1.61158 13.3534 1.16578 12.3196C0.719973 11.2857 0.49707 10.1791 0.49707 8.9998C0.49707 7.82045 0.719973 6.71387 1.16578 5.68005C1.61158 4.64623 2.21696 3.74685 2.9819 2.9819C3.74685 2.21696 4.64623 1.61158 5.68005 1.16578C6.71387 0.719973 7.82045 0.49707 8.9998 0.49707C10.1791 0.49707 11.2857 0.719973 12.3196 1.16578C13.3534 1.61158 14.2528 2.21696 15.0177 2.9819C15.7826 3.74685 16.388 4.64623 16.8338 5.68005C17.2796 6.71387 17.5025 7.82045 17.5025 8.9998C17.5025 9.36816 17.4825 9.72957 17.4425 10.084C17.4025 10.4385 17.3372 10.786 17.2466 11.1266C17.0223 10.8745 16.7609 10.6687 16.4624 10.5093C16.164 10.3499 15.842 10.2524 15.4966 10.2167C15.535 10.0217 15.5629 9.82234 15.5804 9.61867C15.5979 9.41502 15.6067 9.20873 15.6067 8.9998C15.6067 7.15198 14.9675 5.58888 13.6891 4.31049C12.4107 3.03211 10.8476 2.39292 8.9998 2.39292C7.15198 2.39292 5.58888 3.03211 4.31049 4.31049C3.03211 5.58888 2.39292 7.15198 2.39292 8.9998C2.39292 10.8476 3.03211 12.4107 4.31049 13.6891C5.58888 14.9675 7.15198 15.6067 8.9998 15.6067C9.69817 15.6067 10.3636 15.5058 10.9962 15.3042C11.6287 15.1025 12.2125 14.8191 12.7475 14.4541C12.9175 14.7367 13.1365 14.984 13.4045 15.1961C13.6724 15.4082 13.9652 15.5695 14.2829 15.68C13.5612 16.2528 12.7528 16.6998 11.8576 17.0209C10.9624 17.342 10.0098 17.5025 8.9998 17.5025ZM15.1511 14.1642C14.8295 14.1642 14.5564 14.0519 14.3318 13.8273C14.1071 13.6026 13.9948 13.3295 13.9948 13.0079C13.9948 12.6864 14.1071 12.4133 14.3318 12.1887C14.5564 11.964 14.8295 11.8517 15.1511 11.8517C15.4726 11.8517 15.7457 11.964 15.9704 12.1887C16.195 12.4133 16.3073 12.6864 16.3073 13.0079C16.3073 13.3295 16.195 13.6026 15.9704 13.8273C15.7457 14.0519 15.4726 14.1642 15.1511 14.1642ZM11.6751 12.9464L8.09174 9.36303V4.85805H9.90786V8.62661L12.9563 11.6751L11.6751 12.9464Z"
+									fill="#08090B"
+							/>
+						</svg>
+						Long press the command and select 'Accept'. That's it!
+					</p>
+					<p class="d-none d-lg-block mb-1">
+						To accept the transaction, go to the MiniDapp hub and click Pending Actions. Click Accept for the Miniswap command, then click OK. That's it
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" id="claim_pending_complete" style="display: none;">
+		<div class="col-12">
+			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px; background: #e3e3e6;">
+				<div class="card-body p-3 p-sm-4" style="border-radius: 1.5rem;">
+					<h4 class="mb-4">Action required</h4>
+					<p>
+						You now need to accept the pending transaction to claim your native Minima.
+					</p>
+					<p class="d-block d-lg-none mb-0">
+						To accept the transaction, go to the Minima app Home screen and press
+						<svg style="margin-left: 4px; margin-right: 4px;" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+									d="M8.9998 17.5025C7.82045 17.5025 6.71387 17.2796 5.68005 16.8338C4.64623 16.388 3.74685 15.7826 2.9819 15.0177C2.21696 14.2528 1.61158 13.3534 1.16578 12.3196C0.719973 11.2857 0.49707 10.1791 0.49707 8.9998C0.49707 7.82045 0.719973 6.71387 1.16578 5.68005C1.61158 4.64623 2.21696 3.74685 2.9819 2.9819C3.74685 2.21696 4.64623 1.61158 5.68005 1.16578C6.71387 0.719973 7.82045 0.49707 8.9998 0.49707C10.1791 0.49707 11.2857 0.719973 12.3196 1.16578C13.3534 1.61158 14.2528 2.21696 15.0177 2.9819C15.7826 3.74685 16.388 4.64623 16.8338 5.68005C17.2796 6.71387 17.5025 7.82045 17.5025 8.9998C17.5025 9.36816 17.4825 9.72957 17.4425 10.084C17.4025 10.4385 17.3372 10.786 17.2466 11.1266C17.0223 10.8745 16.7609 10.6687 16.4624 10.5093C16.164 10.3499 15.842 10.2524 15.4966 10.2167C15.535 10.0217 15.5629 9.82234 15.5804 9.61867C15.5979 9.41502 15.6067 9.20873 15.6067 8.9998C15.6067 7.15198 14.9675 5.58888 13.6891 4.31049C12.4107 3.03211 10.8476 2.39292 8.9998 2.39292C7.15198 2.39292 5.58888 3.03211 4.31049 4.31049C3.03211 5.58888 2.39292 7.15198 2.39292 8.9998C2.39292 10.8476 3.03211 12.4107 4.31049 13.6891C5.58888 14.9675 7.15198 15.6067 8.9998 15.6067C9.69817 15.6067 10.3636 15.5058 10.9962 15.3042C11.6287 15.1025 12.2125 14.8191 12.7475 14.4541C12.9175 14.7367 13.1365 14.984 13.4045 15.1961C13.6724 15.4082 13.9652 15.5695 14.2829 15.68C13.5612 16.2528 12.7528 16.6998 11.8576 17.0209C10.9624 17.342 10.0098 17.5025 8.9998 17.5025ZM15.1511 14.1642C14.8295 14.1642 14.5564 14.0519 14.3318 13.8273C14.1071 13.6026 13.9948 13.3295 13.9948 13.0079C13.9948 12.6864 14.1071 12.4133 14.3318 12.1887C14.5564 11.964 14.8295 11.8517 15.1511 11.8517C15.4726 11.8517 15.7457 11.964 15.9704 12.1887C16.195 12.4133 16.3073 12.6864 16.3073 13.0079C16.3073 13.3295 16.195 13.6026 15.9704 13.8273C15.7457 14.0519 15.4726 14.1642 15.1511 14.1642ZM11.6751 12.9464L8.09174 9.36303V4.85805H9.90786V8.62661L12.9563 11.6751L11.6751 12.9464Z"
+									fill="#08090B"
+							/>
+						</svg>
+						Long press the command and select 'Accept'. That's it!
+					</p>
+					<p class="d-none d-lg-block mb-0">
+						To accept the transaction, go to the MiniDapp hub and click Pending Actions. Click Accept for the Miniswap command, then click OK. That's it
+					</p>
+					<button id="pending_claim_minima_button" class="btn btn-lg col-12 btn-primary mt-4">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div class="container" id="pending_swaps_container" style="display: none">
 		<div class="col-12 row p-2 my-3 mx-auto" style="max-width: 300px; background: #6500ff; border-radius: 30px;">
@@ -60,29 +170,29 @@
 			</div>
 		</div>
         <p class="text-center">
-            <a class="text-dark" onclick="   
-            $('.container').css('display', 'none'); 
+            <a class="text-dark" onclick="
+            $('.container').css('display', 'none');
             $('#choose_direction_card').css('display', 'block');
-            $('body').css('background', '#320087');" id="back_from_pending_swaps_card" 
+            $('body').css('background', '#320087');" id="back_from_pending_swaps_card"
             style="cursor: pointer; text-decoration: underline; text-underline-offset: 7px; font-weight: 800;">Back
             </a>
         </p>
-        
+
 	</div>
 
-	<div class="container" id="write_mode_container">
+	<div class="container" id="write_mode_container" style="display: none;">
 		<div class="col-12">
 			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
 				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
 					<h4>This MiniDapp only works in WRITE Mode</h4>
-					<p class="mt-3">This MiniDapp needs access to your wallet, please close this page and give MiniSwap WRITE permissions from the MiniHub, then reopen MiniSwap.</p>
+					<p class="mt-3 mb-0">This MiniDapp needs access to your wallet, please close this page and give MiniSwap WRITE permissions from the MiniHub, then reopen MiniSwap.</p>
 					<a class="btn btn-primary mt-3 btn-block col-12 btn-lg" id="confirm_write_permissions">I have set WRITE permissions</a>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="container" id="choose_direction_card" style="display: none">
+	<div class="container" id="choose_direction_card" style="display: block">
 		<div class="col-12">
 			<div class="card mx-auto my-3 box-shadow border" style="max-width: 450px;">
 				<div class="card-body p-2 p-sm-4" style="border-radius: 1.5rem;">
@@ -112,7 +222,7 @@
 						<div class="row col-12 p-0 m-0 py-3" style="border-radius: 1rem;">
 							<div class="col-6" style="display: flex;">
 								<span class="border align-self-center py-1 pt-2 col-12" style="min-width: 115px; border-radius: 15px; border: solid 2px #e3e1e8 !important; background: #e3e0e9;">
-									<img class="mb-1 ms-2 me-2" src="minimalogo.svg" height="32" width="32"> 
+									<img class="mb-1 ms-2 me-2" src="minimalogo.svg" height="32" width="32">
 									<span class="h-5 m-0" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">Minima</span>
 								</span>
 							</div>
@@ -122,7 +232,7 @@
 							<div class="col-12">
 								<input class="p-2 pt-1 mt-3 form-control col-12 align-self-center swap_amount" id="top_amount" asset="minima" placeholder="0.00" style="font-size: 32px; background: none; border:none; height: 40px">
 							</div>
-						</div>	
+						</div>
 					</div>
 
 					<div class="col-12">
@@ -174,7 +284,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 	<div class="container" id="minima_lockup_confirm_container" style="display: none;">
 		<div class="col-12 row p-0 m-0">
@@ -183,7 +293,7 @@
 					<h5 class="text-center my-4" style="font-weight: 800;">
 							Confirmation
 					</h5>
-					
+
 					<label style="font-weight: 800;">Swapping:</label>
 					<p class="m-0"><span id="swap_amount_minima_label">- -</span> Minima</p>
 					<hr class="my-2">
@@ -214,7 +324,7 @@
 					<p class="text-center mt-3" style="font-weight: 800;">
 						<a class="text-dark" id="back_from_minima_lockup_confirm_container" style="cursor: pointer; text-decoration: underline; text-underline-offset: 7px;">Cancel</a>
 					</p>
-					
+
 				</div>
 			</div>
 		</div>
@@ -313,7 +423,7 @@
 							<i class="align-self-center fa fa-info-circle" style="width: fit-content;"></i>
 							<div style="" class="col-10">Send this receipt to the recipient to continue</div>
 						</div>
-						<pre class="p-3 bg-light m-0" id="minima_lock_receipt_json" style="" readonly></pre>	
+						<pre class="p-3 bg-light m-0" id="minima_lock_receipt_json" style="" readonly></pre>
 						<a class="btn btn-lg col-12 btn-primary mt-4" id="copy_minima_lock_receipt">
 							<span>Copy</span>
 							<i class="fa fa-check-circle" style="display: none;"></i>
@@ -336,7 +446,7 @@
 					<p><strong class="ropsten_receipt_timelock">- - : - - : - -</strong></p>
 					<div style="border: solid 2px #6500ff; border-radius: 15px;" class="progress ropsten_receipt_progress">
 						<div class="progress-bar ropsten_receipt_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="background-color: #6500ff; ">
-							
+
 						</div>
 					</div>
 					<p><span class="ropsten_receipt_progress_text">-- / --</span> Blocks</p>
@@ -362,7 +472,7 @@
 				<p>Timelock Period: <span id="minima_redeem_hms">--</span> remaining... </p>
 				<div  style="border: solid 2px #6500ff; border-radius: 15px;" class="progress minima_redeem_progress mt-3">
 					<div class="progress-bar minima_redeem_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="background-color: #6500ff;">
-						
+
 					</div>
 				</div>
 				<p id="minima_redeem_progress_text">-- / --</p>
@@ -389,7 +499,7 @@
 			<h5 class="text-center my-4" style="font-weight: 800;">Success</h5>
 			<p class="text-canter">You have successfully claimed the recipient's <span class="asset_selection_text">ETH</span>. They can now claim the Minima</p>
 			<a class="btn btn-primary btn-lg col-12" target="_blank" id="evm_funds_claimed_explorer_link">View on Explorer</a>
-			<a style="cursor:pointer; font-weight: 800; text-decoration: underline; text-underline-offset: 7px;" class="start_another_swap mx-auto text-dark mt-4">Start Another Swap</a>		
+			<a style="cursor:pointer; font-weight: 800; text-decoration: underline; text-underline-offset: 7px;" class="start_another_swap mx-auto text-dark mt-4">Start Another Swap</a>
 		</div>
 	</div>
 
@@ -399,18 +509,18 @@
 			<h5 class="text-center my-3" style="font-weight: 800;" id="eth_waiting_to_be_claimed_label">Waiting for <span class="asset_selection_text">ETH</span> to be Claimed</h5>
 
 			<p id="eth_waiting_to_be_claimed_message" class="text-center mb-3">You will be able to claim your Minima after the counterparty claims the <span class="asset_selection_text">ETH</span></p>
-			
+
 			<div class="p-3 bg-light" style="border-radius: 10px">
-				<p class="m-0" id="eth_claimed_status">Must be claimed in: 
+				<p class="m-0" id="eth_claimed_status">Must be claimed in:
 					<small style="font-weight: 800;" id="eth_receipt_claimed_timelock">00:00:00</small>
 				</p>
-				
+
 				<div class="progress eth_redeem_progress mt-3" style="border: solid 2px #6500ff;border-radius: 15px;">
 					<div style="background-color: #6500ff;" id="eth_redeem_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-						
+
 					</div>
 				</div>
-			</div>	
+			</div>
 			<a class="btn btn-lg mt-4 col-12 btn-primary" id="eth_redeem_button" style="display: none;">
 				<span id="eth_redeem_button_text">Redeem <span class="asset_selection_text">ETH</span></span>
 				<div class="spinner-border mx-auto" role="status" id="eth_redeem_button_spinner" style="display: none">
@@ -420,7 +530,7 @@
 			<a class="btn btn-lg mt-4 col-12 btn-primary" target="_blank" id="eth_redeem_explorer_button" style="display: none">
 				View Receipt on Explorer
 			</a>
-			
+
 		</div>
 	</div>
 
@@ -430,7 +540,7 @@
 			<h5 style="font-weight: 800;" id="claim_minima_title" class="m-0 text-center">Claim the Minima</h5>
 
 			<p class="text-center mt-4" id="claim_minima_text">The counterparty has claimed your <span class="asset_selection_text">ETH</span>, you can now claim the Minima</p>
-	
+
 			<a class="btn btn-lg col-12 btn-primary" target="_blank" id="claim_minima_button">
 				<span id="claim_minima_button_text">
 					Claim Minima
@@ -439,8 +549,8 @@
 					<span class="sr-only"></span>
 				</div>
 			</a>
-			<a style="cursor:pointer; font-weight: 800; text-decoration: underline; text-underline-offset: 7px; display: none;" class="start_another_swap mx-auto text-dark mt-4">Start Another Swap</a>		
-			
+			<a style="cursor:pointer; font-weight: 800; text-decoration: underline; text-underline-offset: 7px; display: none;" class="start_another_swap mx-auto text-dark mt-4">Start Another Swap</a>
+
 		</div>
 	</div>
 
@@ -455,7 +565,7 @@
 							<div style="" class="col-10">Send this public key to the recipient before proceeding</div>
 						</div>
 						<pre class="p-3 bg-light m-0 public_key" style="white-space: pre-line;" readonly>
-						Unable to connect to Minima node.</pre>	
+						Unable to connect to Minima node.</pre>
 						<a class="btn btn-lg col-12 btn-primary mt-4" id="copy_minima_public_key">
 							<span>Copy</span>
 							<i class="fa fa-check-circle" style="display: none;"></i>
@@ -492,14 +602,29 @@
 						<strong>Load Receipt</strong>
 					</span>
 				</h5>
-				<p class="mb-2"><strong>Minima Lockup Receipt</strong></p>
-				<textarea class="p-2" placeholder="Enter the lockup receipt that the recipient received when they locked their Minima" class="mt-2" id="minima_receipt_textarea" style="min-height: 150px; border: none;"></textarea>
-				<a class="btn btn-primary btn-lg mt-3 col-12" id="load_minima_receipt">
-					<span id="load_minima_receipt_text">Load Receipt</span>
-					<div  style="display:none" class="spinner-border mx-auto" role="status" id="load_minima_receipt_spinner">
-						<span class="sr-only"></span>
-					</div>
-				</a>
+				<section id="minima-receipt-loader-form">
+					<p class="mb-2"><strong>Minima Lockup Receipt</strong></p>
+					<textarea class="p-2 w-100" placeholder="Enter the lockup receipt that the recipient received when they locked their Minima" class="mt-2" id="minima_receipt_textarea" style="min-height: 150px; border: none;"></textarea>
+					<a class="btn btn-primary btn-lg mt-4 col-12" id="preview_minima_receipt">
+						Load Receipt
+					</a>
+				</section>
+				<section id="minima-receipt-loader-summary" class="mt-3" style="display: none;">
+					<label style="font-weight: 800;">Swapping:</label>
+					<p class="m-0"><span id="confirm_send_amount_label"></span></p>
+					<hr class="my-2">
+
+					<label style="font-weight: 800;">Receiving:</label>
+					<p class="m-0"><span id="confirm_receive_amount_label"></span> Minima</p>
+					<hr class="my-2">
+
+					<a class="btn btn-primary btn-lg mt-4 col-12" id="load_minima_receipt">
+						<span id="load_minima_receipt_text">Confirm Receipt</span>
+						<div style="display:none" class="spinner-border mx-auto" role="status" id="load_minima_receipt_spinner">
+							<span class="sr-only"></span>
+						</div>
+					</a>
+				</section>
 				<a style="cursor: pointer;text-decoration: underline;text-underline-offset: 7px;font-weight: 800;" class="text-dark my-3 mx-auto" id="back_from_lock_on_ropsten">Cancel</a>
 			</div>
 		</div>
@@ -511,13 +636,13 @@
 			<div class="row col-12 m-0 p-0 h5 my-2">
 				<a style="width: fit-content;" class="btn btn-sm btn-dark" id="back_from_current_contracts"><i class="fa fa-chevron-left"></i>&nbsp;Back</a>
 			</div>
-			
+
 			<div id="myhtlc" style="font-size:12;">
-				
+
 			</div>
 			<div id="htlc_created" style="font-family: monospace; font-size: 12">
-					
-			</div>				
+
+			</div>
 		</div>
 	</div>
 
@@ -540,13 +665,13 @@
 			<div id="minima_receipt_content">
 				<div class="">
 					<p class="mb-2"><strong>Recipient's Funds</strong></p>
-					<p class="m-0 p-3 bg-light"> 
+					<p class="m-0 p-3 bg-light">
 						<span id="minima_receipt_confirmation_status">--</span>
 						<span class="ml-1 float-end mt-1" id="minima_receipt_confirmation_status_colour" style="width: 18px; height: 18px; border-radius: 1rem; background: orange; display: inline-block;"></span>
 					</p>
 
 					<p class="my-2"><strong>You Will Receive</strong></p>
-					<p class="m-0 p-2 bg-light h5 m-0 align-self-center" style="display: flex;"> 
+					<p class="m-0 p-2 bg-light h5 m-0 align-self-center" style="display: flex;">
 						<img src="minimalogo.svg" style="width: 48px;">
 						<span class="align-self-center">
 							<span id="minima_receipt_status"> </span> <span>Minima</span>
@@ -554,30 +679,30 @@
 					</p>
 
 					<p class="my-2"><strong>They Will Receive</strong></p>
-					<p class="m-0 p-2 bg-light" style="display: flex;"> 
+					<p class="m-0 p-2 bg-light" style="display: flex;">
 						<img src="ethlogo.svg" id="asset_to_lock_img" style="height: 48px;">
 						<span class="asset_to_lock h5 m-0 align-self-center asset_selection_text"> </span>
 					</p>
 
 					<p class="my-2"><strong>Expires In</strong></p>
-					<p class="m-0 p-3 bg-light"> 
+					<p class="m-0 p-3 bg-light">
 						<strong class="minima_receipt_timelock"></strong>
 					</p>
 					<div class="progress minima_receipt_progress mt-2" style="border: solid 2px #6500ff;border-radius: 15px;">
 						<div class="progress-bar minima_receipt_progress_bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="background-color: #6500ff;">
-							
+
 						</div>
 					</div>
 					<p class="minima_receipt_progress_text text-center"></p>
 					<!--a class="btn btn-primary btn-lg col-12 mt-3" id="minima_receipt_confirm">Confirm</a-->
-					
+
 					<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_evm_asset_approve">
 						<span id="ethereum_approve_text" style="display: block;">Approve</span>
 						<div class="spinner-border mx-auto" role="status" id="ethereum_approve_spinner" style="display: none;">
 							<span class="sr-only"></span>
 						</div>
 					</a>
-					
+
 					<a class="btn btn-primary btn-lg col-12 mt-3" id="lock_evm_asset_confirm">
 						<span id="ethereum_create_text" style="display: block;">Lock Funds</span>
 						<div class="spinner-border mx-auto" role="status" id="ethereum_create_spinner" style="display: none;">
@@ -662,7 +787,7 @@
 					<i class="align-self-center fa fa-info-circle" style="width: fit-content;"></i>
 					<div style="" class="col-10">Send this receipt to the recipient to continue</div>
 				</div>
-				<pre class="p-3 bg-light m-0 ethereum_lock_info" style="white-space: pre-line;" readonly=""></pre>	
+				<pre class="p-3 bg-light m-0 ethereum_lock_info" style="white-space: pre-line;" readonly=""></pre>
 				<a class="btn btn-lg col-12 btn-primary mt-3" id="copy_ethereum_lockup_receipt">
 					<span>Copy</span>
 					<i class="fa fa-check-circle" style="display: none;"></i>
@@ -678,7 +803,7 @@
 				Minima Wallet
 				<hr class="my-1">
 				<div class="mt-1">
-					<i class="fa fa-cube" aria-hidden="true"></i>: 
+					<i class="fa fa-cube" aria-hidden="true"></i>:
 					<span id="current_minima_block" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
@@ -686,7 +811,7 @@
 				</div>
 
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					<span id="" class="float-end px-2">
 						<span class="minima_confirmed">
 							<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
@@ -706,7 +831,7 @@
 				</div>
 
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					<span id="" class="float-end px-2">
 						<span class="minima_sendable">
 							<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
@@ -725,36 +850,36 @@
 					Block Num:
 					<span id="current_ethereum_block" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
-					</span>					
+					</span>
 				</div>
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					<span class="native_asset_name">ETH</span>:
 					<span id="current_eth_balance" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
 				</div>
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					USDC:
 					<span id="current_usdc_balance" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
-				</div>		
+				</div>
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					USDT:
 					<span id="current_usdt_balance" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
-				</div>	
+				</div>
 				<div class="mt-1">
-					<i class="fa-solid fa-coins"></i> 
+					<i class="fa-solid fa-coins"></i>
 					wMinima:
 					<span id="current_wminima_balance" class="float-end px-2">
 						<div class="spinner-border" style="height: 8px; width: 8px; font-size: 8px"></div>
 					</span>
-				</div>		
+				</div>
 			</span>
 		</p>
 	</div>
@@ -762,7 +887,7 @@
 	<div class="modal fade" tabindex="-1" id="asset_choice_modal">
 		<div class="modal-dialog modal-md" style="max-width: 375px;">
 		  	<div class="modal-content" style="border-radius: 1.5rem; background: #e3e3e6">
-				
+
 				<div class="modal-body p-4">
 					<h5 class="modal-title text-center" style="font-weight: 800;">Select Currency</h5>
 					<div class="my-3">
@@ -783,7 +908,7 @@
 							<span class="ms-2"><small style="font-weight: 800; font-size: 18px; letter-spacing: 1px">Wrapped Minima / wMinima</small></span>
 						</div>
 					</div>
-					<p class="text-center" style="font-weight: 800; text-decoration: underline; text-underline-offset: 7px; cursor: pointer;">Cancel</p>
+					<p class="text-center" onclick="$('#asset_choice_modal').modal('hide')" style="font-weight: 800; text-decoration: underline; text-underline-offset: 7px; cursor: pointer;">Cancel</p>
 				</div>
 		  	</div>
 		</div>
@@ -796,21 +921,20 @@
 		 * |+++++++++ IMPORTANT +++++++++|
 		 * |=============================|
 		 * HTLC only works if the first party sets a timelock period, and
-		 * within that timelock period the counterparty sets up another, shorter timelock period 
+		 * within that timelock period the counterparty sets up another, shorter timelock period
 		 * for their funds to be locked.
-		 * This is so that when the first party claims the counterparty's funds, the counterparty 
-		 * still has time to claim the first party's funds. For that reason ETH_TIMELOCK_INNER_WINDOW 
+		 * This is so that when the first party claims the counterparty's funds, the counterparty
+		 * still has time to claim the first party's funds. For that reason ETH_TIMELOCK_INNER_WINDOW
 		 * must be greater than MIMIMUM_LOCKUP_MINIMA, or the first party can maliciously claim everything
 		**/
 		const MINIMUM_LOCKUP_MINIMA = 1000 //default 12 hours = 1000 blocks
-		const ETH_TIMELOCK_INNER_WINDOW = parseInt(MINIMUM_LOCKUP_MINIMA / 6); //default 2 hours 
+		const ETH_TIMELOCK_INNER_WINDOW = parseInt(MINIMUM_LOCKUP_MINIMA / 6); //default 2 hours
         const MINIMA_BLOCK_TIME = 50;
         const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME;
 		const ETH_TIMELOCK_MAX_DELAY = 60 * 60 * 6 / 50; //6 hours in blocks
 		const ETH_TIMELOCK_MAX_DELAY_HOURS = ETH_TIMELOCK_MAX_DELAY * 50 / 60 / 60; // 6 hours
 
 		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> eth
-		
 		var user_balances = //User's wallet balances of each asset
 		{
 			"eth" 	 : "- -",
@@ -829,20 +953,99 @@
 
 		var current_minima_block = 0;	//The current Minima Block right now.
 		var minima_starting_block = 0;	//The Minima block when this Dapp was loaded (used for progress bars)
-		
+
 		var minima_transaction_update_interval; //used to track whether the Minima has been unlocked
 
 		//Interval object to update the progress bar which indicates how long the ropsten timelock has before refund is possible
-		var ethereum_timelock_progress_bar_update_interval; 
+		var ethereum_timelock_progress_bar_update_interval;
 
 		//Interval object to periodically check whether the Ropsten ETH is claimed
-		var evm_claimed_check_interval; 
-		
-		//Object to store many HTLC contracts we may have on the go, and then we can 
+		var evm_claimed_check_interval;
+
+		//Object to store many HTLC contracts we may have on the go, and then we can
 		var HTLCs = {};
 
 	</script>
-	
+
+	<!-- Vault is locked -->
+	<script>
+		var passwordHidden = true;
+		var vaultPassword = null;
+		var vaultCallback = null;
+		var vaultCanContinue = false;
+
+		/**
+		 * shows vault locked modal
+		 */
+		var showVaultLockedModal = function() {
+			$('#node_locked_modal').modal({backdrop: 'static', keyboard: false})
+			$('#node_locked_modal').modal('show');
+		};
+
+		/**
+		 * checks to see if node is locked
+		 * @returns {Promise<unknown>}
+		 */
+		function isNodeLocked() {
+			return new Promise(function (resolve, reject) {
+				try {
+					MDS.cmd('status', function (msg) {
+						if (msg.response.locked) {
+							resolve(true);
+						}
+
+						resolve(false);
+					});
+				} catch {
+					reject();
+				}
+			})
+		}
+
+		$(document).ready(function() {
+			/**
+			 * Allows the user to see the vault password that they have entered
+			 */
+			$('#toggle_password').on('click', function() {
+				passwordHidden = !passwordHidden;
+
+				if (!passwordHidden) {
+					$('#vault_password').attr('type', 'text');
+					return $(this).attr('src','visibility.svg');
+				}
+
+				$('#vault_password').attr('type', 'password');
+				return $(this).attr('src','visibility_off.svg');
+			});
+
+			/**
+			 * Enables the confirm vault password button after they type in it
+			 */
+			$('#vault_password').on('keyup', function() {
+				$('#confirm_vault_password_btn').attr('disabled', false);
+			});
+
+			/**
+			 * Confirms the password
+			 */
+			$('#confirm_vault_password').on('submit', function(evt) {
+				evt.preventDefault();
+
+				vaultCanContinue = true;
+				vaultPassword = $('#vault_password').val();
+
+				$('#node_locked_modal').modal('hide');
+				$('#confirm_vault_password_btn').attr('disabled', true);
+				$('#vault_password').val('');
+
+				// run callback and set it back to null
+				if (vaultCallback) {
+					vaultCallback();
+				}
+			});
+		});
+	</script>
+
 	<!-- Helpers -->
 	<script>
 		function isValidJSON(str) {
@@ -867,7 +1070,7 @@
 			var seconds = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
 
 			//Remove trailing commas and whitespace
-			return (days + hours + minutes + seconds).replace(/(^[,\s]+)|([,\s]+$)/g, '').trim(); 
+			return (days + hours + minutes + seconds).replace(/(^[,\s]+)|([,\s]+$)/g, '').trim();
 		}
 
 		function secondsToDigitalClock(val) {
@@ -914,11 +1117,11 @@
                     l = l - coeff_array[0].length;
                     if (l < 0) {
                     num = coeff_array[0].slice(0, l) + '.' + coeff_array[0].slice(l) + (coeff_array.length === 2 ? coeff_array[1] : '');
-                    } 
+                    }
                     else {
                     num = zero + '.' + new Array(l + 1).join(zero) + coeff_array.join('');
                     }
-                } 
+                }
                 else {
                     var dec = coeff_array[1];
                     if (dec)
@@ -951,7 +1154,7 @@
 				return false;
 			}
 
-			//If there is insufficient balance of the token we are trying to get rid of 
+			//If there is insufficient balance of the token we are trying to get rid of
 			if(new BigNumber(user_balances[_current_asset]).isLessThan(new BigNumber(amount)) && swap_direction[0].toLowerCase() == _current_asset)
 			{
 				return false;
@@ -966,14 +1169,19 @@
 
 		//const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 200 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 200))";
 		//const actualscript_address = "0x2C0B69764D57A682B4E3F095B992D98BC15C20870F5DC9342BBA88907BBD5B32";
-		
+
 		//12 hours version
 		const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 1000 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 1000))";
 		const actualscript_address = "0x77AF062D69F57F43839D66792614AE52DDF939231A720FB6E476A434BA95DA78";
-		
-		
-		MDS.init(function(msg){
 
+		// callbacks for read only
+		var targetSell = null;
+		var targetSellCallback = null;
+		var targetScript = null;
+		var targetScriptCallback = null;
+		var targetClaimCallback = null;
+
+		MDS.init(function(msg){
 			if(msg.event == "inited"){
 
 				//My HTLC contracts
@@ -982,16 +1190,16 @@
 							+"  `htlcscript` varchar(512) DEFAULT NULL, "
 							+"  `chain` varchar(32) DEFAULT NULL, "
 							+"  `address` varchar(160) DEFAULT NULL, "
-							
+
 							+"  `contractidevm` varchar(66) DEFAULT '', "
-							
+
 							+"  `secret` varchar(160) DEFAULT NULL, "
 							+"  `hash` varchar(160) DEFAULT NULL,"
                             +"  `actualscript` varchar(2000) DEFAULT NULL,"
 
                             +"  `receiverminima` varchar(66) DEFAULT NULL, "
                             +"  `refunderminima` varchar(66) DEFAULT NULL, "
-							
+
                             +"  `receiverasset` varchar(66) DEFAULT NULL, "
 
                             +"  `coinid` varchar(66) DEFAULT NULL UNIQUE, "
@@ -1001,7 +1209,7 @@
 
 							+"  `amountminima` float DEFAULT 0,"
 							+"  `minimalocked` bool DEFAULT false,"
-							
+
 							+"  `amounteth` float DEFAULT 0,"
 							+"  `ethlocked` bool DEFAULT false,"
                             +"  `ethlockedtime` varchar(64) DEFAULT 0,"
@@ -1013,10 +1221,10 @@
 
 							+"  `claimedethereum` bool DEFAULT false,"
 							+"  `claimedminima` bool DEFAULT false,"
-							
+
 							+"  `creationtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
 							+" )";
-				
+
 				//Run this..
 				MDS.sql(initsql,function(msg){
 					MDS.log("HTLC SQL Inited..");
@@ -1028,25 +1236,87 @@
 				});
 
 				MDS.cmd("status", function(response){
-						
+
 					current_minima_block = response.response.chain.block;
 					minima_starting_block = current_minima_block;
-					$("#current_minima_block").text(current_minima_block);		
-					$("#pending_swaps_button").css("display", "block");	
-					$("#get_minima_block_spinner").css("display", "none");	
+					$("#current_minima_block").text(current_minima_block);
+					$("#pending_swaps_button").css("display", "block");
+					$("#get_minima_block_spinner").css("display", "none");
 
 					//if(response.response.locked)
 					//{
 						//show the password input
 					//}
-				});					
-			
+				});
 			}else if(msg.event == "NEWBLOCK"){
 				current_minima_block = msg.data.txpow.header.block;
 				$("#current_minima_block").text(current_minima_block);
-				$("#pending_swaps_button").css("display", "block");	
-				$("#get_minima_block_spinner").css("display", "none");		
-			}else{
+				$("#pending_swaps_button").css("display", "block");
+				$("#get_minima_block_spinner").css("display", "none");
+			} else if (msg.event === 'NEWBALANCE') {
+
+				// target script
+				if (targetSellCallback && targetSell) {
+					MDS.cmd("coins", function(response){
+						let coins = response.response;
+						let targetCoin = null;
+
+						console.log('reconciling coin', targetSell);
+
+						// checks to see if one of the coins match the newly accepted transaction
+						// hashlock_minima
+						// receiver_minima
+						// refunder_key
+						for (let coin of coins) {
+							if (coin.state.length !== 3) {
+								continue;
+							}
+
+							if (coin.amount === targetSell.amount
+								&& coin.state[0].data === targetSell.hashlock_minima
+								&& coin.state[1].data === targetSell.receiver_minima
+								&& coin.state[2].data === targetSell.refunder_key) {
+								targetCoin = coin;
+							}
+						}
+
+						if (targetCoin) {
+							console.log('target coin found', targetCoin);
+							$('#confirm_send').css('display', 'none');
+							targetSellCallback(targetCoin.coinid);
+						} else {
+							console.log('target coin not found', coins, targetSell);
+						}
+					});
+				}
+
+
+			} else if (msg.event === 'MDS_TIMER_10SECONDS') {
+
+				if (targetScript && targetScriptCallback) {
+					MDS.cmd("txnlist", function(response){
+						let transactions = response.response;
+						let targetTransaction = null;
+
+						// checks if a transaction matches the transaction
+						for (let transaction of transactions) {
+							if (transaction.id === targetScript
+								&& transaction.witness && transaction.witness.signatures.length > 0) {
+								targetTransaction = transaction;
+							}
+						}
+
+						if (targetTransaction) {
+							console.log('target transaction found', targetTransaction);
+							$('#confirm_txnsign').css('display', 'none');
+							targetScriptCallback();
+						} else {
+							console.log('target transaction not found', transactions, targetScript);
+						}
+					});
+				}
+
+			} else {
 				//All other messages - Log it..
 				//MDS.log(JSON.stringify(msg));
 			}
@@ -1071,43 +1341,54 @@
 				}
 			});
 		});
-		
+
 		//Get a random SHA2 hash "secret" which can be used to create the hashlock
 		function genRandomSecret(){
-			
+
 			//Get a secure random number..
 			MDS.cmd("random", function(resp){
-			
+
 				//Get the random value.. but make it upper case so we can make ethereum and minima compatible
 				secret_minima = "0x" + resp.response.random.substring(2).toUpperCase();
 
 				hashSecret();
-			});	
+			});
 		}
-	
+
 		//Create the hashlock using the secret hash
 		function hashSecret(){
-			
+
 			//Hash the secret value
 			MDS.cmd("hash data:\""+secret_minima+"\" type:sha2", function(resp){
-			
+
 				//Get the random value..
 				var hash = resp.response.hash;
-				
+
 				//Set it..
 				hashlock_minima = hash;
 			});
 		}
-		
+
 		//Create a HTLC contract on Minima
-		function genHTLCtxn(){
-			
+		async function genHTLCtxn(){
+			const nodeIsLocked = await isNodeLocked();
+
+			// if node is locked, set vault callback and show vault is locked modal
+			if (nodeIsLocked && !vaultCanContinue) {
+				vaultCallback = genHTLCtxn;
+				return showVaultLockedModal();
+			}
+
+			// clear vault is locked callback
+			vaultCallback = null;
+			vaultCanContinue = false;
+
 			$(".hashlock_minima").removeClass("is-invalid");
 			$("#ethereum_address").removeClass("is-invalid");
 
 			$(".minima_lock_text").css("display", "none");
 			$("#minima_lock_spinner").css("display", "block");
-			
+
 			var receiver_minima = $("#minima_receiver").val().replace(" ", "");
 
 			var minima_amount = $(".minima_amount").val();
@@ -1117,9 +1398,9 @@
             var receiver_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 
 			const timelock_seconds = $("#minima_timelock_dropdown_button").attr("time");
-			
+
 			let seconds_to_blocks = timelock_seconds / 50;
-			
+
 			const timelock = parseInt(current_minima_block) + parseInt(seconds_to_blocks) + 1;
 
 			const ethereum_address = $("#ethereum_address").val()
@@ -1171,28 +1452,90 @@
 				error = true;
 			}
 
-			if(error) 
+			if(error)
 			{
 				$(".minima_lock_text").css("display", "block");
 				$("#minima_lock_spinner").css("display", "none");
 				return;
 			}
-			
+
 			//Now create a script that we track with this value..
 			MDS.cmd("newscript trackall:true script:\""+actualscript+"\"", function(resp){
-			
+
 				MDS.log("NEW SCRIPT CREATION");
 				MDS.log(resp);
 
 				//Details
 				let script 	= resp.response.script;
-				let address = resp.response.address;				
+				let address = resp.response.address;
 				let _txn = "send amount:"+minima_amount+" address:"+address + " state:"+ JSON.stringify({"1":hashlock_minima, "2":receiver_minima, "3":refunder_key});
+
+				if (vaultPassword) {
+					_txn += " password:" + vaultPassword;
+				}
+
                 console.log("GENERATING HTLC TRANSACTION ");
                 console.log(_txn);
 				//Now lets put this in the DB
 				MDS.cmd(_txn, function(sendresp){
-					
+
+					if (sendresp.pending) {
+						targetSell = {
+								amount: minima_amount,
+								hashlock_minima,
+								receiver_minima,
+								refunder_key,
+						};
+						targetSellCallback = function(coinid) {
+							// reset target
+							targetSell = null;
+							targetSellCallback = null;
+
+							console.log("THE MINIMA SECRET IS " + secret_minima);
+
+							//If the send was successful add it to the database
+							var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+script+"','"+actualscript+"','"+receiver_minima+"','"+refunder_key+"','"+receiver_asset+"','minima','"+coinid+"','"+address+"','"+secret_minima+"','"+hashlock_minima+"','"+timelock+"','"+minima_amount+"','"+receiver_asset_amount+"','"+ethereum_address+"', true)";
+							MDS.sql(sql,function(sqlresp){
+
+								console.log("Result of the INSERT:");
+								console.log(sqlresp);
+
+								$("#btn-lock-funds-minima").css("display", "none");
+								$(".container").css("display", "none");
+
+								$("#funds_locked_minima_success").css("display", "block");
+								//$("#funds_locked_minima_receipt").css("display", "block");
+
+								let json = JSON.stringify({
+									"hashlock"	: hashlock_minima,
+									"timelock"	: timelock,
+									"receiver_minima": receiver_minima,
+									"refunder_minima": refunder_key,
+									"actual_script": actualscript,
+									"receiver_asset": receiver_asset,
+									"receiver_asset_amount"	: scientificToDecimal(receiver_asset_amount),
+									"sender_asset" : "minima",
+									"sender_asset_amount" : scientificToDecimal(minima_amount),
+									"address"	: address,
+									"coinid"	:coinid,
+									"unlockaddresseth" : ethereum_address
+								});
+
+								var jsonPretty = JSON.stringify(JSON.parse(json),null,2);
+
+								$("#minima_lock_receipt_json").text(jsonPretty);
+								$("body").css("background", "white");
+							});
+
+							$(".minima_lock_text").css("display", "block");
+							$("#minima_lock_spinner").css("display", "none");
+
+						};
+
+						$('#minima_lockup_confirm_container').css('display', 'none');
+						return $('#confirm_send').css('display', 'block');
+					}
+
 					MDS.log("SENT THE SCRIPT " + minima_amount + " MINIMA");
 					MDS.log("ENTIRE RESPONSE:");
 					MDS.log(JSON.stringify(sendresp));
@@ -1209,7 +1552,7 @@
 						//If the send was successful add it to the database
 						var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+script+"','"+actualscript+"','"+receiver_minima+"','"+refunder_key+"','"+receiver_asset+"','minima','"+coinid+"','"+address+"','"+secret_minima+"','"+hashlock_minima+"','"+timelock+"','"+minima_amount+"','"+receiver_asset_amount+"','"+ethereum_address+"', true)";
 						MDS.sql(sql,function(sqlresp){
-							
+
                             console.log("Result of the INSERT:");
                             console.log(sqlresp);
 
@@ -1238,23 +1581,22 @@
 
 							$("#minima_lock_receipt_json").text(jsonPretty);
 
-							
+
 							$("body").css("background", "white");
-														
 						});
 					}
 
 					$(".minima_lock_text").css("display", "block");
 					$("#minima_lock_spinner").css("display", "none");
-			
-					
-				});	
+
+
+				});
 
 			});
 		}
-	
+
 		function loadHTLC(){
-			
+
 			//$("#myhtlc").empty();
 
             $("#pending_swaps_rows").html("");
@@ -1270,8 +1612,8 @@
 
 				let _pending_swaps_html = "";
                 let _completed_swaps_html = "";
-				
-				for(var i = 0; i < data.length; i++) 
+
+				for(var i = 0; i < data.length; i++)
 				{
 
                     console.log("ROW");
@@ -1283,26 +1625,25 @@
 
                     if(data[i].CHAIN == "minima")
 					{
-						title_text = '<small class="m-0" style="font-weight: 800">' 
-                                    + parseFloat(data[i].AMOUNTMINIMA).toString() 
-                                    + " MINIMA for " 
-                                    + parseFloat(data[i].AMOUNTETH).toString() 
+						title_text = '<small class="m-0" style="font-weight: 800">'
+                                    + parseFloat(data[i].AMOUNTMINIMA).toString()
+                                    + " MINIMA for "
+                                    + parseFloat(data[i].AMOUNTETH).toString()
                                     + data[i].RECEIVERASSET.toUpperCase()
 									+ "</small>";
 					}
 					else
 					{
-						title_text = '<small class="m-0" style="font-weight: 800">' 
-                                    + parseFloat(data[i].AMOUNTETH).toString() 
+						title_text = '<small class="m-0" style="font-weight: 800">'
+                                    + parseFloat(data[i].AMOUNTETH).toString()
                                     + " " + data[i].RECEIVERASSET.toUpperCase()
-									+ " for " 
-                                    + parseFloat(data[i].AMOUNTMINIMA).toString() 
+									+ " for "
+                                    + parseFloat(data[i].AMOUNTMINIMA).toString()
                                     + " MINIMA</small>";
 					}
 
                     //If the user has either claimed the Minima or ETH
 					if	(data[i].CLAIMEDMINIMA == "true" || data[i].CLAIMEDETHEREUM == "true"){
-						                        
                         let _outcome = '<span class="text-success float-end" style="font-weight:800">Completed</span>';
 						console.log("Found completed swap");
 						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
@@ -1315,8 +1656,7 @@
 						console.log("Found completed swap");
 						_completed_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light my-1">' + title_text + _outcome +'</div>';
 						continue;
-					}					
-					
+					}
                     //Expire contracts 30 minutes before actual expiry to avoid race conditions with collection
 					let timelock_minima_expiry_seconds = (data[i].TIMELOCKMINIMA - current_minima_block - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME;
                     let timelock_ethereum_expiry_seconds = data[i].TIMELOCKEVM - Date.now() / 1000;
@@ -1326,7 +1666,7 @@
 
 					if(data[i].CHAIN == "minima")
 					{
-						if(timelock_minima_expiry_seconds <= 0) 
+						if(timelock_minima_expiry_seconds <= 0)
 						{
 							timelock_minima_expiry_seconds = 0;
 							time_left_text = " Expired";
@@ -1339,7 +1679,7 @@
 					}
 					else
 					{
-						if(timelock_ethereum_expiry_seconds <= 0) 
+						if(timelock_ethereum_expiry_seconds <= 0)
 						{
 							timelock_ethereum_expiry_seconds = 0;
 							time_left_text = " Expired";
@@ -1355,39 +1695,53 @@
 
 					_pending_swaps_html += '<div address="'+data[i].ADDRESS+'" from_chain="'+data[i].CHAIN+'" contractidevm="'+data[i].CONTRACTIDEVM+'" style="border-radius: 10px; cursor: pointer" class="p-3 bg-light historical_swap_item my-1">'+title_text+'</div>';
 				}
-				
+
                 console.log("FINAL HTML");
                 console.log(_pending_swaps_html);
 
+				$("#completed_swaps_rows").html('');
 				$("#pending_swaps_rows").append(_pending_swaps_html);
                 $("#completed_swaps_rows").append(_completed_swaps_html);
-			
+
             });
 
 		}
-		
-		function collect(address, secret, is_refund = false){
+
+		async function collect(address, secret, is_refund = false){
+			const nodeIsLocked = await isNodeLocked();
+
+			// if node is locked, set vault callback and show vault is locked modal
+			if (nodeIsLocked && !vaultCanContinue) {
+				$("#claim_minima_button_text").css("display", "block");
+				$("#claim_minima_button_spinner").css("display", "none");
+				vaultCallback = function() {
+					$('#claim_minima_button_text').click();
+				};
+				return showVaultLockedModal();
+			}
+
+			// clear vault is locked callback
+			vaultCallback = null;
+			vaultCanContinue= false;
 
             secret = "0x" + secret.substring(2).toUpperCase();
 
 			console.log("Collecting coin at address " + address);
 			console.log("Using secret " + secret);
 
-			//First.. get the coin..			
+			//First.. get the coin..
 			let collection_result = MDS.cmd("coins address:"+address, function(coinresp){
 
 				MDS.log(JSON.stringify(coinresp));
-				
+
 				console.log("The response is: ");
 				console.log(coinresp);
-
 				var coins = coinresp.response;
 
 				if(coins.length < 1){
 					alert("No unspent coins found.");
 					return false;
 				}
-				
 				//Get the coin
 				var coin = coins[0];
 
@@ -1403,7 +1757,7 @@
                 let pertinent_key;
                 //If we are not the minima locker
                 if(current_loaded_htlc.CHAIN != "minima")
-                {   
+                {
                     pertinent_key = current_loaded_htlc.RECEIVERMINIMA;
                 }
                 else
@@ -1414,9 +1768,9 @@
 				//Get an address to collect to..
 				let cmd_result = MDS.cmd("getaddress", function(getresp){
 					var getaddress = getresp.response.address;
-					
+
 					//Now construct a txn..
-					/*var txncreate = 
+					/*var txncreate =
 						"newscript trackall:true script:\""+actualscript+"\";"+
 						"txndelete id:myhtlc;"+																	//Delete this transaction
 						"txncreate id:myhtlc;"+																	//Create a new transaction
@@ -1424,21 +1778,51 @@
 						"txnoutput id:myhtlc amount:"+coin.amount+" address:"+getaddress+" storestate:false;"+	//Create a transaction output
 						"txnstate id:myhtlc port:0 value:"+secret+";"+											//Add a variable to state(0)
 						"txnsign txnpostauto:true id:myhtlc publickey:"+ pertinent_key+";";						//Sign the transaction with the public key
-					
+
 					*/
-					var txncreate = 
+					var txncreate =
 						"newscript trackall:true script:\""+actualscript+"\";"+
 						"txndelete id:myhtlc;"+																	//Delete this transaction
 						"txncreate id:myhtlc;"+																	//Create a new transaction
 						"txninput id:myhtlc coinid:"+coin.coinid+";"+											//Add a coin to the input of this transaction
 						"txnoutput id:myhtlc amount:"+coin.amount+" address:"+getaddress+" storestate:false;"+	//Create a transaction output
 						"txnstate id:myhtlc port:0 value:"+secret+";"+											//Add a variable to state(0)
-						"txnsign id:myhtlc publickey:"+ pertinent_key+";"+										//Sign the transaction with the public key
+						"txnsign id:myhtlc publickey:"+ pertinent_key
+							+ (vaultPassword ? ` password:${vaultPassword};` : ';') +								//Sign the transaction with the public key
 						"txnpost id:myhtlc auto:true;"+															//Post the transaction to the network
 						"txndelete id:myhtlc";
 
 					//Lets Post it..
 					let txn_create = MDS.cmd(txncreate, function(txnresp){
+
+						if (txnresp[txnresp.length - 1].pending) {
+							$('#claim_minima').css("display", "none");
+							$("#claim_pending_complete").css("display", "block");
+
+							targetClaimCallback = function() {
+								$("#timelock_too_short_warning").css("display", "none");
+
+								clearInterval(ethereum_timelock_progress_bar_update_interval);
+
+								if(!is_refund)
+								{
+									var sql = "UPDATE htlc SET claimedminima = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
+									MDS.sql(sql,function(sqlresp){
+										console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
+									});
+								}
+								else
+								{
+									var sql = "UPDATE htlc SET refundedminima = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
+									MDS.sql(sql,function(sqlresp){
+										console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
+									});
+								}
+
+							};
+
+							return;
+						}
 
 						let txnpost_response;
 
@@ -1462,11 +1846,11 @@
 
 						if(amount_claimed > 0)
 						{
-							//Reset redemption button 
+							//Reset redemption button
 							$("#ropsten_receipt_expiry_warning").css("display", "none");
 							$("#minima_redeem_spinner").css("display", "none");
 							$("#redeem_minima").css("display", "none");
-							
+
 							$("#timelock_too_short_warning").css("display", "none");
 
 							clearInterval(ethereum_timelock_progress_bar_update_interval);
@@ -1499,7 +1883,7 @@
 
 			});
 		}
-		
+
 	</script>
 
 	<script>
@@ -1524,8 +1908,8 @@
 				$(this).addClass("btn-light");
 
 				$("#completed_swaps_toggle").removeClass("text-purple");
-				$("#completed_swaps_toggle").removeClass("btn-light");	
-                
+				$("#completed_swaps_toggle").removeClass("btn-light");
+
                 $("#pending_swaps_card").show();
                 $("#completed_swaps_card").hide();
 			});
@@ -1535,7 +1919,7 @@
 				$(this).addClass("btn-light");
 
 				$("#pending_swaps_toggle").removeClass("text-purple");
-				$("#pending_swaps_toggle").removeClass("btn-light");	
+				$("#pending_swaps_toggle").removeClass("btn-light");
 
                 $("#pending_swaps_card").hide();
                 $("#completed_swaps_card").show();
@@ -1567,6 +1951,9 @@
 			$("#back_from_lock_on_ropsten").on("click", function(){
 				$(".container").css("display", "none");
 				$("#minima-get-public-key-container").css("display", "block");
+				$('#minima_receipt_textarea').val('');
+				$('#minima-receipt-loader-form').css('display', 'block');
+				$('#minima-receipt-loader-summary').css('display', 'none');
 			});
 
 			$("#back_from_minima_receipt_container").on("click", function(){
@@ -1592,7 +1979,7 @@
 
 			//Choose asset to bridge
 			$(".asset_selection").on("click", function(){
-								
+
 				const _html = $(this).html();
 				const _currency = $(this).attr("currency");
 
@@ -1611,7 +1998,7 @@
 				$("#bottom_balance_label").text("Balance: " + user_balances[_currency] + " " + ASSET_FRIENDLY_NAMES[_currency]);
 
 				$(".modal").modal("hide");
-				
+
 			});
 
 			//Change asset
@@ -1624,7 +2011,7 @@
 
 				let _current_asset = $(this).attr("asset");
 
-				let _parent = $(this).closest(".background_area")[0]; 
+				let _parent = $(this).closest(".background_area")[0];
 
 				$(this).removeClass("is-invalid");
 
@@ -1639,7 +2026,7 @@
 
 			//Start the swap
 			$("#swap_initiate_button").on("click", function(){
-				
+
 				$("#top_amount").removeClass("is-invalid");
 				$("#bottom_amount").removeClass("is-invalid");
 
@@ -1655,13 +2042,13 @@
 						_return_early = true;
 					}
 				});
-				
+
 				if(_return_early) return;
 
 				let _current_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 				let _valid_top_amount = validate_amount(_top_amount);
 				let _valid_bottom_amount = validate_amount(_bottom_amount);
-				
+
 				if(!_valid_top_amount || !_valid_bottom_amount)
 				{
 					alert("Invalid send or receive value");
@@ -1678,7 +2065,7 @@
 				{
 					alert("Insufficient Minima Balance");
 					$("#top_amount").addClass("is-invalid");
-					return;	
+					return;
 				}
 
 				genRandomSecret();
@@ -1699,15 +2086,15 @@
 
 			//Set the timelock
 			$(".minima_timelock_dropdown_item").on("click", function(){
-				
+
 				let _time_amount = $(this).attr("time");
 				let _button_content_text = $(this).text();
 
 				$("#minima_timelock_dropdown_button_content").text(_button_content_text);
 				$("#minima_timelock_dropdown_button").attr("time", _time_amount);
-			
+
 			});
-			
+
 			//Confirm the lock of funds, and bring up confirmation receipt
 			$("#btn-lock-funds-minima").on("click", function(){
 
@@ -1744,11 +2131,11 @@
 
 			//Copy the receipt of locking Minima
 			$("#copy_minima_lock_receipt").on("click", function(){
-				
+
 				let json_string = $("#minima_lock_receipt_json").text();
 
 				navigator.clipboard.writeText(json_string).then(
-					function() 
+					function()
 					{
 						//clipboard successfully set
 						$("#copy_minima_lock_receipt").removeClass("btn-primary");
@@ -1756,9 +2143,9 @@
 						$("#copy_minima_lock_receipt").find("span").text("Copied!");
 						$("#copy_minima_lock_receipt").find("i").css("display", "inline");
 						$("#minima_receipt_given_confirm").css("display", "block");
-						
-					}, 
-					function() 
+
+					},
+					function()
 					{
 						//clipboard write failed
 						window.alert('Your browser does not support the Clipboard API. Please copy the text manually');
@@ -1766,7 +2153,38 @@
 				);
 			});
 
+			$("#preview_minima_receipt").on("click", async function(){
+				$("#minima_receipt_textarea").css("border","none !important;");
+				let _json = $("#minima_receipt_textarea").val();
+
+				if(!isValidJSON(_json))
+				{
+					alert("Receipt invalid: invalid JSON format");
+					return;
+				}
+
+				_json = JSON.parse(_json);
+
+				$("#confirm_send_amount_label").text(_json.receiver_asset_amount + ' ' + _json.receiver_asset);
+				$("#confirm_receive_amount_label").text(_json.sender_asset_amount);
+
+				$('#minima-receipt-loader-form').css('display', 'none');
+				$('#minima-receipt-loader-summary').css('display', 'block');
+			});
+
 			$("#load_minima_receipt").on("click", async function(){
+				const nodeIsLocked = await isNodeLocked();
+
+				if (nodeIsLocked && !vaultCanContinue) {
+					vaultCallback = function() {
+						$('#load_minima_receipt').click();
+					};
+					return showVaultLockedModal();
+				}
+
+				// clear vault is locked callback
+				vaultCallback = null;
+				vaultCanContinue = false;
 
 				$("#load_minima_receipt_text").css("display", "none");
 				$("#load_minima_receipt_spinner").css("display", "block");
@@ -1803,7 +2221,7 @@
 				if(_receiver_asset == "eth")
 				{
 					$("#lock_evm_asset_approve").css("display", "none");
-					$("#lock_evm_asset_confirm").css("display", "block");	
+					$("#lock_evm_asset_confirm").css("display", "block");
 				}
 				else
 				{
@@ -1830,10 +2248,178 @@
 				let _salt = Math.floor(Date.now() / 1000);
 
 				_txn = 	"txncreate id:checksignature"+_salt+";"
-				+		"txnsign id:checksignature"+_salt+" publickey: " + _receiver_minima + ";";
+				+		"txnsign id:checksignature"+_salt+" publickey: " + _receiver_minima + (vaultPassword ? ` password:${vaultPassword};` : ';');
 
 				let _cmd = MDS.cmd(_txn, function(_response){
-					
+
+					if (_response[1].pending) {
+						targetScript = 'checksignature'+ _salt;
+						targetScriptCallback = function() {
+
+							targetScript = null;
+							targetScriptCallback = null;
+
+							$('#minima-receipt-loader-container').css('display', 'block');
+
+							let _cmd_command = "runscript script:" + '"' + _actual_script + '"';
+
+							MDS.cmd(_cmd_command, function(response){
+
+								if(response.response.script.address !== _address)
+								{
+									alert("Invalid lockup receipt. The script used to lockup the Minima does not match the receipt.");
+									_error = true;
+
+									$("#minima_receipt_textarea").css("border","solid 2px red !important;");
+									return;
+								}
+
+								$(".container").css("display", "none");
+								$("#minima_receipt_container").css("display: block");
+
+								//Set global HTLC object for reference later on
+								current_loaded_htlc = {};
+								current_loaded_htlc.AMOUNTETH = _eth_amount;
+								current_loaded_htlc.TIMELOCKMINIMA = _timelock_minima;
+								current_loaded_htlc.UNLOCKADDRESSETH =  _ethereum_unlock_address;
+								current_loaded_htlc.RECEIVERMINIMA =  _receiver_minima;
+								current_loaded_htlc.REFUNDERMINIMA =  _refunder_minima;
+								current_loaded_htlc.RECEIVERASSET = _receiver_asset;
+								current_loaded_htlc.ADDRESS = _address;
+								current_loaded_htlc.COINID = _coinid;
+								current_loaded_htlc.HASH = _hashlock;
+
+								var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+_actual_script+"','"+_actual_script+"','"+_receiver_minima+"','"+_refunder_minima+"','"+_receiver_asset+"','"+chainName+"','"+_coinid+"','"+_address+"','','"+_hashlock+"','"+_timelock_minima+"','"+_receiver_asset_amount+"','"+_eth_amount+"','', true)";
+
+								MDS.sql(sql,function(sqlresp){
+									console.log("%cLocked Minima Receipt Adding Details to Database", "background:red");
+									console.log(sqlresp);
+								});
+
+								let _blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
+
+								$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * MINIMA_BLOCK_TIME - ETH_TIMELOCK_INNER_WINDOW) + ")");
+
+								$(".minima_receipt_progress_text").text("Block" + current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
+
+								let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100;
+
+								$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
+
+								function update_minima_transaction_status () {
+
+									//The address of a coin is the hash of its script
+									//So both users will know what the address is. If the address
+									//is not the hash of the expected script, then we know the script is wrong
+
+									MDS.cmd("coins address:" + _address, function(response){
+
+										let _coin_found = false;
+										let _coin;
+										let _obj = response.response;
+										var _coin_created_block;
+
+										console.log(response);
+										console.log("Coin created at " + _coin_created_block);
+
+										for(let i = 0; i < _obj.length; i++)
+										{
+
+											if(_obj[i].coinid == current_loaded_htlc.COINID)
+											{
+												_coin = _obj[i];
+												_coin_found = true;
+												current_loaded_htlc.CREATED = _obj[i].created;
+												break;
+											}
+										}
+
+										// change back to 10
+										let _confirmation_blocks_left = 2 - (current_minima_block - current_loaded_htlc.CREATED);
+
+										if(new BigNumber(_confirmation_blocks_left).isNaN())
+										{
+											_confirmation_blocks_left = 2;
+										}
+
+										//Show how many blocks are left until confirmation
+										$("#confirmation_blocks_left").text(_confirmation_blocks_left);
+
+										if(_coin_found && (current_minima_block - current_loaded_htlc.CREATED >= 2))
+										{
+											$("#minima_receipt_status").html(_coin.amount);
+											$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
+											$("#asset_to_lock_img").attr("src", _receiver_asset + "logo.svg");
+
+											if(_coin.state[0].data !== current_loaded_htlc.HASH)
+											{
+												alert("Incorrect hashlock. Swap invalid.")
+
+												clearInterval(minima_transaction_update_interval);
+												return;
+											}
+
+											if(_coin.state[1].data !== current_loaded_htlc.RECEIVERMINIMA)
+											{
+												alert("Incorrect receiver in script. Swap invalid.");
+												clearInterval(minima_transaction_update_interval);
+												return;
+											}
+
+											$("#minima_receipt_confirmation_status").text("No Longer Available")
+											$("#minima_receipt_confirmation_status_colour").css("background", "red");
+											$("#minima_lock_receipt_waiting_button").css("display", "none");
+											$("#minima_lock_receipt_waiting_spinner").css("display", "none");
+											$("#minima_lock_receipt_continue_button").css("display", "block");
+											$("#minima_lock_receipt_icon").removeClass("fa-hourglass-half");
+											$("#minima_lock_receipt_icon").addClass("fa-check-circle");
+											$("#minima_lock_receipt_text").text("Blockchain Status Confirmed");
+
+											$("#minima_receipt_confirmation_status").text("Confirmed Locked");
+											$("#minima_receipt_confirmation_status_colour").css("background", "green");
+
+											clearInterval(minima_transaction_update_interval);
+										}
+
+										let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100;
+										$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
+
+										if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
+										{
+											$("#minima_receipt_confirm").css("display", "none");
+											$("#minima_receipt_expiry_warning").css("display", "block");
+										}
+
+										$(".minima_receipt_progress_text").text(current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
+
+										_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
+										_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
+
+										$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")");
+
+									});
+								}
+
+								update_minima_transaction_status();
+
+								if(!minima_transaction_update_interval)
+								{
+									minima_transaction_update_interval = setInterval(function(){
+										update_minima_transaction_status();
+									}, 3000);
+								}
+
+								$("#minima-receipt-loader-container").css("display", "none");
+								$("#minima_receipt_container").css("display", "block");
+
+							});
+						};
+
+						$('#minima_receipt_container').css('display', 'none');
+						$('#minima-receipt-loader-container').css('display', 'none');
+						return $('#confirm_txnsign').css('display', 'block');
+					}
+
 					if(_response[1].status == false && _response[1].pending == false)
 					{
 						//The receiver can not unlock this HTLC
@@ -1843,7 +2429,7 @@
 					}
 
 					let _cmd_command = "runscript script:" + '"' + _actual_script + '"';
-					
+
 					MDS.cmd(_cmd_command, function(response){
 
 						if(response.response.script.address !== _address)
@@ -1871,7 +2457,7 @@
 						current_loaded_htlc.HASH = _hashlock;
 
 						var sql = "INSERT INTO htlc(htlcscript, actualscript, receiverminima, refunderminima, receiverasset, chain, coinid, address, secret, hash, timelockminima, amountminima, amounteth, unlockaddresseth, minimalocked) VALUES ('"+_actual_script+"','"+_actual_script+"','"+_receiver_minima+"','"+_refunder_minima+"','"+_receiver_asset+"','"+chainName+"','"+_coinid+"','"+_address+"','','"+_hashlock+"','"+_timelock_minima+"','"+_receiver_asset_amount+"','"+_eth_amount+"','', true)";
-                
+
                         MDS.sql(sql,function(sqlresp){
                             console.log("%cLocked Minima Receipt Adding Details to Database", "background:red");
                             console.log(sqlresp);
@@ -1879,11 +2465,11 @@
 
 						let _blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
 
-						$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * MINIMA_BLOCK_TIME - ETH_TIMELOCK_INNER_WINDOW) + ")"); 
+						$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * MINIMA_BLOCK_TIME - ETH_TIMELOCK_INNER_WINDOW) + ")");
 
 						$(".minima_receipt_progress_text").text("Block" + current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
 
-						let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100; 
+						let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100;
 
 						$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
 
@@ -1905,14 +2491,14 @@
 
 								for(let i = 0; i < _obj.length; i++)
 								{
-				
+
 									if(_obj[i].coinid == current_loaded_htlc.COINID)
 									{
 										_coin = _obj[i];
 										_coin_found = true;
 										current_loaded_htlc.CREATED = _obj[i].created;
 										break;
-									}	
+									}
 								}
 
 								let _confirmation_blocks_left = 10 - (current_minima_block - current_loaded_htlc.CREATED);
@@ -1934,7 +2520,7 @@
 									if(_coin.state[0].data !== current_loaded_htlc.HASH)
 									{
 										alert("Incorrect hashlock. Swap invalid.")
-										
+
 										clearInterval(minima_transaction_update_interval);
 										return;
 									}
@@ -1957,11 +2543,11 @@
 
 									$("#minima_receipt_confirmation_status").text("Confirmed Locked");
 									$("#minima_receipt_confirmation_status_colour").css("background", "green");
-									
+
                                     clearInterval(minima_transaction_update_interval);
 								}
 
-								let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100; 
+								let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100;
 								$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
 
 								if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
@@ -1975,7 +2561,7 @@
 								_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
 								_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
 
-								$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")"); 
+								$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")");
 
 							});
 						}
@@ -1993,10 +2579,10 @@
 						$("#minima_receipt_container").css("display", "block");
 
 					});
-				
-				});				
+
+				});
 			});
-			
+
 			$("#copy_minima_public_key").on("click", function(){
 				let json_string = $(".public_key").text();
 
@@ -2008,7 +2594,7 @@
 						$("#copy_minima_public_key").find("span").text("Copied!");
 						$("#copy_minima_public_key").find("i").css("display", "inline");
 						$("#continue_from_copy_minima_public_key").css("display", "block");
-					}, 
+					},
 					function() {
 					/* clipboard write failed */
 					window.alert('Your browser does not support the Clipboard API. Please copy the text manually');
@@ -2036,7 +2622,7 @@
 			$("#minima_receipt_confirm").on("click", function(){
 
 				$(".container").css("display", "none");
-			
+
 				$("#ethereum_lock_modal_eth_amount").text(current_loaded_htlc.AMOUNTETH);
 
 				let _timelock_seconds = current_minima_block - parseInt(current_loaded_htlc.TIMELOCKMINIMA);
@@ -2056,7 +2642,7 @@
 						$("#copy_ethereum_lockup_receipt").find("span").text("Copied!");
 						$("#copy_ethereum_lockup_receipt").find("i").css("display", "inline");
 						$("#continue_from_copy_ethereum_lockup_receipt").css("display", "block");
-					}, 
+					},
 					function() {
 					/* clipboard write failed */
 					window.alert('Your browser does not support the Clipboard API. Please copy the text manually');
@@ -2067,12 +2653,12 @@
 			$("#minima_receipt_given_prompt_confirm").on("click", function(){
 				$(".container").css("display", "none");
 				$("#ethereum-receipt-loader-container").css("display", "block");
-			});			
+			});
 
 			//When the minima locker confirms that they have given the receipt to the counterparty
 			$("#minima_receipt_given_confirm").on("click", function(){
 
-				//load the most recent HTLC 
+				//load the most recent HTLC
 				let _sql = "SELECT * FROM htlc ORDER BY creationtime DESC LIMIT 1";
 
 				MDS.sql(_sql,function(sqlresp){
@@ -2092,9 +2678,9 @@
 						{
 							$("#ropsten_timelock_progress_container").css("display", "none");
 							$("#ropsten_receipt_expiry_warning").css("display", "block");
-							
+
 							let _blocks_til_redeemable = current_loaded_htlc.TIMELOCKMINIMA - current_minima_block;
-							let _percentage_redeemable_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - minima_starting_block) * 100; 
+							let _percentage_redeemable_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - minima_starting_block) * 100;
 
 							if(_percentage_redeemable_time > 100)
 							{
@@ -2103,7 +2689,7 @@
 
 							$(".minima_redeem_progress_bar").css("width", _percentage_redeemable_time + "%");
 							$("#minima_redeem_progress_text").text(current_minima_block + " / " + current_loaded_htlc.TIMELOCKMINIMA + " Blocks");
-							
+
 							let time_remaining = secondsToHms(_blocks_til_redeemable * MINIMA_BLOCK_TIME);
 
 							if(!time_remaining)
@@ -2111,19 +2697,19 @@
 								time_remaining = "0 seconds";
 								$("#redeem_minima").css("display", "block");
 							}
-							
+
 							$("#minima_redeem_hms").text(time_remaining);
 							return;
 						}
 
 						$(".ropsten_receipt_progress_text").text(current_minima_block + " / " + (current_loaded_htlc.TIMELOCKMINIMA - ETH_TIMELOCK_INNER_WINDOW));
-					
+
 						let _blocks_til_expiry = parseInt(current_loaded_htlc.TIMELOCKMINIMA) - current_minima_block;
 						let _digital_clock_expiry = secondsToDigitalClock((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
 
-						$(".ropsten_receipt_timelock").text(_digital_clock_expiry); 
-					
-						let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100; 
+						$(".ropsten_receipt_timelock").text(_digital_clock_expiry);
+
+						let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100;
 
 						$(".ropsten_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
 					}
@@ -2141,7 +2727,7 @@
 					$(".container").css("display", "none");
 					$("#funds_locked_minima_receipt_prompt").css("display", "block");
 				});
-				
+
 			});
 
 			//Need to approve before you lock ERC20
@@ -2155,7 +2741,7 @@
 
                 console.log("RECEIVER ASSET " + _receiver_asset);
                 console.log("RECEIVER AMOUNT " + _receiver_amount);
-                
+
 
 				let _token = ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId][_receiver_asset];
 
@@ -2179,7 +2765,7 @@
 			});
 
 			$("#lock_evm_asset_confirm").on("click", async function(){
-				
+
 				let time_window_seconds = (parseInt(current_loaded_htlc.TIMELOCKMINIMA) - current_minima_block) * MINIMA_BLOCK_TIME; //Minima timelock expires in this many seconds
 
 				let _block_number = await web3.eth.getBlockNumber();
@@ -2214,20 +2800,20 @@
 				}
 
 				//Return after highlighting errors if they are any
-				if(error) 
+				if(error)
 				{
 					return;
 				}
 
 				$("#ethereum_create_spinner").css("display", "block");
-				$("#ethereum_create_text").css("display", "none");	
+				$("#ethereum_create_text").css("display", "none");
 
-				let htlc_contract;				
+				let htlc_contract;
 				let htlc_contract_method;
 
 				if(_receiver_asset === "eth")
-				{					
-					//Use the Native Contract 
+				{
+					//Use the Native Contract
 					htlc_contract = new window.web3.eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["native"][chainName]);
 					htlc_contract_method = htlc_contract.methods.newContract(_receiver, _hashlock, parseInt(_timelock));
 					console.log("Creating contract for " + _receiver_asset);
@@ -2241,11 +2827,11 @@
 						$("#ethereum_create_text").css("display", "block");
 
 						evm_htlc_contract_id = response.events.LogHTLCNew.returnValues[0];
-						
+
 						$(".container").css("display", "none");
 
 						$("#ethereum_lockup_confirmed").css("display", "block");
-						
+
 						_JSON = JSON.stringify({"asset" : _receiver_asset, "contract_id" : evm_htlc_contract_id});
 
 						$(".ethereum_lock_info").text(_JSON);
@@ -2275,7 +2861,7 @@
 
 							$("#eth_receipt_claimed_timelock").text(_timelock_remaining);
 
-							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100; 
+							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100;
 
 							$("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
 
@@ -2302,7 +2888,7 @@
 							}
 
 						}, 3000);
-							
+
 					}).catch((err) => {
 						$("#ethereum_create_spinner").css("display", "none");
 						$("#ethereum_create_text").css("display", "block");
@@ -2322,11 +2908,11 @@
 					.then(async response => {
 
 						evm_htlc_contract_id = response.events.HTLCERC20New.returnValues[0];
-						
+
 						$(".container").css("display", "none");
 
 						$("#ethereum_lockup_confirmed").css("display", "block");
-						
+
 						_JSON = JSON.stringify({"asset" : _receiver_asset, "contract_id" : evm_htlc_contract_id});
 
 						$(".ethereum_lock_info").text(_JSON);
@@ -2358,7 +2944,7 @@
 
 							$("#eth_receipt_claimed_timelock").text(_timelock_remaining);
 
-							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100; 
+							let _progress_bar_width = (current_ethereum_chain_time - eth_locked_time) / (_timelock - eth_locked_time) * 100;
 
 							$("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
 
@@ -2408,7 +2994,7 @@
 					alert("Bad receipt: Invalid JSON");
 					return;
 				}
-				
+
 				let _obj = JSON.parse(_receipt);
 
                 console.log("The object: ");
@@ -2442,7 +3028,7 @@
 
                     console.log("Contract Object");
                     console.log(_contract_object);
-                    
+
 					let contract_amount_from_wei = _contract_object.amount / (10 ** ASSET_DECIMALS[_obj.asset][chainId]);
 					console.log("contract amount from wei" + contract_amount_from_wei);
 
@@ -2473,7 +3059,7 @@
                         MDS.sql(_sql,function(sqlresp){
                             console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
                         });
-						
+
 					}).catch((err) => {
 						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
 						$("#ethereum_unlock_text").css("display", "block");
@@ -2516,12 +3102,12 @@
 					}).then(async response =>{
 						$("#evm_funds_claimed_receipt").css("display", "block");
 						$("#ethereum-receipt-loader-container").css("display", "none");
-                        
+
                         let _sql = "UPDATE htlc SET claimedethereum = true WHERE hash = '"+current_loaded_htlc.HASH+"'";
                         MDS.sql(_sql,function(sqlresp){
                             console.log("%cUpdated status of HTLC with hash " + current_loaded_htlc.HASH, "background: fuchsia");
                         });
-						
+
 					}).catch((err) => {
 						$("#load_evm_funds_locked_receipt_spinner").css("display", "none");
 						$("#ethereum_unlock_text").css("display", "block");
@@ -2567,7 +3153,7 @@
 
 				let _contract_type;
 				let _which_abi;
-				
+
 				if(current_loaded_htlc.RECEIVERASSET != "eth")
 				{
 					_contract_type = "erc20";
@@ -2590,7 +3176,7 @@
 					$("#eth_redeem_button_text").css("display", "block");
 				});
 			});
-		
+
 			$("#claim_minima_button").on("click", async function(){
 
 				$("#claim_minima_button_text").css("display", "none");
@@ -2610,7 +3196,7 @@
 
 				collect(current_loaded_htlc.ADDRESS, secret_minima);
 			});
-		
+
             $('body').on('click', '.historical_swap_item', async function() {
                 console.log("Clicked");
 
@@ -2657,7 +3243,7 @@
 						$(".container").css("display", "none");
 						$("#minima-receipt-loader-container").css("display", "block");
                         return;
-                    } 
+                    }
 
                     let _now = parseInt(Date.now() / 1000);
 
@@ -2693,7 +3279,7 @@
 							$("#eth_redeem_button_spinner").css("display", "none");
 							$("#eth_redeem_button_text").css("display", "block");
 						});
-						return;	
+						return;
                     }
 
                     let _json = JSON.stringify({
@@ -2704,9 +3290,9 @@
                     console.log("Invoking the interval");
 
                     evm_claimed_check_interval = setInterval(async function(){
-                        
+
                         console.log("Inside the interval");
-                        
+
 						console.log("Getting contract with the ID of " + current_loaded_htlc.CONTRACTIDEVM);
 
 						var _contract_object;
@@ -2737,7 +3323,7 @@
 
                         $("#eth_receipt_claimed_timelock").text(_timelock_remaining);
 
-                        let _progress_bar_width = (current_ethereum_chain_time - current_loaded_htlc.ETHLOCKEDTIME) / (current_loaded_htlc.TIMELOCKEVM - current_loaded_htlc.ETHLOCKEDTIME) * 100; 
+                        let _progress_bar_width = (current_ethereum_chain_time - current_loaded_htlc.ETHLOCKEDTIME) / (current_loaded_htlc.TIMELOCKEVM - current_loaded_htlc.ETHLOCKEDTIME) * 100;
 
                         $("#eth_redeem_progress_bar").css("width", _progress_bar_width + "%");
 
@@ -2775,8 +3361,8 @@
                     $(".ethereum_lock_info").text(_json);
                 }
                 else
-                {   
-                    
+                {
+
                     //Minima Timelock has Expired
                     if(current_loaded_htlc.TIMELOCKMINIMA <= current_minima_block)
                     {
@@ -2790,7 +3376,7 @@
                         {
                             alert("Minima Timelock has expired. This swap cannot be completed. The Minima can be refunded by the counterparty.");
                         }
-                        
+
                         return;
                     }
 
@@ -2814,7 +3400,7 @@
                     console.log(json);
 
                     var jsonPretty = JSON.stringify(JSON.parse(json),null,2);
-                    
+
                     console.log("PRETTY JSON");
                     console.log(jsonPretty);
 
@@ -2823,22 +3409,37 @@
                     $(".container").css("display", "none");
                     $("#funds_locked_minima_receipt").css("display", "block");
                 }
-                
+
             });
 
 			$(".start_another_swap ").on("click", function(){
 				location.reload();
 			});
+
+			$('#pending_claim_minima_button').on('click', function() {
+				if (typeof targetClaimCallback === 'function') {
+					targetClaimCallback();
+				}
+
+				$('#claim_minima_icon').css('display', 'block');
+				$('#claim_minima_button').css('display', 'none');
+				$('#claim_pending_complete').css('display', 'none');
+				$('#claim_minima').css('display', 'block');
+				$('.start_another_swap').css('display', 'block');
+				$("#claim_minima_title").text("The swap is complete.");
+				$("#claim_minima_title").addClass("mb-2");
+				$("#claim_minima_text").css('display', 'none');
+			})
 		});
 
 	</script>
 
 	<!-- Metamask and Web3 Logic -->
 	<script>
-		
+
 		const SUPPORTED_CHAINS =
 		{
-			
+
 			"0x1":
 			{
 				"name": "Ethereum Mainnet",
@@ -2886,7 +3487,7 @@
 			},
 		}
 
-		const SUPPORTED_ASSETS = 
+		const SUPPORTED_ASSETS =
 		{
 			"0xaa36a7"	: ["eth", "wminima", "usdc", "usdt"],	//Sepolia
 			"0x3"		: ["eth", "usdc", "usdt"],	 			//Ropsten
@@ -2896,16 +3497,16 @@
 
 		const HTLC_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"LogHTLCNew","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCRefund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"LogHTLCWithdraw","type":"event"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"evm_htlc_contract_id","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}];
 		const HTLC_ERC20_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"receiver","type":"address"},{"indexed":false,"internalType":"address","name":"tokenContract","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"timelock","type":"uint256"}],"name":"HTLCERC20New","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"HTLCERC20Refund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"contractId","type":"bytes32"}],"name":"HTLCERC20Withdraw","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"_receiver","type":"address"},{"internalType":"bytes32","name":"_hashlock","type":"bytes32"},{"internalType":"uint256","name":"_timelock","type":"uint256"},{"internalType":"address","name":"_tokenContract","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"newContract","outputs":[{"internalType":"bytes32","name":"contractId","type":"bytes32"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"},{"internalType":"bytes32","name":"_preimage","type":"bytes32"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"}],"name":"refund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"bytes32","name":"_contractId","type":"bytes32"}],"name":"getContract","outputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"address","name":"tokenContract","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes32","name":"hashlock","type":"bytes32"},{"internalType":"uint256","name":"timelock","type":"uint256"},{"internalType":"bool","name":"withdrawn","type":"bool"},{"internalType":"bool","name":"refunded","type":"bool"},{"internalType":"bytes32","name":"preimage","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}];
-		
-		const HTLC_CONTRACT_ADDRESSES = 
+
+		const HTLC_CONTRACT_ADDRESSES =
 		{
-			"native" : 
+			"native" :
 			{
 				polygon : "0xf4188600176727caf29d0ca523479334f38f99ed",
 				sepolia : "0xDF45127318f78b5F422c6ddD6e11e6e7c986Ca78",
 				ethereum: "0x00678A4D4ad7aa891Ab250fA274EB0f2C155242f"
 			},
-			"erc20" : 
+			"erc20" :
 			{
 				polygon : "0x6c9a1013EdaFb2e9C9c6034F1870fEc1166273f0",
 				sepolia : "0x0e0d7b45339d247938446f720652a2d5af70f22c",
@@ -2939,7 +3540,7 @@
 			},
 
 			//BNB Chain
-			"0x38"	: {										
+			"0x38"	: {
 				"name" : "BNB Chain",
 				"native_asset" : "BNB"
 			},
@@ -2969,37 +3570,37 @@
 			}
 		}
 
-		const TOKEN_CONTRACT_ADDRESSES = 
+		const TOKEN_CONTRACT_ADDRESSES =
 		{
 			//ETH
 			"0x1"	: {
 				"usdt" 	: 	"0xdac17f958d2ee523a2206206994597c13d831ec7",
-				"usdc"	: 	"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 
+				"usdc"	: 	"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
 				"wminima":  "0x669c01CAF0eDcaD7c2b8Dc771474aD937A7CA4AF"
 			},
 
 			//ETH Ropsten
 			"0x3"	: {
 				"usdt" 	: 	"0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
-				"usdc"	: 	"0xfe724a829fdf12f7012365db98730eee33742ea2", 
+				"usdc"	: 	"0xfe724a829fdf12f7012365db98730eee33742ea2",
 			},
 
 			//Polygon
 			"0x89" : {
 				"usdt" 	: 	"0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-				"usdc"	: 	"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 
+				"usdc"	: 	"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
 			},
 
-			
+
 			//Sepolia
 			"0xaa36a7" : {
 				"usdt" 	: 	"0xa1d7f71cbbb361a77820279958bac38fc3667c1a",
-				"usdc"	: 	"0x51fce89b9f6d4c530698f181167043e1bb4abf89", 
+				"usdc"	: 	"0x51fce89b9f6d4c530698f181167043e1bb4abf89",
 				"wminima": 	"0xE60EefeE4f610dB767371591480c7ddbFCeaE719",
 			},
 
 			//BNB Chain
-			"0x38"	: {										
+			"0x38"	: {
 				"usdc" 	: 	"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
 				"usdt" 	: 	"0x55d398326f99059ff775485246999027b3197955",
 			},
@@ -3029,9 +3630,9 @@
 			}
 		}
 
-		const ABIs = 
+		const ABIs =
 		{
-			"usdt": 
+			"usdt":
 			[
 				{
 					"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_upgradedAddress","type":"address"}],"name":"deprecate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"deprecated","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_evilUser","type":"address"}],"name":"addBlackList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"upgradedAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balances","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"maximumFee","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"_totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"unpause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_maker","type":"address"}],"name":"getBlackListStatus","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowed","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"paused","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"who","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"pause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newBasisPoints","type":"uint256"},{"name":"newMaxFee","type":"uint256"}],"name":"setParams","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"issue","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"redeem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"basisPointsRate","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"isBlackListed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_clearedUser","type":"address"}],"name":"removeBlackList","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"MAX_UINT","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_blackListedUser","type":"address"}],"name":"destroyBlackFunds","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_initialSupply","type":"uint256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"amount","type":"uint256"}],"name":"Issue","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"amount","type":"uint256"}],"name":"Redeem","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"newAddress","type":"address"}],"name":"Deprecate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"feeBasisPoints","type":"uint256"},{"indexed":false,"name":"maxFee","type":"uint256"}],"name":"Params","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_blackListedUser","type":"address"},{"indexed":false,"name":"_balance","type":"uint256"}],"name":"DestroyedBlackFunds","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_user","type":"address"}],"name":"AddedBlackList","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_user","type":"address"}],"name":"RemovedBlackList","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"
@@ -3051,9 +3652,9 @@
 			],
 		}
 
-		const ASSET_DECIMALS = 
+		const ASSET_DECIMALS =
 		{
-			"usdc"  : 
+			"usdc"  :
 			{
 				"0x1" 	: 6,
 				"0x3" 	: 6,
@@ -3064,9 +3665,9 @@
 				"0xa4b1": 6,
 				"0xa" 	: 6,
 				"0xaa36a7" : 6,
-				
+
 			},
-			"usdt"  : 
+			"usdt"  :
 			{
 				"0x1" 	: 6,
 				"0x3" 	: 6,
@@ -3077,9 +3678,9 @@
 				"0xa4b1": 6,
 				"0xa" 	: 6,
 				"0xaa36a7" : 6,
-				
+
 			},
-			"eth"	: 
+			"eth"	:
 			{
 				"0x1" 	: 18,
 				"0x3" 	: 18,
@@ -3090,7 +3691,7 @@
 				"0xa4b1": 18,
 				"0xa" 	: 18,
 				"0xaa36a7" : 18,
-				
+
 			},
 			"wminima":
 			{
@@ -3106,7 +3707,7 @@
 			}
 		}
 
-		const ASSET_FRIENDLY_NAMES = 
+		const ASSET_FRIENDLY_NAMES =
 		{
 			"minima" 	: "Minima",
 			"wminima" 	: "wMinima",
@@ -3115,7 +3716,7 @@
 			"eth"		: "ETH",
 		}
 
-		var WEB3_RPC = 
+		var WEB3_RPC =
 		{
 			"0x1"	: new Web3("https://mainnet.infura.io/v3/89f762f8adbe4f819b574fc5c523d6ad"),//ETH Mainnet PoW
             "0x3"   : new Web3("https://ropsten.infura.io/v3/89f762f8adbe4f819b574fc5c523d6ad"),//Ropsten
@@ -3142,7 +3743,7 @@
 			"0xaa36a7":  new WEB3_RPC["0xaa36a7"].eth.Contract(HTLC_ABI, HTLC_CONTRACT_ADDRESSES["erc20"].sepolia)
 		}
 
-		var ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS = 
+		var ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS =
 		{
 			"0x1" : //Ethereum Mainnet
 			{
@@ -3198,7 +3799,7 @@
 		var currentAccount = null;
 		var chainName = "Unknown Chain";
 
-		if(typeof ethereum == 'undefined' || !ethereum || !ethereum.isMetaMask) 
+		if(typeof ethereum == 'undefined' || !ethereum || !ethereum.isMetaMask)
 		{
 			$(".download_metamask_button").css("display", "block");
 		}
@@ -3245,7 +3846,7 @@
 			window.ethereum.enable();
 		});
 
-		//Button on first view 
+		//Button on first view
 		$(".connect_wallet_button").on("click", function(){
 			window.ethereum.enable();
 		});
@@ -3258,10 +3859,10 @@
 
 			if(typeof chain.result != 'undefined') {
 				chainId = chain.result;
-			}      
+			}
 			else {
 				chainId = chain;
-			} 
+			}
 
 			chainName = "Unknown Chain";
 
@@ -3271,7 +3872,7 @@
 			}
 
 			$("#metamask_connected").text("Metamask Connected");
-			
+
 			if(typeof SUPPORTED_CHAINS[chainId] == 'undefined')
 			{
 				//Wrong Chain
@@ -3285,7 +3886,7 @@
 
 			$(".network_name").text(NETWORK_NAMES[chainId].name);
 			$(".native_asset_name").text(NETWORK_NAMES[chainId].native_asset);
-			
+
 		}
 
 		async function handleAccountsChanged(accounts)
@@ -3304,19 +3905,19 @@
 				$("#swap_initiate_button").css("display", "block");
 				$(".connect_wallet_button").css("display", "none");
 			}
-			
+
 			//Metamask has some internal compatibility issues
 			if(typeof accounts.result != 'undefined')
 			{
 				currentAccount = accounts.result[0];
-			}      
+			}
 			else
 			{
 				currentAccount = accounts[0];
-			}  
+			}
 
 			$("#ethereum_address").val(currentAccount);
-			
+
 			update_balances();
 		}
 
@@ -3324,7 +3925,7 @@
 		{
 
 			if(!currentAccount) return;
-		
+
 			//Avoid code duplication by defining a quick helper function
 			function friendly_balance (bal, asset)
 			{
@@ -3362,7 +3963,7 @@
             });
 
 			ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["usdt"].methods.balanceOf(currentAccount).call().then(function (bal) {
-				
+
 				let _friendly_balance = friendly_balance(bal, "usdt");
 
 				$("#current_usdt_balance").text(_friendly_balance);
@@ -3373,7 +3974,7 @@
             });
 
 			ERC20_CONTRACT_FUNCTIONALITY_PROVIDERS[chainId]["wminima"].methods.balanceOf(currentAccount).call().then(function (bal) {
-				
+
 				let _friendly_balance = friendly_balance(bal, "wminima");
 
 				$("#current_wminima_balance").text(_friendly_balance);
@@ -3399,7 +4000,7 @@
 			} else {
 				await ethereum.request({
 					method: 'wallet_addEthereumChain',
-					params: 
+					params:
 					[
 						{
 							"chainId": _chainId,
@@ -3416,7 +4017,7 @@
 				});
 			}
 		}
-		 
+
 	</script>
 </body>
 
