@@ -1708,6 +1708,7 @@
 		}
 
 		async function collect(address, secret, is_refund = false){
+			
 			const nodeIsLocked = await isNodeLocked();
 
 			// if node is locked, set vault callback and show vault is locked modal
@@ -1788,9 +1789,11 @@
 						"txnoutput id:myhtlc amount:"+coin.amount+" address:"+getaddress+" storestate:false;"+	//Create a transaction output
 						"txnstate id:myhtlc port:0 value:"+secret+";"+											//Add a variable to state(0)
 						"txnsign id:myhtlc publickey:"+ pertinent_key
-							+ (vaultPassword ? ` password:${vaultPassword};` : ';') +								//Sign the transaction with the public key
+							+ (vaultPassword ? ` password:${vaultPassword};` : ';') +							//Sign the transaction with the public key
 						"txnpost id:myhtlc auto:true;"+															//Post the transaction to the network
 						"txndelete id:myhtlc";
+
+						
 
 					//Lets Post it..
 					let txn_create = MDS.cmd(txncreate, function(txnresp){
@@ -1831,7 +1834,7 @@
 						//We did 8 commands at simultaneously, but we only care about the txn post response
 						for(let i = 0; i < txnresp.length; i++)
 						{
-							if(txnresp[i].command == "txnsign")
+							if(txnresp[i].command == "txnpost")
 							{
 								txnpost_response = txnresp[i];
 							}
@@ -1842,7 +1845,9 @@
 
 						//Now we can see how much we claimed
 						//let amount_claimed = txnpost_response.response.body.txn.outputs[0].amount;
-						let amount_claimed = txnpost_response.response.txpow.body.txn.outputs[0].amount;
+						console.log("The response is ");
+						console.log(txnpost_response.response);
+						let amount_claimed = txnpost_response.response.body.txn.outputs[0].amount;
 
 						if(amount_claimed > 0)
 						{
