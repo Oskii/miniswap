@@ -311,7 +311,7 @@
 					<hr class="my-2">
 
 					<label style="font-weight: 800;">Recipient Must Lock Funds Within:</label>
-					<p class="m-0"><span id="expiry_hours_label">- -</span></p>
+					<p class="m-0"><span id="expiry_blocks_label">- -</span></p>
 
 					<a class="btn btn-lg col-12 btn-primary mt-4" id="minima_lockup_confirm" onclick="genHTLCtxn();">
 						<span class="minima_lock_text">
@@ -360,7 +360,7 @@
 
 						<div class="dropdown">
 							<button style="height: 48px; border-radius: 7px; border: solid 2px #6500ff" time="50000" id="minima_timelock_dropdown_button" class="btn btn-light dropdown-toggle text-start" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-							  <span id="minima_timelock_dropdown_button_content">1000 Blocks (13 hours)</span>
+							  <span class="minima_timelock_duration" id="minima_timelock_dropdown_button_content">1000 Blocks (13 hours)</span>
 							  <i class="fas fa-caret-down fas fa-caret-down float-end mt-1 ms-3"></i>
 							</button>
 							<ul class="dropdown-menu" id="minima_timelock_dropdown" aria-labelledby="dropdownMenuButton1" style="border: solid 2px #6500ff;">
@@ -452,7 +452,7 @@
 					<p><span class="ropsten_receipt_progress_text">-- / --</span> Blocks</p>
 				</div>
 
-				<p class="mb-2 mt-3" style="font-weight: 800;">Enter Recipient Receipt</p>
+				<p class="mb-2 mt-3" style="font-weight: 800;">Enter Ethereum Lockup Receipt</p>
 				<textarea id="ropsten_receipt_textarea" style="min-height: 150px; border: none; border-radius: 5px;" class="col-12"></textarea>
 				<a class="btn btn-lg btn-primary col-12 mt-3" id="load_evm_funds_locked_receipt">
 					<span id="load_evm_funds_locked_receipt_text">Claim Funds</span>
@@ -714,7 +714,7 @@
 				<div id="minima_receipt_expiry_warning" style="display: none;">
 					<div class="alert alert-danger">
 						<strong>Warning!</strong>
-						<p>The timelock on this contract is too short for you to safely lock your funds. <strong>Do not</strong> lock up any funds. To initiate another swap, request the counterparty to lock up their funds again with a longer timelock.</p>
+						<p>The timelock on this contract is too short for you to safely lock your funds. We <strong>do not</strong> recommend continuing with this swap. To initiate another swap, request the counterparty to lock up their funds again with a longer timelock.</p>
 					</div>
 					<a class="btn btn-dark btn-lg col-12" onclick="location.reload()">Start Again</a>
 				</div>
@@ -927,12 +927,22 @@
 		 * still has time to claim the first party's funds. For that reason ETH_TIMELOCK_INNER_WINDOW
 		 * must be greater than MIMIMUM_LOCKUP_MINIMA, or the first party can maliciously claim everything
 		**/
-		const MINIMUM_LOCKUP_MINIMA = 1000 //default 12 hours = 1000 blocks
-		const ETH_TIMELOCK_INNER_WINDOW = parseInt(MINIMUM_LOCKUP_MINIMA / 6); //default 2 hours
-        const MINIMA_BLOCK_TIME = 50;
-        const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME;
-		const ETH_TIMELOCK_MAX_DELAY = 60 * 60 * 6 / 50; //6 hours in blocks
-		const ETH_TIMELOCK_MAX_DELAY_HOURS = ETH_TIMELOCK_MAX_DELAY * 50 / 60 / 60; // 6 hours
+		const MINIMUM_LOCKUP_MINIMA = 15 //default 500 seconds hours = 12 blocks
+		const MINIMA_BLOCK_TIME = 50; //seconds
+		const ETH_TIMELOCK_INNER_WINDOW = parseInt(MINIMUM_LOCKUP_MINIMA / 3); //default 2 hours
+		const REFUND_EXTRA_BLOCKS = 5; //number of blocks to wait to ensure that the minima refund will work 
+        
+		const LOCKUP_CONFIRMATION_BLOCKS = 3;
+
+		let innerWindowInSeconds = ETH_TIMELOCK_INNER_WINDOW * MINIMA_BLOCK_TIME;
+		let innerWindowInMinutes = (innerWindowInSeconds / 60).toFixed(2);
+    	let innerWindowInHours = (innerWindowInSeconds / 3600).toFixed(2);
+
+		const MINIMUM_LOCKUP_MINIMA_SECONDS = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME;
+		const ETH_TIMELOCK_MAX_DELAY = 3; //They can delay 3 blocks
+
+    	let durationInSeconds = MINIMUM_LOCKUP_MINIMA * MINIMA_BLOCK_TIME;
+    	let durationInHours = (durationInSeconds / 3600).toFixed(2);    
 
 		var swap_direction = ["Minima", "eth"]; //Set default swap direction to Minima ---> eth
 		var user_balances = //User's wallet balances of each asset
@@ -964,6 +974,10 @@
 
 		//Object to store many HTLC contracts we may have on the go, and then we can
 		var HTLCs = {};
+
+		$('.minima_timelock_duration').text(`${MINIMUM_LOCKUP_MINIMA} Blocks (${durationInHours} hours)`);
+		$('#expiry_blocks_label').text(`The next ${ETH_TIMELOCK_INNER_WINDOW} Minima blocks`);
+
 
 	</script>
 
@@ -1170,9 +1184,13 @@
 		//const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 200 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 200))";
 		//const actualscript_address = "0x2C0B69764D57A682B4E3F095B992D98BC15C20870F5DC9342BBA88907BBD5B32";
 
+		//10 minutes version
+		//const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 10 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 10))";
+		//const actualscript_address = "0x2C0B69764D57A682B4E3F095B992D98BC15C20870F5DC9342BBA88907BBD5B32";
+
 		//12 hours version
-		const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE 1000 AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT 1000))";
-		const actualscript_address = "0x77AF062D69F57F43839D66792614AE52DDF939231A720FB6E476A434BA95DA78";
+		const actualscript = "RETURN ((SHA2(STATE(0)) EQ PREVSTATE(1) AND @COINAGE LTE " + MINIMUM_LOCKUP_MINIMA + " AND SIGNEDBY(PREVSTATE(2))) OR (SIGNEDBY(PREVSTATE(3)) AND @COINAGE GT " + MINIMUM_LOCKUP_MINIMA +"))";
+		const actualscript_address = "0x12B88015B0FCFE32962702D71E5C32D9F8CBD335533283A36DCEB24287044AA9";
 
 		// callbacks for read only
 		var targetSell = null;
@@ -1181,6 +1199,7 @@
 		var targetScriptCallback = null;
 		var targetClaimCallback = null;
 
+		MDS.logging = true;
 		MDS.init(function(msg){
 			if(msg.event == "inited"){
 
@@ -1397,19 +1416,15 @@
 
             var receiver_asset = $($(".asset_selection_text")[0]).text().toLowerCase();
 
-			const timelock_seconds = $("#minima_timelock_dropdown_button").attr("time");
-
-			let seconds_to_blocks = timelock_seconds / 50;
-
-			const timelock = parseInt(current_minima_block) + parseInt(seconds_to_blocks) + 1;
+			const timelock = parseInt(current_minima_block) + parseInt(MINIMUM_LOCKUP_MINIMA);
 
 			const ethereum_address = $("#ethereum_address").val()
 
 			let error = false;
 
-			if(parseInt(timelock) <= parseInt(current_minima_block) + MINIMUM_LOCKUP_MINIMA)
+			if(parseInt(timelock) <= parseInt(current_minima_block))
 			{
-				alert("Timelock must be at least 2 hours after current Minima Block. Timelock: " + timelock + " Current Block: " + current_minima_block);
+				alert("Timelock must be after current Minima Block. Timelock: " + timelock + " Current Block: " + current_minima_block);
 				error = true;
 			}
 
@@ -2118,7 +2133,6 @@
 				$("body").css("background", "#320087");
 
 				$("#recipient_minima_public_key_label").text($("#minima_receiver").val());
-				$("#expiry_hours_label").text(ETH_TIMELOCK_MAX_DELAY_HOURS + " hours");
 
 				let _friendly_date = new Date().toLocaleDateString("en-UK", {year: 'numeric', month: 'long', day: 'numeric' }) + " - " + new Date().toLocaleTimeString().toLowerCase().replace(" ", "");
 				$("#date_time").text(_friendly_date);
@@ -2197,6 +2211,116 @@
 				$("#minima_receipt_textarea").css("border","none !important;");
 				let _json = $("#minima_receipt_textarea").val();
 
+				function update_minima_transaction_status () {
+
+					//The address of a coin is the hash of its script
+					//So both users will know what the address is. If the address
+					//is not the hash of the expected script, then we know the script is wrong
+					console.log("Looking for coin " + current_loaded_htlc.COINID);
+
+					MDS.cmd("coins address:" + _address, function(response){
+
+						let _coin_found = false;
+						let _coin;
+						let _obj = response.response;
+						var _coin_created_block;
+
+						console.log(response);
+						console.log("1Coin created at " + _coin_created_block);
+
+						for(let i = 0; i < _obj.length; i++)
+						{
+
+							if(_obj[i].coinid == current_loaded_htlc.COINID)
+							{
+								console.log("Found the coin");
+								_coin = _obj[i];
+								_coin_found = true;
+								current_loaded_htlc.CREATED = _obj[i].created;
+								break;
+							}
+						}
+
+						// change back to 10
+						let _confirmation_blocks_left = 2 - (current_minima_block - current_loaded_htlc.CREATED);
+
+						if(new BigNumber(_confirmation_blocks_left).isNaN())
+						{
+							_confirmation_blocks_left = 2;
+						}
+
+						//Show how many blocks are left until confirmation
+						$("#confirmation_blocks_left").text(_confirmation_blocks_left);
+
+						if(_coin_found && (current_minima_block - current_loaded_htlc.CREATED >= 2))
+						{
+							$("#minima_receipt_status").html(_coin.amount);
+							$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
+							$("#asset_to_lock_img").attr("src", _receiver_asset + "logo.svg");
+
+							if(_coin.state[0].data !== current_loaded_htlc.HASH)
+							{
+								alert("Incorrect hashlock. Swap invalid.")
+								clearInterval(minima_transaction_update_interval);
+								return;
+							}
+
+							if(_coin.state[1].data !== current_loaded_htlc.RECEIVERMINIMA)
+							{
+								alert("Incorrect receiver in script. Swap invalid.");
+								clearInterval(minima_transaction_update_interval);
+								return;
+							}
+
+							$("#minima_receipt_confirmation_status").text("No Longer Available")
+							$("#minima_receipt_confirmation_status_colour").css("background", "red");
+							$("#minima_lock_receipt_waiting_button").css("display", "none");
+							$("#minima_lock_receipt_waiting_spinner").css("display", "none");
+							$("#minima_lock_receipt_continue_button").css("display", "block");
+							$("#minima_lock_receipt_icon").removeClass("fa-hourglass-half");
+							$("#minima_lock_receipt_icon").addClass("fa-check-circle");
+							$("#minima_lock_receipt_text").text("Blockchain Status Confirmed");
+
+							$("#minima_receipt_confirmation_status").text("Confirmed Locked");
+							$("#minima_receipt_confirmation_status_colour").css("background", "green");
+
+							//clearInterval(minima_transaction_update_interval);
+						}
+
+						let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100;
+						$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
+
+						console.log("The current minima block is " + current_minima_block);
+						console.log("The HTLC was created at block " + current_loaded_htlc.CREATED);
+						console.log("The timelock expires at " + _timelock_minima);
+						console.log("The Max Delay for ETH lockup is " + ETH_TIMELOCK_MAX_DELAY + " Blocks");
+						
+
+						if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
+						{
+							$("#minima_receipt_confirm").css("display", "none");
+							$("#minima_receipt_expiry_warning").css("display", "block");
+						}
+
+						$(".minima_receipt_progress_text").text(current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
+
+						_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
+						_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
+
+						$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")");
+
+						if(current_minima_block >= _timelock_minima - ETH_TIMELOCK_INNER_WINDOW)
+						{
+							clearInterval(minima_transaction_update_interval);
+							console.log("Cleared interval");
+							$("#lock_evm_asset_confirm").css("display", "none");
+							return;
+						}
+
+					});
+				}
+
+
 				if(!isValidJSON(_json))
 				{
 					alert("Receipt invalid: invalid JSON format");
@@ -2207,7 +2331,8 @@
 
 				let _obj = JSON.parse(_json);
 
-                console.log("Receipt information: " + _obj);
+                console.log("Receipt information: ");
+				console.log(_obj);
 
 				let _address = _obj.address //Guaranteed unique field
 				let _eth_amount = parseFloat(_obj.receiver_asset_amount).toString();
@@ -2303,6 +2428,8 @@
 
 								let _blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
 
+								console.log("Number of blocks until offer expiry " + _blocks_til_expiry);
+
 								$(".minima_receipt_timelock").text((parseInt(_blocks_til_expiry) - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + secondsToHms(_blocks_til_expiry * MINIMA_BLOCK_TIME - ETH_TIMELOCK_INNER_WINDOW) + ")");
 
 								$(".minima_receipt_progress_text").text("Block" + current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
@@ -2311,105 +2438,12 @@
 
 								$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
 
-								function update_minima_transaction_status () {
-
-									//The address of a coin is the hash of its script
-									//So both users will know what the address is. If the address
-									//is not the hash of the expected script, then we know the script is wrong
-
-									MDS.cmd("coins address:" + _address, function(response){
-
-										let _coin_found = false;
-										let _coin;
-										let _obj = response.response;
-										var _coin_created_block;
-
-										console.log(response);
-										console.log("Coin created at " + _coin_created_block);
-
-										for(let i = 0; i < _obj.length; i++)
-										{
-
-											if(_obj[i].coinid == current_loaded_htlc.COINID)
-											{
-												_coin = _obj[i];
-												_coin_found = true;
-												current_loaded_htlc.CREATED = _obj[i].created;
-												break;
-											}
-										}
-
-										// change back to 10
-										let _confirmation_blocks_left = 2 - (current_minima_block - current_loaded_htlc.CREATED);
-
-										if(new BigNumber(_confirmation_blocks_left).isNaN())
-										{
-											_confirmation_blocks_left = 2;
-										}
-
-										//Show how many blocks are left until confirmation
-										$("#confirmation_blocks_left").text(_confirmation_blocks_left);
-
-										if(_coin_found && (current_minima_block - current_loaded_htlc.CREATED >= 2))
-										{
-											$("#minima_receipt_status").html(_coin.amount);
-											$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
-											$("#asset_to_lock_img").attr("src", _receiver_asset + "logo.svg");
-
-											if(_coin.state[0].data !== current_loaded_htlc.HASH)
-											{
-												alert("Incorrect hashlock. Swap invalid.")
-
-												clearInterval(minima_transaction_update_interval);
-												return;
-											}
-
-											if(_coin.state[1].data !== current_loaded_htlc.RECEIVERMINIMA)
-											{
-												alert("Incorrect receiver in script. Swap invalid.");
-												clearInterval(minima_transaction_update_interval);
-												return;
-											}
-
-											$("#minima_receipt_confirmation_status").text("No Longer Available")
-											$("#minima_receipt_confirmation_status_colour").css("background", "red");
-											$("#minima_lock_receipt_waiting_button").css("display", "none");
-											$("#minima_lock_receipt_waiting_spinner").css("display", "none");
-											$("#minima_lock_receipt_continue_button").css("display", "block");
-											$("#minima_lock_receipt_icon").removeClass("fa-hourglass-half");
-											$("#minima_lock_receipt_icon").addClass("fa-check-circle");
-											$("#minima_lock_receipt_text").text("Blockchain Status Confirmed");
-
-											$("#minima_receipt_confirmation_status").text("Confirmed Locked");
-											$("#minima_receipt_confirmation_status_colour").css("background", "green");
-
-											clearInterval(minima_transaction_update_interval);
-										}
-
-										let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100;
-										$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
-
-										if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
-										{
-											$("#minima_receipt_confirm").css("display", "none");
-											$("#minima_receipt_expiry_warning").css("display", "block");
-										}
-
-										$(".minima_receipt_progress_text").text(current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
-
-										_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
-										_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
-
-										$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")");
-
-									});
-								}
-
 								update_minima_transaction_status();
 
 								if(!minima_transaction_update_interval)
 								{
 									minima_transaction_update_interval = setInterval(function(){
+										console.log("%cUpdate transaction status interval", "background: yellow");
 										update_minima_transaction_status();
 									}, 3000);
 								}
@@ -2477,99 +2511,6 @@
 						let _percentage_timelock_time = (current_minima_block - minima_starting_block) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - minima_starting_block) * 100;
 
 						$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
-
-						function update_minima_transaction_status () {
-
-							//The address of a coin is the hash of its script
-							//So both users will know what the address is. If the address
-							//is not the hash of the expected script, then we know the script is wrong
-
-							MDS.cmd("coins address:" + _address, function(response){
-
-								let _coin_found = false;
-								let _coin;
-								let _obj = response.response;
-								var _coin_created_block;
-
-								console.log(response);
-								console.log("Coin created at " + _coin_created_block);
-
-								for(let i = 0; i < _obj.length; i++)
-								{
-
-									if(_obj[i].coinid == current_loaded_htlc.COINID)
-									{
-										_coin = _obj[i];
-										_coin_found = true;
-										current_loaded_htlc.CREATED = _obj[i].created;
-										break;
-									}
-								}
-
-								let _confirmation_blocks_left = 10 - (current_minima_block - current_loaded_htlc.CREATED);
-
-								if(new BigNumber(_confirmation_blocks_left).isNaN())
-								{
-									_confirmation_blocks_left = 10;
-								}
-
-								//Show how many blocks are left until confirmation
-								$("#confirmation_blocks_left").text(_confirmation_blocks_left);
-
-								if(_coin_found && (current_minima_block - current_loaded_htlc.CREATED >= 10))
-								{
-									$("#minima_receipt_status").html(_coin.amount);
-									$(".asset_to_lock").text(_eth_amount + " " + ASSET_FRIENDLY_NAMES[_receiver_asset]);
-									$("#asset_to_lock_img").attr("src", _receiver_asset + "logo.svg");
-
-									if(_coin.state[0].data !== current_loaded_htlc.HASH)
-									{
-										alert("Incorrect hashlock. Swap invalid.")
-
-										clearInterval(minima_transaction_update_interval);
-										return;
-									}
-
-									if(_coin.state[1].data !== current_loaded_htlc.RECEIVERMINIMA)
-									{
-										alert("Incorrect receiver in script. Swap invalid.");
-										clearInterval(minima_transaction_update_interval);
-										return;
-									}
-
-									$("#minima_receipt_confirmation_status").text("No Longer Available")
-									$("#minima_receipt_confirmation_status_colour").css("background", "red");
-									$("#minima_lock_receipt_waiting_button").css("display", "none");
-									$("#minima_lock_receipt_waiting_spinner").css("display", "none");
-									$("#minima_lock_receipt_continue_button").css("display", "block");
-									$("#minima_lock_receipt_icon").removeClass("fa-hourglass-half");
-									$("#minima_lock_receipt_icon").addClass("fa-check-circle");
-									$("#minima_lock_receipt_text").text("Blockchain Status Confirmed");
-
-									$("#minima_receipt_confirmation_status").text("Confirmed Locked");
-									$("#minima_receipt_confirmation_status_colour").css("background", "green");
-
-                                    clearInterval(minima_transaction_update_interval);
-								}
-
-								let _percentage_timelock_time = (current_minima_block - current_loaded_htlc.CREATED) / (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW - current_loaded_htlc.CREATED) * 100;
-								$(".minima_receipt_progress_bar").css("width", _percentage_timelock_time + "%" );
-
-								if(parseInt(current_minima_block) > (parseInt(current_loaded_htlc.CREATED) + parseInt(ETH_TIMELOCK_MAX_DELAY))) //timelock expired
-								{
-									$("#minima_receipt_confirm").css("display", "none");
-									$("#minima_receipt_expiry_warning").css("display", "block");
-								}
-
-								$(".minima_receipt_progress_text").text(current_minima_block + " / " + (_timelock_minima - ETH_TIMELOCK_INNER_WINDOW));
-
-								_blocks_til_expiry = parseInt(_timelock_minima) - current_minima_block;
-								_hms_expiry = secondsToHms((_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) * MINIMA_BLOCK_TIME );
-
-								$(".minima_receipt_timelock").text(parseInt(_blocks_til_expiry - ETH_TIMELOCK_INNER_WINDOW) + " Blocks (" + _hms_expiry + ")");
-
-							});
-						}
 
 						update_minima_transaction_status();
 
@@ -2679,13 +2620,13 @@
 
 					function update_ropsten_transaction_status()
 					{
-						if(current_loaded_htlc.TIMELOCKMINIMA - current_minima_block <= ETH_TIMELOCK_INNER_WINDOW) //Less than one hour to go
+						if(current_loaded_htlc.TIMELOCKMINIMA - current_minima_block <= ETH_TIMELOCK_INNER_WINDOW) //Less than x blocks to go
 						{
 							$("#ropsten_timelock_progress_container").css("display", "none");
 							$("#ropsten_receipt_expiry_warning").css("display", "block");
 
-							let _blocks_til_redeemable = current_loaded_htlc.TIMELOCKMINIMA - current_minima_block;
-							let _percentage_redeemable_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - minima_starting_block) * 100;
+							let _blocks_til_redeemable = current_loaded_htlc.TIMELOCKMINIMA - current_minima_block + REFUND_EXTRA_BLOCKS;
+							let _percentage_redeemable_time = (current_minima_block - minima_starting_block) / (current_loaded_htlc.TIMELOCKMINIMA - minima_starting_block + 1) * 100;
 
 							if(_percentage_redeemable_time > 100)
 							{
@@ -2693,14 +2634,15 @@
 							}
 
 							$(".minima_redeem_progress_bar").css("width", _percentage_redeemable_time + "%");
-							$("#minima_redeem_progress_text").text(current_minima_block + " / " + current_loaded_htlc.TIMELOCKMINIMA + " Blocks");
+							$("#minima_redeem_progress_text").text(current_minima_block + " / " + (parseInt(current_loaded_htlc.TIMELOCKMINIMA) + REFUND_EXTRA_BLOCKS) + " Blocks");
 
 							let time_remaining = secondsToHms(_blocks_til_redeemable * MINIMA_BLOCK_TIME);
 
 							if(!time_remaining)
 							{
-								time_remaining = "0 seconds";
+								time_remaining = "Your Minima will be redeemable - 0 seconds";
 								$("#redeem_minima").css("display", "block");
+								clearInterval(ethereum_timelock_progress_bar_update_interval);
 							}
 
 							$("#minima_redeem_hms").text(time_remaining);
@@ -3143,7 +3085,7 @@
 				$("#minima_redeem_button_text").css("display", "none");
 				$("#minima_redeem_spinner").css("display", "block");
 
-				collect(current_loaded_htlc.ADDRESS, secret_minima);
+				collect(current_loaded_htlc.ADDRESS, secret_minima, true);
 
                 $(".container").css("display", "none");
 
@@ -3434,7 +3376,8 @@
 				$("#claim_minima_title").text("The swap is complete.");
 				$("#claim_minima_title").addClass("mb-2");
 				$("#claim_minima_text").css('display', 'none');
-			})
+			});
+
 		});
 
 	</script>
